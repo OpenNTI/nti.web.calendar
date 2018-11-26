@@ -1,0 +1,43 @@
+{
+  "name": "@nti/web-calendar",
+  "version": "1.0.0",
+  "description": "NextThought components for calendar",
+  "main": "lib/index.js",
+  "module": "src/index.js",
+  "files": [
+    "lib",
+    "src"
+  ],
+  "scripts": {
+    "test": "cmp-scripts test",
+    "start": "cmp-scripts start",
+    "prepack": "cmp-scripts build",
+    "build": "cmp-scripts build",
+    "clean": "cmp-scripts clean",
+    "check": "cmp-scripts check",
+    "release": "cmp-scripts release",
+    "install-snapshots": "cmp-scripts install-snapshots",
+    "fix": "cmp-scripts fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NextThought/nti.web.calendar.git"
+  },
+  "keywords": [
+    "nextthought",
+    "calendar"
+  ],
+  "author": "NextThought",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/NextThought/nti.web.calendar/issues"
+  },
+  "homepage": "https://github.com/NextThought/nti.web.calendar#readme",
+  "publishConfig": {
+    "registry": "https://npm.nextthought.com"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@nti/cmp-scripts": "^2.2.7"
+  }
+}
