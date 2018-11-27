@@ -36,8 +36,19 @@
   "publishConfig": {
     "registry": "https://npm.nextthought.com"
   },
-  "dependencies": {},
+  "dependencies": {
+    "prop-types": "^15.5.8",
+    "@nti/lib-locale": "^1.0.7",
+    "@nti/web-commons": "0.x.x",
+    "@nti/lib-commons": "^2.5.4"
+  },
   "devDependencies": {
-    "@nti/cmp-scripts": "^2.2.7"
+    "@nti/cmp-scripts": "^2.2.7",
+    "@nti/style-common": "^1.3.0",
+    "enzyme": "^3.0.0",
+    "enzyme-adapter-react-16": "^1.0.1",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "react-test-renderer": "^16.0.0"
   }
 }
