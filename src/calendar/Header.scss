@@ -1,0 +1,92 @@
+.calendar-header {
+	background-color: #2D2D2D;
+	border-bottom: 1px solid #000000;
+	display: flex;
+	width: 100%;
+
+	.icon-more {
+		cursor: pointer;
+	}
+
+	.calendars-list {
+		font: 600 14px "Open Sans";
+		color: white;
+		padding: 10px;
+		flex-grow: 1;
+
+		i.icon-chevron-down-10, i.icon-chevron-up-10 {
+			color: #b8b8b8;
+			padding-left: 5px;
+		}
+
+		i.icon-chevron-up-10 {
+			display: none;
+		}
+
+		&.flyout-open {
+			i.icon-chevron-down-10 {
+				display: none;
+			}
+
+			i.icon-chevron-up-10 {
+				display: initial;
+			}
+		}
+	}
+
+	.controls {
+		align-items: center;
+		display: flex;
+
+		i.icon-bold-x, i.icon-more {
+			color: #787878;
+			margin: 10px;
+		}
+	}
+}
+
+.export-calendar {
+	position: absolute;
+	padding: 5px;
+	width: 100%;
+
+	.export-content {
+		background: white;
+		padding: 20px;
+		border-radius: 5px;
+
+		.export-header {
+			color: #494949;
+			font-family: "Open Sans";
+			font-size: 14px;
+			font-weight: 600;
+			line-height: 19px;
+			display: flex;
+			align-items: center;
+
+			.download-icon {
+				height: 30px;
+				width: 30px;
+				border: 1px solid #e4e4e4;
+				text-align: center;
+				line-height: 30px;
+				border-radius: 50%;
+				margin-right: 10px;
+			}
+		}
+
+		.export-message {
+			color: #757474;
+			font-family: "Open Sans";
+			font-size: 14px;
+			margin: 15px 0px;
+		}
+
+		.export-link {
+			color: #3FB3F6;
+			font-family: "Open Sans";
+			font-size: 14px;
+			cursor: pointer;
+		}
+	}
+}
