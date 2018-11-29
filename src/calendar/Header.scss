@@ -3,16 +3,16 @@
 	border-bottom: 1px solid #000000;
 	display: flex;
 	width: 100%;
-
-	.icon-more {
-		cursor: pointer;
-	}
+    border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
 
 	.calendars-list {
 		font: 600 14px "Open Sans";
 		color: white;
 		padding: 10px;
 		flex-grow: 1;
+		display: flex;
+		align-items: center;
 
 		i.icon-chevron-down-10, i.icon-chevron-up-10 {
 			color: #b8b8b8;
@@ -41,6 +41,11 @@
 		i.icon-bold-x, i.icon-more {
 			color: #787878;
 			margin: 10px;
+			cursor: pointer;
+		}
+
+		i.icon-more.active {
+			color: white;
 		}
 	}
 }
@@ -49,6 +54,7 @@
 	position: absolute;
 	padding: 5px;
 	width: 100%;
+	z-index: 1;
 
 	.export-content {
 		background: white;

@@ -1,0 +1,28 @@
+.event-generic {
+	.event-generic-meta {
+		background-color: #ffffff;
+		border-radius: 5px;
+		padding: 5px 10px;
+		width: 226px;
+		height: 40px;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+
+		.event-generic-title {
+			color: #494949;
+			font-family: "Open Sans";
+			font-size: 14px;
+			font-weight: 600;
+		}
+
+		.event-generic-time {
+			color: #B8B8B8;
+			font-family: "Open Sans";
+			font-size: 10px;
+			font-weight: bold;
+			letter-spacing: -0.21px;
+			line-height: 7px;
+		}
+	}
+}

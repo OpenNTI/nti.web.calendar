@@ -1,0 +1,28 @@
+.course-item {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	padding: 5px 0px;
+
+	.course-item-meta {
+		flex-grow: 1;
+		margin-left: 10px;
+	}
+
+	.course-item-title {
+		color: #494949;
+		font-family: "Open Sans";
+		font-size: 14px;
+		font-weight: 600;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.course-item-provider-id {
+		color: #B8B8B8;
+		font-family: "Open Sans";
+		font-size: 10px;
+		font-weight: bold;
+	}
+}

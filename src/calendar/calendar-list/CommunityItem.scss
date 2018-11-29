@@ -1,0 +1,21 @@
+.community-item {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	padding: 5px 0px;
+
+	.community-item-meta {
+		flex-grow: 1;
+		margin-left: 10px;
+	}
+
+	.community-item-title {
+		color: #494949;
+		font-family: "Open Sans";
+		font-size: 14px;
+		font-weight: 600;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+}

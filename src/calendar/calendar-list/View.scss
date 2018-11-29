@@ -1,6 +1,7 @@
 .calendar-list-trigger {
 	width: 100%;
 	padding: 5px;
+	max-width: 280px;
 
 	.flyout .flyout-inner {
 		border-radius: 5px;
@@ -16,5 +17,9 @@
 		font-weight: bold;
 		font-size: 10px;
 		text-transform: uppercase;
+	}
+
+	.course-item-list, .community-item-list {
+		padding: 15px 0px;
 	}
 }

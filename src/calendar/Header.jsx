@@ -68,8 +68,8 @@ export default class CalendarHeader extends React.Component {
 						<CalendarList />
 					</Flyout.Triggered>
 					<div className="controls">
-						<i className="icon-more" onClick={this.onOptionsClick} />
-						<i className={cx('icon-bold-x', {active: this.state.showOptions})} />
+						<i className={cx('icon-more', { active: this.state.showOptions })} onClick={this.onOptionsClick} />
+						<i className="icon-bold-x" />
 					</div>
 				</div>
 				{this.state.showOptions && this.renderExport()}

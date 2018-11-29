@@ -1,0 +1,20 @@
+.calendar-icon {
+	height: 32px;
+	width: 32px;
+	min-width: 32px;
+	border-radius: 50%;
+	position: relative;
+	background-size: cover;
+	background-position: center;
+	background: url(https://source.unsplash.com/random);
+	cursor: pointer;
+
+	&.selected {
+		text-align: center;
+	}
+
+	i.icon-check {
+		color: white;
+		font-size: 30px;
+	}
+}
