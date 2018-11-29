@@ -42,7 +42,8 @@
     "@nti/web-commons": "0.x.x",
     "@nti/lib-commons": "^2.5.4",
     "classnames": "^2.0.0",
-    "@nti/web-client": "^1.1.3"
+    "@nti/web-client": "^1.1.3",
+    "@nti/lib-store": "^1.6.0"
   },
   "devDependencies": {
     "@nti/cmp-scripts": "^2.2.7",
