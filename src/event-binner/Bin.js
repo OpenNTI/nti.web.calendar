@@ -51,6 +51,18 @@ class Bin {
 	}
 }
 
+function getUniqueEvents (events) {
+	const {unique} = events.reduce((acc, event) => {
+		const id = event.getID();
+
+		if (acc.seen[id]) { return acc; }
+
+		return {unique: [...acc.unique, event], seen: {...acc.seen, [id]: true}};
+	}, {unique: [], seen: {}});
+
+	return unique;
+}
+
 export function insertEvent (bin, event) {
 	const items = bin ? bin.items : [];
 
@@ -84,7 +96,7 @@ export function insertEvent (bin, event) {
 	}
 
 
-	return new Bin(bin.name, newItems);
+	return new Bin(bin.name, getUniqueEvents(newItems));
 }
 
 

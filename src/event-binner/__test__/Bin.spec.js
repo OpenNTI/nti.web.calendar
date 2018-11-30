@@ -64,6 +64,18 @@ describe('Event Bin Tests', () => {
 		]);
 	});
 
+	test('insertEvent removes duplicate events', () => {
+		const firstEvent = createEvent('first', TODAY.date);
+		const secondEvent = createEvent('second', TOMORROW.date);
+
+		let bin = createBin('test', firstEvent);
+
+		bin = insertEvent(bin, secondEvent);
+		bin = insertEvent(bin, firstEvent);
+
+		expect(bin.items).toEqual([firstEvent, secondEvent]);
+	});
+
 	describe('start', () => {
 		test('is null if no events', () => {
 			const bin = createBin('no events');

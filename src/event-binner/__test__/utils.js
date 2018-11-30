@@ -2,6 +2,7 @@ export function createEvent (id, start, end) {
 	return {
 		id,
 		title: id,
+		getID: () => id,
 		getStartTime: () => start,
 		getEndTime: () => end
 	};
