@@ -50,4 +50,27 @@ export default class EventBinner {
 			return aStart < bStart ? -1 : (aStart === bStart ? 0 : 1);
 		});
 	}
+
+	getFirstEvent () {
+		const {bins} = this;
+		const first = bins && bins[0];
+
+		if (!first) { return null; }
+
+		const {items} = first;
+
+		return items ? items[0] : null;
+	}
+
+
+	getLastEvent () {
+		const {bins} = this;
+		const last = bins && bins[bins.length - 1];
+
+		if (!last) { return null; }
+
+		const {items} = last;
+
+		return items ? items[items.length - 1] : null;
+	}
 }
