@@ -69,7 +69,8 @@ export default class CalendarStore extends Stores.BoundStore {
 
 			this.set({
 				loading: false,
-				bins: this.eventBinner.bins
+				bins: this.eventBinner.bins,
+				calendars: collection.Items
 			});
 		} catch (e) {
 			this.set({

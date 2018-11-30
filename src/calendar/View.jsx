@@ -8,7 +8,7 @@ import Day from './day';
 
 const { BoundaryMonitor } = Scroll;
 
-@Store.connect(['bins', 'loading', 'loaded', 'error'])
+@Store.connect(['bins', 'loading', 'loaded', 'error',  'calendars'])
 export default class Calendar extends React.Component {
 	static deriveBindingFromProps (props) {
 		return props.entity || null;
@@ -17,22 +17,25 @@ export default class Calendar extends React.Component {
 	static propTypes = {
 		entity: PropTypes.object,
 		store: PropTypes.object,
-		bins: PropTypes.array
+		bins: PropTypes.array,
+		calendars: PropTypes.array
 	}
 
 	state = {
-		calendars: []
+		excludedCalendars: []
 	}
 
 	render () {
-		const { calendars } = this.state;
-		const { bins } = this.props;
+		const { excludedCalendars } = this.state;
+		const { bins, calendars } = this.props;
 
 		return (
 			<div className="calendar-main">
 				<Header calendars={calendars} />
 				<div className="calendar-body">
-					{bins && bins.length > 0 && bins.map(bin => <Day key={bin.name} bin={bin} />)}
+					<BoundaryMonitor>
+						{bins && bins.length > 0 && bins.map(bin => <Day key={bin.name} bin={bin} />)}
+					</BoundaryMonitor>
 				</div>
 			</div>
 		);

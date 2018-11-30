@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import cx from 'classnames';
+import { Presentation } from '@nti/web-commons';
 
 import { Icon } from '../components';
 
@@ -11,11 +11,13 @@ export default class CourseItem extends React.Component {
 	}
 
 	render () {
-		const { item: { title, providerId }, selected } = this.props;
-
+		const { item: { CatalogEntry = {} }, selected } = this.props;
+		const { title, providerId } = CatalogEntry;
 		return (
 			<div className="course-item">
-				<Icon selected={selected} />
+				<Presentation.Asset propName="url" contentPackage={CatalogEntry} type="thumb">
+					<Icon selected={selected} />
+				</Presentation.Asset>
 				<div className="course-item-meta">
 					<div className="course-item-title">{title}</div>
 					<div className="course-item-provider-id">{providerId}</div>

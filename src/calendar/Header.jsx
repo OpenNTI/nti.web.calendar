@@ -16,6 +16,10 @@ const t = scoped('nti.web.calendar.header', {
 });
 
 export default class CalendarHeader extends React.Component {
+	static propTypes = {
+		calendars: PropTypes.array
+	}
+
 	state = {
 		showOptions: false
 	}
@@ -54,6 +58,8 @@ export default class CalendarHeader extends React.Component {
 	}
 
 	render () {
+		const { calendars } = this.props;
+
 		return (
 			<>
 				<div className="calendar-header">
@@ -63,9 +69,9 @@ export default class CalendarHeader extends React.Component {
 						verticalAlign={Flyout.ALIGNMENTS.BOTTOM}
 						horizontalAlign={Flyout.ALIGNMENTS.LEFT}
 						ref={this.attachFlyoutRef}
-
+						contain
 					>
-						<CalendarList />
+						<CalendarList calendars={calendars} />
 					</Flyout.Triggered>
 					<div className="controls">
 						<i className={cx('icon-more', { active: this.state.showOptions })} onClick={this.onOptionsClick} />
