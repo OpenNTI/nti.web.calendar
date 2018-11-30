@@ -44,8 +44,6 @@ class Test extends React.Component {
 		return (
 			<div className="container">
 				<Calendar />
-				<Generic item={event} />
-				<AssignmentEvent item={assignment} />
 			</div>
 		);
 	}

@@ -4,8 +4,9 @@ import { DateTime } from '@nti/web-commons';
 
 import { Icon } from '../../calendar/components';
 import { Event } from '../components';
+import Registry from '../Registry';
 
-
+@Registry.register('application/vnd.nextthought.courseware.coursecalendarevent')
 export default class GenericEvent extends React.Component {
 	static propTypes = {
 		item: PropTypes.shape({
