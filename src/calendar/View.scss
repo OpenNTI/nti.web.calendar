@@ -1,3 +1,5 @@
+@import '~@nti/style-common';
+
 .calendar-main {
 	position: relative;
 	max-width: 280px;
@@ -10,5 +12,21 @@
 		border-bottom-right-radius: 5px;
 		overflow: auto;
 		max-height: calc(100% - 40px);
+		min-height: 60px;
+	}
+
+	.add-event {
+		background-color: $primary-red;
+		color: white;
+		text-align: center;
+		width: 40px;
+		height: 40px;
+		border-radius: 50%;
+		padding-top: 10px;
+		box-shadow: 0 3px 11px 0 rgba(0, 0, 0, 0.5);
+		position: absolute;
+		cursor: pointer;
+		bottom: 15px;
+		right: 15px;
 	}
 }
