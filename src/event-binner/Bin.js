@@ -18,13 +18,13 @@ class Bin {
 	get start () {
 		const first = this.items[0];
 
-		return first ? first.getStartDate() : null;
+		return first ? first.getStartTime() : null;
 	}
 
 	get end () {
 		const end = this.items[this.items.length - 1];
 
-		return end ? (end.getEndDate() || end.getStartDate()) : null;
+		return end ? (end.getEndTime() || end.getStartTime()) : null;
 	}
 
 
@@ -57,12 +57,12 @@ export function insertEvent (bin, event) {
 	let inserted = false;
 	const newItems = [];
 
-	const eventStart = event.getStartDate();
-	const eventEnd = event.getEndDate() || eventStart;
+	const eventStart = event.getStartTime();
+	const eventEnd = event.getEndTime() || eventStart;
 
 	for (let item of items) {
-		const itemStart = item.getStartDate();
-		const itemEnd = item.getEndDate() || itemStart;
+		const itemStart = item.getStartTime();
+		const itemEnd = item.getEndTime() || itemStart;
 
 		//if the new events starts before the other event put it first
 		if (eventStart < itemStart && !inserted) {

@@ -3,8 +3,8 @@ function getNameForDate (date) {
 }
 
 export default function byDay (event) {
-	const start = event.getStartDate();
-	const end = event.getEndDate();
+	const start = event.getStartTime();
+	const end = event.getEndTime();
 
 	const days = [getNameForDate(start)];
 

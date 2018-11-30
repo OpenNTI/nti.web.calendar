@@ -24,7 +24,7 @@ export default class EventBinner {
 
 
 	insertEvent (event) {
-		if (!event || !event.getStartDate || !event.getEndDate) { throw new Error('Invalid Event Inserted'); }
+		if (!event || !event.getStartTime || !event.getEndTime) { throw new Error('Invalid Event Inserted'); }
 
 		const bins = this[BINNER](event);
 
