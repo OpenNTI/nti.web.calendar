@@ -22,7 +22,8 @@ const t = scoped('calendar.editor.Editor', {
 	delete: 'Delete',
 	event: 'Event',
 	start: 'Start',
-	end: 'End'
+	end: 'End',
+	searchCalendar: 'Search Calendars'
 });
 
 export default
@@ -105,10 +106,19 @@ class EventEditor extends React.Component {
 		return (
 			<div className="input-section calendar">
 				<div className="section-title">{t('calendar')}</div>
-				<Input.Select onChange={this.onCalendarSelect} value={calendar} placeholder={t('Select a calendar')}>
+				<Input.Select onChange={this.onCalendarSelect} value={calendar} placeholder={t('searchCalendar')} searchable>
 					{availableCalendars.map((choice, choiceIndex) => {
 						return (
-							<Input.Select.Option value={choice} key={choiceIndex}>
+							<Input.Select.Option
+								value={choice}
+								key={choiceIndex}
+								matches={(targetOption, term) => {
+									const lowerTerm = term && term.toLowerCase();
+									const catalogEntryTitle = (choice.CatalogEntry && choice.CatalogEntry.Title && choice.CatalogEntry.Title.toLowerCase()) || '';
+
+									return choice.title && choice.title.toLowerCase().indexOf(lowerTerm) >= 0
+										|| catalogEntryTitle.indexOf(lowerTerm) >= 0;
+								}}>
 								{(choice.CatalogEntry && choice.CatalogEntry.Title) || choice.title}
 							</Input.Select.Option>
 						);
