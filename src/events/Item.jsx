@@ -13,7 +13,8 @@ export default class EventItem extends React.Component {
 	static propTypes = {
 		item: PropTypes.object,
 		context: PropTypes.object,
-		readOnly: PropTypes.bool
+		readOnly: PropTypes.bool,
+		onItemClick: PropTypes.func
 	}
 
 	state = {}
@@ -37,7 +38,20 @@ export default class EventItem extends React.Component {
 		const Cmp = registry.getItemFor(item.MimeType);
 
 		return (
-			<Cmp item={item} context={context} />
+			<div className="item-container"
+				onClick={() => {
+					const {onItemClick} = this.props;
+
+					if(onItemClick) {
+						onItemClick(item);
+					}
+				}}
+			>
+				<Cmp
+					item={item}
+					context={context}
+				/>
+			</div>
 		);
 	}
 }

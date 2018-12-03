@@ -53,6 +53,7 @@ class EventEditor extends React.Component {
 		defaultStartDate.setMinutes(0);
 
 		const availableCalendars = getAvailableCalendars();
+		const calendarFromEvent = event && this.getMatchingCalendar(event, availableCalendars);
 
 		this.state = {
 			startDate: event ? event.getStartTime() : defaultStartDate,
@@ -60,12 +61,20 @@ class EventEditor extends React.Component {
 			title: event && event.title,
 			description: event && event.description,
 			location: event && event.location,
-			calendar: availableCalendars[0],
+			calendar: calendarFromEvent || availableCalendars[0],
 			event: props.event,
 			// check icon for null string.  if we remove an icon and PUT to the record, it won't be null, but "null"
 			img: props.event && props.event.icon && props.event.icon !== 'null' && {src: props.event.icon},
 			availableCalendars
 		};
+	}
+
+	getMatchingCalendar (event, availableCalendars) {
+		const targetID = event.CatalogEntryNTIID;
+
+		return availableCalendars.filter(c => {
+			return c.CatalogEntry.NTIID === targetID;
+		})[0];
 	}
 
 	renderDate () {
@@ -101,12 +110,13 @@ class EventEditor extends React.Component {
 	}
 
 	renderCalendarSelect () {
+		const { event } = this.props;
 		const { availableCalendars, calendar } = this.state;
 
 		return (
 			<div className="input-section calendar">
 				<div className="section-title">{t('calendar')}</div>
-				<Input.Select onChange={this.onCalendarSelect} value={calendar} placeholder={t('searchCalendar')} searchable>
+				<Input.Select onChange={this.onCalendarSelect} value={calendar} placeholder={t('searchCalendar')} disabled={!!event} searchable>
 					{availableCalendars.map((choice, choiceIndex) => {
 						return (
 							<Input.Select.Option

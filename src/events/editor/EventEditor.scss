@@ -227,6 +227,11 @@
 				&.calendar {
 					.nti-select-input {
 						width: 440px;
+
+						&.disabled {
+							opacity: 0.5;
+							pointer-events: none;
+						}
 					}
 
 					i.icon-chevron-down {
