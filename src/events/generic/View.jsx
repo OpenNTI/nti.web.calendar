@@ -10,22 +10,22 @@ import Registry from '../Registry';
 export default class GenericEvent extends React.Component {
 	static propTypes = {
 		item: PropTypes.shape({
-			startTime: PropTypes.string.isRequired,
-			endTime: PropTypes.string.isRequired,
+			getStartTime: PropTypes.func.isRequired,
+			getEndTime: PropTypes.func.isRequired,
 			title: PropTypes.string.isRequired,
 			icon: PropTypes.string
 		})
 	};
 
 	render () {
-		const { item: { title, startTime, endTime, icon } } = this.props;
+		const { item: { title, icon } } = this.props;
 		return (
 			<Event.Layout className="event-generic">
 				<Icon url={icon} />
 				<div className="event-generic-meta">
 					<div className="event-generic-title">{title}</div>
 					<div className="event-generic-time">
-						<time>{DateTime.format(new Date(startTime), 'h:mm')}</time> - <time>{DateTime.format(new Date(endTime), 'h:mm A')}</time>
+						<time>{DateTime.format(this.props.item.getStartTime(), 'h:mm')}</time> - <time>{DateTime.format(this.props.item.getEndTime(), 'h:mm A')}</time>
 					</div>
 				</div>
 			</Event.Layout>
