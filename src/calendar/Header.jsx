@@ -17,17 +17,25 @@ const t = scoped('nti.web.calendar.header', {
 
 export default class CalendarHeader extends React.Component {
 	static propTypes = {
-		calendars: PropTypes.array
+		calendars: PropTypes.array,
+		filters: PropTypes.array,
+		addFilter: PropTypes.func,
+		removeFilter: PropTypes.func
 	}
 
 	state = {
-		showOptions: false
+		showOptions: false,
+		showFilters: false
 	}
 
 	attachFlyoutRef = x => this.flyout = x;
 
 	onOptionsClick = () => {
 		this.setState({ showOptions: !this.state.showOptions });
+	}
+
+	onFiltersClick = () => {
+		this.setState({ showFilters: !this.state.showFilters });
 	}
 
 	renderExport () {
@@ -47,38 +55,26 @@ export default class CalendarHeader extends React.Component {
 		);
 	}
 
-	renderListTrigger () {
-		return (
-			<div className="calendars-list">
-				{t('title')}
-				<i className="icon-chevron-down-10" />
-				<i className="icon-chevron-up-10" />
-			</div>
-		);
-	}
-
 	render () {
-		const { calendars } = this.props;
-
+		const { calendars, filters, addFilter, removeFilter } = this.props;
+		const { showFilters, showOptions } = this.state;
 		return (
 			<>
 				<div className="calendar-header">
-					<Flyout.Triggered
-						className="calendar-list-trigger"
-						trigger={this.renderListTrigger()}
-						verticalAlign={Flyout.ALIGNMENTS.BOTTOM}
-						horizontalAlign={Flyout.ALIGNMENTS.LEFT}
-						ref={this.attachFlyoutRef}
-						contain
-					>
-						<CalendarList calendars={calendars} />
-					</Flyout.Triggered>
+					<div className={cx('calendars-list', { open: showFilters })} onClick={this.onFiltersClick}>
+						{t('title')}
+						<i className="icon-chevron-down-10" />
+						<i className="icon-chevron-up-10" />
+					</div>
 					<div className="controls">
-						<i className={cx('icon-more', { active: this.state.showOptions })} onClick={this.onOptionsClick} />
+						<i className={cx('icon-more', { active: showOptions })} onClick={this.onOptionsClick} />
 						<i className="icon-bold-x" />
 					</div>
 				</div>
-				{this.state.showOptions && this.renderExport()}
+				{showOptions && this.renderExport()}
+				{showFilters && (
+					<CalendarList calendars={calendars} filters={filters} addFilter={addFilter} removeFilter={removeFilter} />
+				)}
 			</>
 		);
 	}

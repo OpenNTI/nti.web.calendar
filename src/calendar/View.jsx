@@ -10,7 +10,7 @@ import Day from './day';
 
 const { BoundaryMonitor } = Scroll;
 
-@Store.connect(['bins', 'loading', 'loaded', 'error',  'calendars', 'canCreate'])
+@Store.connect(['bins', 'loading', 'loaded', 'error',  'calendars', 'canCreate', 'filters'])
 export default class Calendar extends React.Component {
 	static deriveBindingFromProps (props) {
 		return props.entity || null;
@@ -21,20 +21,19 @@ export default class Calendar extends React.Component {
 		store: PropTypes.object,
 		canCreate: PropTypes.bool,
 		bins: PropTypes.array,
-		calendars: PropTypes.array
+		calendars: PropTypes.array,
+		filters: PropTypes.array
 	}
 
-	state = {
-		excludedCalendars: []
-	}
+	state = {}
 
 	render () {
-		const { excludedCalendars, showEventEditor } = this.state;
-		const { bins, calendars, canCreate } = this.props;
+		const { bins, calendars, canCreate, filters, store } = this.props;
+		const { showEventEditor } = this.state;
 
 		return (
 			<div className="calendar-main">
-				<Header calendars={calendars} />
+				<Header calendars={calendars} filters={filters} addFilter={store.addFilter} removeFilter={store.removeFilter} />
 				<div className="calendar-body">
 					<BoundaryMonitor>
 						{bins && bins.length > 0 && bins.map(bin => <Day key={bin.name} bin={bin} />)}

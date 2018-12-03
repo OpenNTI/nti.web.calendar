@@ -4,10 +4,11 @@ import cx from 'classnames';
 
 export default function Icon ({ selected, onClick, url }) {
 	return (
-		<div style={{ backgroundImage: `url(${url})`, }} className={cx('calendar-icon', { selected })} onClick={onClick}>
+		<div className="icon-wrapper">
 			{selected && (
 				<i className="icon-check" />
 			)}
+			<div style={{ backgroundImage: `url(${url})`, }} className={cx('calendar-icon', { selected })} onClick={onClick} />
 		</div>
 	);
 }

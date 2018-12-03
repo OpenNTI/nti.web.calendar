@@ -6,21 +6,33 @@ import { Icon } from '../components';
 
 export default class CourseItem extends React.Component {
 	static propTypes = {
-		item: PropTypes.object,
-		selected: PropTypes.bool
+		item: PropTypes.shape({
+			CatalogEntry: PropTypes.shape({
+				title: PropTypes.string.isRequired,
+				ProviderUniqueID: PropTypes.string.isRequired
+			}).isRequired,
+			NTIID: PropTypes.string.isRequired
+		}),
+		selected: PropTypes.bool.isRequired,
+		onClick: PropTypes.func.isRequired
+	}
+
+	onClick = () => {
+		this.props.onClick(this.props.item.NTIID);
 	}
 
 	render () {
 		const { item: { CatalogEntry = {} }, selected } = this.props;
-		const { title, providerId } = CatalogEntry;
+		const { title, ProviderUniqueID } = CatalogEntry;
+
 		return (
-			<div className="course-item">
+			<div className="course-item" onClick={this.onClick}>
 				<Presentation.Asset propName="url" contentPackage={CatalogEntry} type="thumb">
 					<Icon selected={selected} />
 				</Presentation.Asset>
 				<div className="course-item-meta">
 					<div className="course-item-title">{title}</div>
-					<div className="course-item-provider-id">{providerId}</div>
+					<div className="course-item-provider-id">{ProviderUniqueID}</div>
 				</div>
 			</div>
 		);

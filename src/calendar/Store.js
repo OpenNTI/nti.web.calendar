@@ -17,6 +17,10 @@ export default class CalendarStore extends Stores.BoundStore {
 	constructor () {
 		super();
 		this.eventBinner = new EventBinner();
+
+		this.set({
+			filters: []
+		});
 	}
 
 	async load () {
@@ -127,14 +131,22 @@ export default class CalendarStore extends Stores.BoundStore {
 		});
 	}
 
-	setFilter (fitler) {
+	addFilter = (filter) => {
+		const filters = this.get('filters');
+		this.set({ filters: [...filters, filter ]});
+	}
 
+	removeFilter = (filter) => {
+		const filters = this.get('filters');
+		const index = filters.findIndex(x => x === filter);
+		filters.splice(index, 1);
+		this.set({ filters: filters.slice() });
 	}
 
 	getAvailableCalendars () {
 		const items = (this.collection && this.collection.Items) || [];
 
-		return items.filter(x=>x.hasLink('create_calendar_event'));
+		return items.filter(x => x.hasLink('create_calendar_event'));
 	}
 
 	async createEvent (calendar, event, title, description, location, startDate, endDate, img) {
