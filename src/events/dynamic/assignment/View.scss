@@ -7,44 +7,46 @@
 	justify-content: space-around;
 	margin: 4px 0;
 
-	.assignment-meta {
-		color: #fff;
-		font-size: 14px;
-		font-weight: 600;
-		background-color: #f35252;
-		padding: 5px 10px;
-		border-radius: 5px;
-		min-height: 40px;
-		width: 226px;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
+	.assignment-main-container {
+		.assignment-meta {
+			color: #fff;
+			font-size: 14px;
+			font-weight: 600;
+			background-color: #f35252;
+			padding: 5px 10px;
+			border-radius: 5px;
+			min-height: 40px;
+			width: 226px;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
 
-		.assignment-subtitle {
-			color: rgba(255, 255, 255, 0.7);
-			font-size: 10px;
-			font-weight: bold;
-			letter-spacing: -0.21px;
-		}
-	}
-
-	.timed-assignment {
-		background: white;
-		padding: 10px;
-		border-bottom-left-radius: 5px;
-		border-bottom-right-radius: 5px;
-
-		.timed-assignment-length {
-			color: #232323;
-			font-size: 24px;
+			.assignment-subtitle {
+				color: rgba(255, 255, 255, 0.7);
+				font-size: 10px;
+				font-weight: bold;
+				letter-spacing: -0.21px;
+			}
 		}
 
-		.timed-assignment-label {
-			color: #b8b8b8;
-			font-size: 10px;
-			font-weight: bold;
-			letter-spacing: -0.21px;
-			text-transform: uppercase;
+		.timed-assignment {
+			background: white;
+			padding: 10px;
+			border-bottom-left-radius: 5px;
+			border-bottom-right-radius: 5px;
+
+			.timed-assignment-length {
+				color: #232323;
+				font-size: 24px;
+			}
+
+			.timed-assignment-label {
+				color: #b8b8b8;
+				font-size: 10px;
+				font-weight: bold;
+				letter-spacing: -0.21px;
+				text-transform: uppercase;
+			}
 		}
 	}
 

@@ -42,7 +42,7 @@ export default class AssignmentEvent extends React.Component {
 		return (
 			<Event.Layout className={cx('assignment-event', { isTimed })}>
 				<Icon />
-				<div className="assignment-content">
+				<div className="assignment-main-container">
 					<div className="assignment-meta">
 						<div className="assignment-title">{title}</div>
 						<List.SeparatedInline className="assignment-subtitle">
