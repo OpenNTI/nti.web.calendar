@@ -1,13 +1,14 @@
 .calendar-header {
-	background-color: #2D2D2D;
-	border-bottom: 1px solid #000000;
+	background-color: #2d2d2d;
+	border-bottom: 1px solid black;
 	display: flex;
 	width: 100%;
-    border-top-left-radius: 5px;
+	border-top-left-radius: 5px;
 	border-top-right-radius: 5px;
 
 	.calendars-list {
-		font: 600 14px "Open Sans";
+		font-weight: 600;
+		font-size: 0.875rem;
 		color: white;
 		padding: 10px;
 		flex-grow: 1;
@@ -63,7 +64,6 @@
 
 		.export-header {
 			color: #494949;
-			font-family: "Open Sans";
 			font-size: 14px;
 			font-weight: 600;
 			line-height: 19px;
@@ -83,14 +83,12 @@
 
 		.export-message {
 			color: #757474;
-			font-family: "Open Sans";
 			font-size: 14px;
-			margin: 15px 0px;
+			margin: 15px 0;
 		}
 
 		.export-link {
-			color: #3FB3F6;
-			font-family: "Open Sans";
+			color: #3fb3f6;
 			font-size: 14px;
 			cursor: pointer;
 		}
