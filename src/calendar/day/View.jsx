@@ -32,7 +32,7 @@ export default class Day extends React.Component {
 
 	render () {
 		const { showEditor, event } = this.state;
-		const { bin: { name, items } } = this.props;
+		const { bin, bin: { name, items } } = this.props;
 		const date = new Date(name);
 		return (
 			<div className="calendar-day">
@@ -44,7 +44,7 @@ export default class Day extends React.Component {
 						<div className="empty-day">{t('empty')}</div>
 					)}
 					{items.length > 0 && (
-						items.map(item =>  <Item key={item.NTIID || (item.getCreatedTime && item.getCreatedTime()) || item.title} item={item} onItemClick={this.onItemClick}/>)
+						items.map(item =>  <Item key={item.NTIID || (item.getCreatedTime && item.getCreatedTime()) || item.title} bin={bin} item={item} onItemClick={this.onItemClick}/>)
 					)}
 				</div>
 				{showEditor && (

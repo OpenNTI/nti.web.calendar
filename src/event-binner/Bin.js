@@ -1,10 +1,12 @@
 const NAME = Symbol('Name');
 const ITEMS = Symbol('Items');
+const BINNER = Symbol('Binner');
 
 class Bin {
-	constructor (name, items = []) {
+	constructor (name, items = [], binner) {
 		this[NAME] = name;
 		this[ITEMS] = items;
+		this[BINNER] = binner;
 	}
 
 	get name () {
@@ -27,6 +29,9 @@ class Bin {
 		return end ? (end.getEndTime() || end.getStartTime()) : null;
 	}
 
+	getBinsFor (item) {
+		return this[BINNER](item);
+	}
 
 	[Symbol.iterator] () {
 		const snapshot = (this.items || []).slice();
@@ -96,10 +101,10 @@ export function insertEvent (bin, event) {
 	}
 
 
-	return new Bin(bin.name, getUniqueEvents(newItems));
+	return new Bin(bin.name, getUniqueEvents(newItems), bin[BINNER]);
 }
 
 
-export function createBin (name, event) {
-	return new Bin(name, event ? [event] : []);
+export function createBin (name, event, binner) {
+	return new Bin(name, event ? [event] : [], binner);
 }

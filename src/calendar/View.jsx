@@ -48,7 +48,7 @@ export default class Calendar extends React.Component {
 			<div className={cx('calendar-main', className)}>
 				<Header calendars={calendars} filters={filters} addFilter={store.addFilter} removeFilter={store.removeFilter} onClose={onClose}/>
 				<div className="calendar-body">
-					{loading && <Loading.Ellipsis/>}
+					{loading && <Loading.Spinner/>}
 					<BoundaryMonitor>
 						{bins && bins.length > 0 && bins.map(bin => <Day key={bin.name} bin={bin} />)}
 					</BoundaryMonitor>

@@ -34,7 +34,7 @@ export default class EventBinner {
 			if (existing) {
 				this[BINS][bin] = insertEvent(existing, event);
 			} else {
-				this[BINS][bin] = createBin(bin, event);
+				this[BINS][bin] = createBin(bin, event, this[BINNER]);
 			}
 		}
 	}

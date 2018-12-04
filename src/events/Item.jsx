@@ -12,6 +12,7 @@ export default class EventItem extends React.Component {
 
 	static propTypes = {
 		item: PropTypes.object,
+		bin: PropTypes.object,
 		context: PropTypes.object,
 		readOnly: PropTypes.bool,
 		onItemClick: PropTypes.func
@@ -25,7 +26,7 @@ export default class EventItem extends React.Component {
 
 	render () {
 		const {
-			props: { item, context },
+			props: { item, bin, context },
 			state: { error }
 		} = this;
 
@@ -36,6 +37,10 @@ export default class EventItem extends React.Component {
 		}
 
 		const Cmp = registry.getItemFor(item.MimeType);
+
+		const bins = bin.getBinsFor(item);
+		const dayIndex = bins.indexOf(bin.name);
+
 
 		return (
 			<div className="item-container"
@@ -49,6 +54,8 @@ export default class EventItem extends React.Component {
 			>
 				<Cmp
 					item={item}
+					day={dayIndex}
+					numberOfDays={bins.length}
 					context={context}
 				/>
 			</div>
