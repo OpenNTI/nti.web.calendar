@@ -2,23 +2,22 @@
 
 .calendar-day {
 	.day-header {
-		background-color: #2D2D2D;
+		background-color: #2d2d2d;
 		padding: 10px;
 		color: white;
-		font-family: "Open Sans";
 		font-weight: bold;
 		text-transform: uppercase;
 		font-size: 10px;
 	}
 
 	.empty-day {
-		color: #B8B8B8;
+		color: #b8b8b8;
 		font-style: italic;
 		padding: 15px 45px;
 		font-size: 14px;
 	}
+
 	.day-events {
-		padding: 10px 0px;
+		padding: 10px 0;
 	}
 }
-
