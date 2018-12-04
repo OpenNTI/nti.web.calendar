@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Scroll } from '@nti/web-commons';
+import { Scroll, Loading } from '@nti/web-commons';
 
 import Editor from '../events/editor';
 
@@ -23,19 +23,21 @@ export default class Calendar extends React.Component {
 		bins: PropTypes.array,
 		calendars: PropTypes.array,
 		filters: PropTypes.array,
-		onClose: PropTypes.func
+		onClose: PropTypes.func,
+		loading: PropTypes.bool
 	}
 
 	state = {}
 
 	render () {
-		const { bins, calendars, canCreate, filters, store, onClose } = this.props;
+		const { bins, calendars, canCreate, filters, store, onClose, loading } = this.props;
 		const { showEventEditor } = this.state;
 
 		return (
 			<div className="calendar-main">
 				<Header calendars={calendars} filters={filters} addFilter={store.addFilter} removeFilter={store.removeFilter} onClose={onClose}/>
 				<div className="calendar-body">
+					{loading && <Loading.Ellipsis/>}
 					<BoundaryMonitor>
 						{bins && bins.length > 0 && bins.map(bin => <Day key={bin.name} bin={bin} />)}
 					</BoundaryMonitor>
