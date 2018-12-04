@@ -5,6 +5,10 @@
 	padding: 5px 0;
 	cursor: pointer;
 
+	.icon-wrapper {
+		position: relative;
+	}
+
 	.course-item-meta {
 		flex-grow: 1;
 		margin-left: 10px;

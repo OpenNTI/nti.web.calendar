@@ -18,7 +18,6 @@
 			.day-header {
 				position: sticky;
 				top: 0;
-				z-index: 1; // make subsequent dom content pass under the header when scrolled
 			}
 		}
 	}
