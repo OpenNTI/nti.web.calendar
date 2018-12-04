@@ -34,7 +34,7 @@ export default class CalendarList extends React.Component {
 					<div className="courses-list">
 						<div className="calendar-list-header">Courses</div>
 						<div className="course-item-list">
-							{courseCalendars.map(item => <CourseItem key={item.NTIID} onClick={this.onFilterClick} selected={filters.includes(item.NTIID)} item={item} />)}
+							{courseCalendars.map(item => <CourseItem key={item.NTIID} onClick={this.onFilterClick} selected={!filters.includes(item.NTIID)} item={item} />)}
 						</div>
 					</div>
 				)}
