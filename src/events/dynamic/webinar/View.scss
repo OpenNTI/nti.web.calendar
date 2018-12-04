@@ -1,0 +1,44 @@
+@import '~@nti/style-common';
+
+.webinar-event {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	min-height: 40px;
+	width: 280px;
+	justify-content: space-around;
+	margin: 4px 0;
+	color: white;
+
+	&.isTimed {
+		.assignment-meta {
+			border-bottom-left-radius: 0px;
+			border-bottom-right-radius: 0px;
+		}
+	}
+
+	.webinar-meta {
+		color: #fff;
+		font-size: 14px;
+		font-weight: 600;
+		background-color: $primary-blue;
+		padding: 5px 10px;
+		border-radius: 5px;
+		min-height: 40px;
+		width: 226px;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+
+		.webinar-subtitle {
+			opacity: 0.67;
+			font-size: 10px;
+			font-weight: bold;
+			letter-spacing: -0.21px;
+
+			.times {
+				text-transform: uppercase;
+			}
+		}
+	}
+}
