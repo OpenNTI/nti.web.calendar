@@ -26,7 +26,7 @@ export default class CalendarList extends React.Component {
 
 	render () {
 		const { calendars, filters } = this.props;
-		const courseCalendars = (calendars.filter(x => x.MimeType === CourseCalendar)) || [];
+		const courseCalendars = calendars && (calendars.filter(x => x.MimeType === CourseCalendar)) || [];
 
 		return (
 			<div className="calendar-list-select">
