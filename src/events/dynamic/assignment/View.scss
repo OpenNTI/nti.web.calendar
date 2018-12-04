@@ -1,20 +1,20 @@
 .assignment-event {
-    display: flex;
-    flex-direction: row;
+	display: flex;
+	flex-direction: row;
 	align-items: center;
-	height: 40px;
+	min-height: 40px;
 	width: 280px;
-    justify-content: space-around;
-	margin: 4px 0px;
+	justify-content: space-around;
+	margin: 4px 0;
 
 	.assignment-meta {
-		color: #FFFFFF;
+		color: #fff;
 		font-size: 14px;
 		font-weight: 600;
 		background-color: #f35252;
 		padding: 5px 10px;
 		border-radius: 5px;
-		height: 40px;
+		min-height: 40px;
 		width: 226px;
 		display: flex;
 		flex-direction: column;
