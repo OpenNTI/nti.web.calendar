@@ -2,12 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { DateTime } from '@nti/web-commons';
 
+import Registry from '../../Registry';
 import { Icon } from '../../../calendar/components';
 import { Event } from '../../components';
-import Registry from '../../Registry';
 
+export default
 @Registry.register('application/vnd.nextthought.assessment.assignmentcalendarevent')
-export default class AssignmentEvent extends React.Component {
+class AssignmentEvent extends React.Component {
 	static propTypes = {
 		item: PropTypes.shape({
 			title: PropTypes.string,
