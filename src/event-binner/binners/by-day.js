@@ -1,5 +1,5 @@
 function getNameForDate (date) {
-	return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+	return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} 13:00`;
 }
 
 export default function byDay (event) {

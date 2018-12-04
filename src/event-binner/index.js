@@ -44,8 +44,8 @@ export default class EventBinner {
 		const bins = Object.values(this[BINS]);
 
 		return bins.sort((a, b) => {
-			const aStart = a.start;
-			const bStart = b.start;
+			const aStart = new Date(a.name);
+			const bStart = new Date(b.name);
 
 			return aStart < bStart ? -1 : (aStart === bStart ? 0 : 1);
 		});

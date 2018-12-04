@@ -70,7 +70,7 @@ export default class CalendarStore extends Stores.BoundStore {
 		try {
 			const service = await getService();
 			const today = new Date();
-			const batch = await service.getBatch(collection.getLink('events'), { batchAfter: today.getTime() * 1000 });
+			const batch = await service.getBatch(collection.getLink('events'), { batchAfter: today.getTime() / 1000 });
 
 			this.set({
 				hasMore: batch.Items.length >= BATCH_SIZE,
@@ -101,7 +101,7 @@ export default class CalendarStore extends Stores.BoundStore {
 		const firstEvent = this.eventBinner.getfirstEvent();
 		const service = await getService();
 		const firstDate = firstEvent.getStartDate();
-		const batch = await service.getBatch(collection.getLink('events'), { batchBefore: firstDate.getTime() * 1000 });
+		const batch = await service.getBatch(collection.getLink('events'), { batchBefore: firstDate.getTime() / 1000 });
 
 		this.eventBinner.insertEvents(batch.Items);
 
@@ -120,7 +120,7 @@ export default class CalendarStore extends Stores.BoundStore {
 		const lastEvent = this.eventBinner.getLastEvent();
 		const service = await getService();
 		const lastDate = lastEvent.getStartDate();
-		const batch = await service.getBatch(collection.getLink('events'), { batchAfter: lastDate.getTime() * 1000 });
+		const batch = await service.getBatch(collection.getLink('events'), { batchAfter: lastDate.getTime() / 1000 });
 
 		this.eventBinner.insertEvents(batch.Items);
 
