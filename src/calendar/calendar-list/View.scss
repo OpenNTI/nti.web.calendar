@@ -11,24 +11,23 @@
 .calendar-list-select {
 	padding: 20px;
 	position: absolute;
-    background: white;
-    z-index: 1;
-    border-radius: 5px;
-    margin: 5px;
-    left: 0;
-    right: 0;
-    bottom: 0;
+	background: white;
+	z-index: 2; // above sticky day headers
+	border-radius: 5px;
+	margin: 5px;
+	left: 0;
+	right: 0;
+	bottom: 0;
 	top: 40px;
 
 	.calendar-list-header {
-		color: #B8B8B8;
-		font-family: "Open Sans";
+		color: #b8b8b8;
 		font-weight: bold;
 		font-size: 10px;
 		text-transform: uppercase;
 	}
 
 	.course-item-list, .community-item-list {
-		padding: 15px 0px;
+		padding: 15px 0;
 	}
 }
