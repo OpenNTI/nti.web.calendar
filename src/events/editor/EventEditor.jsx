@@ -70,10 +70,8 @@ class EventEditor extends React.Component {
 	}
 
 	getMatchingCalendar (event, availableCalendars) {
-		const targetID = event.CatalogEntryNTIID;
-
 		return availableCalendars.filter(c => {
-			return c.CatalogEntry.NTIID === targetID;
+			return c.getID() === event.ContainerId;
 		})[0];
 	}
 
