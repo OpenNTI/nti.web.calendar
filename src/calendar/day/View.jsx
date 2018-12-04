@@ -44,7 +44,7 @@ export default class Day extends React.Component {
 						<div className="empty-day">{t('empty')}</div>
 					)}
 					{items.length > 0 && (
-						items.map(item =>  <Item key={item.NTIID} item={item} onItemClick={this.onItemClick}/>)
+						items.map(item =>  <Item key={item.NTIID || (item.getCreatedTime && item.getCreatedTime()) || item.title} item={item} onItemClick={this.onItemClick}/>)
 					)}
 				</div>
 				{showEditor && (
