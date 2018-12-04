@@ -20,7 +20,8 @@ export default class CalendarHeader extends React.Component {
 		calendars: PropTypes.array,
 		filters: PropTypes.array,
 		addFilter: PropTypes.func,
-		removeFilter: PropTypes.func
+		removeFilter: PropTypes.func,
+		onClose: PropTypes.func
 	}
 
 	state = {
@@ -36,6 +37,14 @@ export default class CalendarHeader extends React.Component {
 
 	onFiltersClick = () => {
 		this.setState({ showFilters: !this.state.showFilters });
+	}
+
+	onClose = () => {
+		const {onClose} = this.props;
+
+		if(onClose) {
+			onClose();
+		}
 	}
 
 	renderExport () {
@@ -68,7 +77,7 @@ export default class CalendarHeader extends React.Component {
 					</div>
 					<div className="controls">
 						<i className={cx('icon-more', { active: showOptions })} onClick={this.onOptionsClick} />
-						<i className="icon-bold-x" />
+						<i className="icon-bold-x" onClick={this.onClose}/>
 					</div>
 				</div>
 				{showOptions && this.renderExport()}

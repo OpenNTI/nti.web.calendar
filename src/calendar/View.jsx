@@ -22,18 +22,19 @@ export default class Calendar extends React.Component {
 		canCreate: PropTypes.bool,
 		bins: PropTypes.array,
 		calendars: PropTypes.array,
-		filters: PropTypes.array
+		filters: PropTypes.array,
+		onClose: PropTypes.func
 	}
 
 	state = {}
 
 	render () {
-		const { bins, calendars, canCreate, filters, store } = this.props;
+		const { bins, calendars, canCreate, filters, store, onClose } = this.props;
 		const { showEventEditor } = this.state;
 
 		return (
 			<div className="calendar-main">
-				<Header calendars={calendars} filters={filters} addFilter={store.addFilter} removeFilter={store.removeFilter} />
+				<Header calendars={calendars} filters={filters} addFilter={store.addFilter} removeFilter={store.removeFilter} onClose={onClose}/>
 				<div className="calendar-body">
 					<BoundaryMonitor>
 						{bins && bins.length > 0 && bins.map(bin => <Day key={bin.name} bin={bin} />)}
