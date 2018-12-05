@@ -12,10 +12,21 @@
 		border-bottom-right-radius: 5px;
 		overflow: auto;
 		max-height: calc(100% - 40px);
-		min-height: 60px;
+		min-height: 200px;
 
-		.loading-spinner {
-			margin-top: 20px;
+		.calendar-error {
+			text-align: center;
+			color: white;
+			margin-top: 15px;
+		}
+
+		.calendar-body-loading {
+			margin: auto;
+			position: absolute;
+			top: 0;
+			left: 0;
+			bottom: 0;
+			right: 0;
 		}
 
 		.calendar-day {

@@ -26,10 +26,20 @@ export default class Calendar extends React.Component {
 		className: PropTypes.string,
 		filters: PropTypes.array,
 		onClose: PropTypes.func,
-		loading: PropTypes.bool
+		loading: PropTypes.bool,
+		error: PropTypes.object
 	}
 
 	state = {}
+
+	renderError () {
+		const { error } = this.props;
+		return (
+			<div className="calendar-error">
+				{error.message || 'Unable to load.'}
+			</div>
+		);
+	}
 
 	render () {
 		const {
@@ -40,7 +50,8 @@ export default class Calendar extends React.Component {
 			filters,
 			store,
 			onClose,
-			loading
+			loading,
+			error
 		} = this.props;
 		const { showEventEditor } = this.state;
 
@@ -48,7 +59,8 @@ export default class Calendar extends React.Component {
 			<div className={cx('calendar-main', className)}>
 				<Header calendars={calendars} filters={filters} addFilter={store.addFilter} removeFilter={store.removeFilter} onClose={onClose}/>
 				<div className="calendar-body">
-					{loading && <Loading.Spinner/>}
+					{loading && <Loading.Spinner className="calendar-body-loading"/>}
+					{error && this.renderError()}
 					<BoundaryMonitor>
 						{bins && bins.length > 0 && bins.map(bin => <Day calendars={calendars} key={bin.name} bin={bin} />)}
 					</BoundaryMonitor>
