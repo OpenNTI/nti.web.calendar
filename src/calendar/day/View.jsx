@@ -16,7 +16,8 @@ export default class Day extends React.Component {
 		bin: PropTypes.shape({
 			name: PropTypes.string,
 			items: PropTypes.array
-		})
+		}),
+		calendars: PropTypes.array
 	}
 
 	state = {}
@@ -30,8 +31,9 @@ export default class Day extends React.Component {
 
 	render () {
 		const { showEditor, event } = this.state;
-		const { bin, bin: { name, items } } = this.props;
+		const { bin, bin: { name, items }, calendars } = this.props;
 		const date = new Date(name);
+
 		return (
 			<div className="calendar-day">
 				<div className="day-header">
@@ -42,7 +44,15 @@ export default class Day extends React.Component {
 						<div className="empty-day">{t('empty')}</div>
 					)}
 					{items.length > 0 && (
-						items.map(item =>  <Item key={item.NTIID || (item.getCreatedTime && item.getCreatedTime()) || item.title} bin={bin} item={item} onItemClick={this.onItemClick}/>)
+						items.map(item => (
+							<Item
+								key={item.NTIID || (item.getCreatedTime && item.getCreatedTime()) || item.title}
+								bin={bin}
+								item={item}
+								onItemClick={this.onItemClick}
+								catalogEntry={(calendars.filter(x => x.NTIID === item.ContainerId)[0] || {}).CatalogEntry}
+							/>
+						))
 					)}
 				</div>
 				{showEditor && (

@@ -50,7 +50,7 @@ export default class Calendar extends React.Component {
 				<div className="calendar-body">
 					{loading && <Loading.Spinner/>}
 					<BoundaryMonitor>
-						{bins && bins.length > 0 && bins.map(bin => <Day key={bin.name} bin={bin} />)}
+						{bins && bins.length > 0 && bins.map(bin => <Day calendars={calendars} key={bin.name} bin={bin} />)}
 					</BoundaryMonitor>
 				</div>
 				{canCreate && <div className="add-event" onClick={() => this.setState({showEventEditor: true})}><i className="icon-add"/></div>}

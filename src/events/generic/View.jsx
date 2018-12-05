@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, DateTime } from '@nti/web-commons';
+import { List, DateTime, Presentation } from '@nti/web-commons';
 import {scoped} from '@nti/lib-locale';
 
 import { Icon } from '../../calendar/components';
@@ -21,14 +21,18 @@ export default class GenericEvent extends React.Component {
 			icon: PropTypes.string
 		}),
 		numberOfDays: PropTypes.number,
-		day: PropTypes.number
+		day: PropTypes.number,
+		catalogEntry: PropTypes.object,
 	};
 
 	render () {
-		const { numberOfDays, day, item: { title, icon } } = this.props;
+		const { numberOfDays, day, item: { title }, catalogEntry } = this.props;
+
 		return (
 			<Event.Layout className="event-generic">
-				<Icon url={icon} />
+				<Presentation.Asset propName="url" contentPackage={catalogEntry} type="thumb">
+					<Icon />
+				</Presentation.Asset>
 				<div className="event-generic-meta">
 					<div className="event-generic-title">{title}</div>
 					<List.SeparatedInline className="event-generic-subtitle">
