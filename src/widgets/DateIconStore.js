@@ -7,7 +7,6 @@ export default class DateIconStore extends Stores.BoundStore {
 			const service = await getService();
 			const collection = await service.getCollection('Calendars');
 			const today = new Date();
-			today.setHours(0, 0, 0, 0);
 
 			const endOfDay = new Date(today);
 			endOfDay.setSeconds(59);
