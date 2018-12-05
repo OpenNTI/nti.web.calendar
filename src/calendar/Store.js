@@ -71,7 +71,8 @@ export default class CalendarStore extends Stores.BoundStore {
 		try {
 			const service = await getService();
 			const today = new Date();
-			const batch = await service.getBatch(collection.getLink('events'), { notBefore: today.getTime() / 1000 });
+			today.setHours(0, 0, 0, 0);
+			const batch = await service.getBatch(collection.getLink('events'), { notBefore: today.getTime() / 1000, 'excluded_context_ntiids': filters });
 
 			this.set({
 				hasMore: batch.Items.length >= BATCH_SIZE,
@@ -135,6 +136,7 @@ export default class CalendarStore extends Stores.BoundStore {
 	addFilter = (filter) => {
 		const filters = this.get('filters');
 		this.set({ filters: [...filters, filter ]});
+		this.loadInitialBatch();
 	}
 
 	removeFilter = (filter) => {
