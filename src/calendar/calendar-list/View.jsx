@@ -38,12 +38,12 @@ export default class CalendarList extends React.Component {
 						</div>
 					</div>
 				)}
-				<div className="community-list">
+				{/* <div className="community-list">
 					<div className="calendar-list-header">Communities</div>
 					<div className="community-item-list">
 
 					</div>
-				</div>
+				</div> */}
 			</div>
 		);
 	}
