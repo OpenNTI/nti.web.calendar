@@ -11,6 +11,8 @@ const t = scoped('calendar.events.generic.View', {
 	dayIndex: 'Day %(count)s / %(total)s'
 });
 
+const formatTime = x => DateTime.format(x, 'h:mm A');
+
 @Registry.register('application/vnd.nextthought.courseware.coursecalendarevent')
 export default class GenericEvent extends React.Component {
 	static propTypes = {
@@ -25,9 +27,32 @@ export default class GenericEvent extends React.Component {
 		catalogEntry: PropTypes.object,
 	};
 
+	renderTime () {
+		const { numberOfDays, day, item} = this.props;
+		const isMultipleDay = numberOfDays > 1;
+		const isLastDay = day + 1 === numberOfDays;
+		const isFirstDay = day === 0;
+
+		return (
+			<div className="event-generic-time">
+				{(!isMultipleDay) && (
+					<>
+						<time>{formatTime(item.getStartTime())}</time> - <time>{formatTime(item.getEndTime())}</time>
+					</>
+				)}
+				{(isFirstDay && isMultipleDay) && (
+					<time>STARTS AT {formatTime(item.getStartTime())}</time>
+				)}
+				{(isLastDay && isMultipleDay) && (
+					<time>ENDS AT {formatTime(item.getEndTime())}</time>
+				)}
+			</div>
+		);
+	}
+
 	render () {
 		const { numberOfDays, day, item: { title }, catalogEntry } = this.props;
-
+		const showTime = ((numberOfDays > 1 && (day === 0 || day + 1 === numberOfDays)) || numberOfDays === 1);
 		return (
 			<Event.Layout className="event-generic">
 				<Presentation.Asset propName="url" contentPackage={catalogEntry} type="thumb">
@@ -37,9 +62,7 @@ export default class GenericEvent extends React.Component {
 					<div className="event-generic-title">{title}</div>
 					<List.SeparatedInline className="event-generic-subtitle">
 						{numberOfDays > 1 && <div className="event-day-index">{t('dayIndex', { count: day + 1, total: numberOfDays })}</div>}
-						<div className="event-generic-time">
-							<time>{DateTime.format(this.props.item.getStartTime(), 'h:mm')}</time> - <time>{DateTime.format(this.props.item.getEndTime(), 'h:mm A')}</time>
-						</div>
+						{showTime && this.renderTime()}
 					</List.SeparatedInline>
 				</div>
 			</Event.Layout>
