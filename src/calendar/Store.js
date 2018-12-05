@@ -197,8 +197,6 @@ export default class CalendarStore extends Stores.BoundStore {
 				calendarEvent = await service.postParseResponse(calendar.getLink('create_calendar_event'), formData);
 			}
 
-			// on successful event creation, call load to resync with server?
-
 			this.set({
 				saving: false
 			});

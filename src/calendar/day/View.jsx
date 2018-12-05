@@ -22,12 +22,10 @@ export default class Day extends React.Component {
 	state = {}
 
 	onItemClick = (item) => {
-		if(item.hasLink('edit')) {
-			this.setState({
-				showEditor: true,
-				event: item
-			});
-		}
+		this.setState({
+			showEditor: true,
+			event: item
+		});
 	}
 
 	render () {
@@ -52,6 +50,7 @@ export default class Day extends React.Component {
 						event={event}
 						onCancel={() => this.setState({showEditor: false})}
 						onSuccess={() => this.setState({showEditor: false})}
+						editable={event.hasLink('edit')}
 					/>
 				)}
 			</div>

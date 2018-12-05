@@ -10,6 +10,48 @@
 		pointer-events: none;
 	}
 
+	&.view-only {
+		.preview {
+			margin-right: 10px;
+		}
+
+		.desc {
+			font-size: 12px;
+			color: $secondary-grey;
+			text-align: left;
+		}
+
+		.contents {
+			.header-info {
+				box-shadow: none;
+			}
+		}
+
+		.other-info {
+			display: flex;
+
+			.location {
+				margin-right: 100px;
+				max-width: 200px;
+
+				.name {
+					font-size: 12px;
+					color: $secondary-grey;
+				}
+			}
+
+			.dates {
+				display: flex;
+
+				.date-display {
+					font-size: 12px;
+					color: $secondary-grey;
+					margin-right: 20px;
+				}
+			}
+		}
+	}
+
 	.error {
 		background-color: $primary-red;
 		color: white;

@@ -58,6 +58,7 @@ export default class Calendar extends React.Component {
 					<Editor
 						onCancel={() => this.setState({showEventEditor: false})}
 						onSuccess={() => this.setState({showEventEditor: false})}
+						create
 					/>
 				)}
 			</div>

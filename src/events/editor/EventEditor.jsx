@@ -17,6 +17,8 @@ const t = scoped('calendar.editor.Editor', {
 	calendar: 'Calendar',
 	save: 'Save',
 	cancel: 'Cancel',
+	close: 'Close',
+	edit: 'Edit',
 	location: 'Location',
 	datesTimes: 'Dates & Times',
 	delete: 'Delete',
@@ -37,6 +39,8 @@ class EventEditor extends React.Component {
 		createEvent: PropTypes.func,
 		createError: PropTypes.string,
 		saving: PropTypes.bool,
+		editable: PropTypes.bool,
+		create: PropTypes.bool,
 		getAvailableCalendars: PropTypes.func
 	}
 
@@ -45,7 +49,7 @@ class EventEditor extends React.Component {
 	constructor (props) {
 		super(props);
 
-		const {event, getAvailableCalendars} = props;
+		const {event, getAvailableCalendars, create} = props;
 
 		let defaultStartDate = new Date();
 		defaultStartDate.setSeconds(0);
@@ -56,6 +60,7 @@ class EventEditor extends React.Component {
 		const calendarFromEvent = event && this.getMatchingCalendar(event, availableCalendars);
 
 		this.state = {
+			viewMode: !create,
 			startDate: event ? event.getStartTime() : defaultStartDate,
 			endDate: event ? event.getEndTime() : new Date(defaultStartDate.getTime() + (60 * 60 * 1000)),
 			title: event && event.title,
@@ -75,7 +80,7 @@ class EventEditor extends React.Component {
 		})[0];
 	}
 
-	renderDate () {
+	renderDateInfo () {
 		const {startDate} = this.state;
 
 		return (
@@ -87,17 +92,31 @@ class EventEditor extends React.Component {
 	}
 
 	renderEventInfo () {
-		const {startDate, title, description, img} = this.state;
+		const {startDate, title, description, img, viewMode} = this.state;
 
 		return (
 			<div className="event-info">
-				<div className="title"><Input.Text placeholder={t('eventTitle')} value={title} onChange={(val) => this.setState({title: val})} maxLength="140"/></div>
+				<div className="title">
+					{
+						viewMode
+							? title
+							: <Input.Text placeholder={t('eventTitle')} value={title} onChange={(val) => this.setState({title: val})} maxLength="140"/>
+					}
+				</div>
 				<div className="time-info">
 					<span className="date">{DateTime.format(startDate, 'dddd [at] hh:mm a z')}</span>
 				</div>
 				<div className="image-and-description">
-					<ImageUpload img={img} onChange={imgBlob => this.setState({imgBlob})}/>
-					<Input.TextArea value={description} onChange={(val) => this.setState({description: val})} placeholder={t('eventDescription')}/>
+					{
+						viewMode
+							? img && <img className="preview" src={img.src}/>
+							: <ImageUpload img={img} onChange={imgBlob => this.setState({imgBlob})}/>
+					}
+					{
+						viewMode
+							? <div className="desc">{description}</div>
+							: <Input.TextArea value={description} onChange={(val) => this.setState({description: val})} placeholder={t('eventDescription')}/>
+					}
 				</div>
 			</div>
 		);
@@ -137,30 +156,52 @@ class EventEditor extends React.Component {
 	}
 
 	renderLocation () {
-		const {location} = this.state;
+		const {location, viewMode} = this.state;
+
+		if(viewMode && !location) {
+			return null;
+		}
 
 		return (
 			<div className="input-section location">
 				<div className="section-title">{t('location')}</div>
-				<Input.Text placeholder={t('eventLocation')} value={location} onChange={(val) => this.setState({location: val})} maxLength="140"/>
+				{
+					viewMode
+						? <div className="name">{location}</div>
+						: <Input.Text placeholder={t('eventLocation')} value={location} onChange={(val) => this.setState({location: val})} maxLength="140"/>
+				}
 			</div>
 		);
+	}
+
+	renderDate (value, label, field) {
+		const {viewMode} = this.state;
+
+		if(viewMode) {
+			return <div className="date-display">{DateTime.format(value, 'LLL')}</div>;
+		}
+
+		return <DateInput date={value} label={label} onChange={(val) => this.setState({[field]: val})}/>;
 	}
 
 	renderDateInputs () {
 		return (
 			<div className="input-section times">
 				<div className="section-title">{t('datesTimes')}</div>
-				<DateInput date={this.state.startDate} label={t('start')} onChange={(val) => this.setState({startDate: val})}/>
-				<DateInput date={this.state.endDate} label={t('end')} onChange={(val) => this.setState({endDate: val})}/>
+				<div className="dates">
+					{this.renderDate(this.state.startDate, t('start'), 'startDate')}
+					{this.renderDate(this.state.endDate, t('end'), 'endDate')}
+				</div>
 			</div>
 		);
 	}
 
 	renderOtherInfo () {
+		const {viewMode} = this.state;
+
 		return (
 			<div className="other-info">
-				{this.renderCalendarSelect()}
+				{!viewMode && this.renderCalendarSelect()}
 				{this.renderLocation()}
 				{this.renderDateInputs()}
 			</div>
@@ -176,18 +217,46 @@ class EventEditor extends React.Component {
 	}
 
 	onSave = async () => {
-		const {event, createEvent, onSuccess} = this.props;
+		const {event, createEvent, onSuccess, create} = this.props;
 		const {calendar, title, description, location, startDate, endDate, imgBlob} = this.state;
 
 		const calendarEvent = await createEvent(calendar, event, title, description, location, startDate, endDate, imgBlob);
 
-		if(onSuccess) {
+		if(create && onSuccess) {
 			onSuccess(calendarEvent);
+		}
+
+		if(!create) {
+			this.setState({viewMode: true});
 		}
 	}
 
 	renderButtons () {
-		const {saving} = this.props;
+		const {saving, editable} = this.props;
+		const {viewMode} = this.state;
+
+		if(viewMode) {
+			let buttons = [
+				{
+					label: t('close'),
+					onClick: this.onCancel,
+				}
+			];
+
+			if(editable) {
+				buttons.push({
+					label: t('edit'),
+					onClick: () => { this.setState({viewMode: false});}
+				});
+			}
+
+			return (
+				<DialogButtons
+					buttons={buttons}
+				/>
+			);
+		}
+
 
 		return (
 			<DialogButtons
@@ -216,7 +285,8 @@ class EventEditor extends React.Component {
 
 	render () {
 		const {saving} = this.props;
-		const cls = cx('calendar-event-editor', {saving});
+		const {viewMode} = this.state;
+		const cls = cx('calendar-event-editor', {saving, 'view-only': viewMode});
 
 		return (
 			<Dialog>
@@ -224,7 +294,7 @@ class EventEditor extends React.Component {
 					{this.renderError()}
 					<div className="contents">
 						<div className="header-info">
-							{this.renderDate()}
+							{this.renderDateInfo()}
 							{this.renderEventInfo()}
 						</div>
 						{this.renderOtherInfo()}
