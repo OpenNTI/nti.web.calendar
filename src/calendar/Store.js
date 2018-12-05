@@ -16,7 +16,6 @@ function getMimeTypeFor (calendar) {
 export default class CalendarStore extends Stores.BoundStore {
 	constructor () {
 		super();
-		this.eventBinner = new EventBinner();
 
 		this.set({
 			filters: []
@@ -60,6 +59,8 @@ export default class CalendarStore extends Stores.BoundStore {
 	async loadInitialBatch () {
 		const filters = this.get('filters');
 		const collection = this.collection;
+
+		this.eventBinner = new EventBinner();
 
 		if (!collection) { return; }
 
