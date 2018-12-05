@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Calendar} from '@nti/web-commons';
 
-import Store from '../calendar/Store';
+import Store from './DateIconStore';
 
 export default
 @Store.connect(['todaysCount'])
