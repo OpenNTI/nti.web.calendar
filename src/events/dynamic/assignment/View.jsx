@@ -22,11 +22,12 @@ export default class AssignmentEvent extends React.Component {
 	}
 
 	renderTimedAssignment () {
-		const { item: { assignment } } = this.props;
+		const { item } = this.props;
+
 		return (
 			<div className="timed-assignment">
 				<div className="timed-assignment-length">
-					{DateTime.getShortNaturalDuration(assignment.getMaximumTimeAllowed())}
+					{DateTime.getShortNaturalDuration(item.MaximumTimeAllowed * 1000)}
 				</div>
 				<div className="timed-assignment-label">
 					Time Limit
@@ -36,12 +37,11 @@ export default class AssignmentEvent extends React.Component {
 	}
 
 	render () {
-		const { item: { title, assignment }, catalogEntry} = this.props;
-		const dueDate = assignment && assignment.getDueDate();
-		const { totalPoints, isTimed } = assignment;
+		const { item, catalogEntry} = this.props;
+		const { dueDate, totalPoints, title, IsTimedAssignment } = item;
 
 		return (
-			<Event.Layout className={cx('assignment-event', { isTimed })}>
+			<Event.Layout className={cx('assignment-event', { IsTimedAssignment })}>
 				<Presentation.Asset propName="url" contentPackage={catalogEntry} type="thumb">
 					<Icon />
 				</Presentation.Asset>
@@ -61,7 +61,7 @@ export default class AssignmentEvent extends React.Component {
 							)}
 						</List.SeparatedInline>
 					</div>
-					{isTimed && this.renderTimedAssignment()}
+					{IsTimedAssignment && this.renderTimedAssignment()}
 				</div>
 			</Event.Layout>
 		);
