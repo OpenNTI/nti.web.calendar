@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { DateTime, List } from '@nti/web-commons';
+import { DateTime, List, Presentation } from '@nti/web-commons';
 import cx from 'classnames';
 
 import { Icon } from '../../../calendar/components';
@@ -17,7 +17,8 @@ export default class AssignmentEvent extends React.Component {
 				getDueDate: PropTypes.func.isRequired,
 				totalPoints: PropTypes.number
 			}).isRequired
-		})
+		}),
+		catalogEntry: PropTypes.object
 	}
 
 	renderTimedAssignment () {
@@ -35,13 +36,15 @@ export default class AssignmentEvent extends React.Component {
 	}
 
 	render () {
-		const { item: { title, assignment }} = this.props;
+		const { item: { title, assignment }, catalogEntry} = this.props;
 		const dueDate = assignment && assignment.getDueDate();
 		const { totalPoints, isTimed } = assignment;
 
 		return (
 			<Event.Layout className={cx('assignment-event', { isTimed })}>
-				<Icon />
+				<Presentation.Asset propName="url" contentPackage={catalogEntry} type="thumb">
+					<Icon />
+				</Presentation.Asset>
 				<div className="assignment-main-container">
 					<div className="assignment-meta">
 						<div className="assignment-title">{title}</div>

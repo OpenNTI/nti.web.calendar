@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { DateTime, List } from '@nti/web-commons';
+import { DateTime, List, Presentation } from '@nti/web-commons';
 import cx from 'classnames';
 
 import { Icon } from '../../../calendar/components';
@@ -14,15 +14,18 @@ export default class WebinarEvent extends React.Component {
 			title: PropTypes.string,
 			dueDate: PropTypes.string,
 			webinar: PropTypes.isRequired
-		})
+		}),
+		catalogEntry: PropTypes.object
 	}
 
 	render () {
-		const { item, item: { title }} = this.props;
+		const { item, item: { title }, catalogEntry} = this.props;
 
 		return (
 			<Event.Layout className={cx('webinar-event')}>
-				<Icon />
+				<Presentation.Asset propName="url" contentPackage={catalogEntry} type="thumb">
+					<Icon />
+				</Presentation.Asset>
 				<div className="webinar-content">
 					<div className="webinar-meta">
 						<div className="webinar-title">{title}</div>
