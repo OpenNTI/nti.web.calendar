@@ -46,7 +46,6 @@ export default class CalendarStore extends Stores.BoundStore {
 
 			this.collection = await collection.refresh();
 			this.loadInitialBatch();
-			this.loadTodaysCount();
 		} catch (e) {
 			this.set({
 				loading: false,
