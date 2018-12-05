@@ -14,6 +14,10 @@
 		max-height: calc(100% - 40px);
 		min-height: 60px;
 
+		.loading-spinner {
+			margin-top: 20px;
+		}
+
 		.calendar-day {
 			.day-header {
 				position: sticky;
