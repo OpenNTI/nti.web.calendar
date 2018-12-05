@@ -47,6 +47,7 @@ export default class CalendarStore extends Stores.BoundStore {
 
 			this.collection = await collection.refresh();
 			this.loadInitialBatch();
+			this.loadTodaysCount();
 		} catch (e) {
 			this.set({
 				loading: false,
@@ -70,7 +71,7 @@ export default class CalendarStore extends Stores.BoundStore {
 		try {
 			const service = await getService();
 			const today = new Date();
-			const batch = await service.getBatch(collection.getLink('events'), { batchAfter: today.getTime() / 1000 });
+			const batch = await service.getBatch(collection.getLink('events'), { notBefore: today.getTime() / 1000 });
 
 			this.set({
 				hasMore: batch.Items.length >= BATCH_SIZE,
@@ -101,7 +102,7 @@ export default class CalendarStore extends Stores.BoundStore {
 		const firstEvent = this.eventBinner.getfirstEvent();
 		const service = await getService();
 		const firstDate = firstEvent.getStartDate();
-		const batch = await service.getBatch(collection.getLink('events'), { batchBefore: firstDate.getTime() / 1000 });
+		const batch = await service.getBatch(collection.getLink('events'), { notBefore: firstDate.getTime() / 1000 });
 
 		this.eventBinner.insertEvents(batch.Items);
 
@@ -120,7 +121,7 @@ export default class CalendarStore extends Stores.BoundStore {
 		const lastEvent = this.eventBinner.getLastEvent();
 		const service = await getService();
 		const lastDate = lastEvent.getStartDate();
-		const batch = await service.getBatch(collection.getLink('events'), { batchAfter: lastDate.getTime() / 1000 });
+		const batch = await service.getBatch(collection.getLink('events'), { notBefore: lastDate.getTime() / 1000 });
 
 		this.eventBinner.insertEvents(batch.Items);
 
@@ -147,6 +148,23 @@ export default class CalendarStore extends Stores.BoundStore {
 		const items = (this.collection && this.collection.Items) || [];
 
 		return items.filter(x => x.hasLink('create_calendar_event'));
+	}
+
+	async loadTodaysCount () {
+		const service = await getService();
+		const collection = await service.getCollection('Calendars');
+		const today = new Date();
+
+		const endOfDay = new Date(today);
+		endOfDay.setSeconds(59);
+		endOfDay.setMinutes(59);
+		endOfDay.setHours(23);
+
+		const batch = await service.getBatch(collection.getLink('events'), { notBefore: today.getTime() / 1000, notAfter: endOfDay.getTime() / 1000 });
+
+		this.set({
+			todaysCount: batch.Items && batch.Items.length
+		});
 	}
 
 	async createEvent (calendar, event, title, description, location, startDate, endDate, img) {
