@@ -32,11 +32,11 @@ export default class CalendarHeader extends React.Component {
 	attachFlyoutRef = x => this.flyout = x;
 
 	onOptionsClick = () => {
-		this.setState({ showOptions: !this.state.showOptions });
+		this.setState({ showOptions: !this.state.showOptions, showFilters: false });
 	}
 
 	onFiltersClick = () => {
-		this.setState({ showFilters: !this.state.showFilters });
+		this.setState({ showFilters: !this.state.showFilters, showOptions: false });
 	}
 
 	onClose = () => {
