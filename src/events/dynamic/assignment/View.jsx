@@ -12,11 +12,11 @@ export default class AssignmentEvent extends React.Component {
 	static propTypes = {
 		item: PropTypes.shape({
 			title: PropTypes.string,
-			dueDate: PropTypes.string,
-			assignment: PropTypes.shape({
-				getDueDate: PropTypes.func.isRequired,
-				totalPoints: PropTypes.number
-			}).isRequired
+			dueDate: PropTypes.oneOfType([
+				PropTypes.string,
+				PropTypes.instanceOf(Date)
+			]),
+			totalPoints: PropTypes.number
 		}),
 		catalogEntry: PropTypes.object
 	}
@@ -37,7 +37,7 @@ export default class AssignmentEvent extends React.Component {
 	}
 
 	render () {
-		const { item, catalogEntry} = this.props;
+		const { item, catalogEntry } = this.props;
 		const { dueDate, totalPoints, title, IsTimedAssignment } = item;
 
 		return (
