@@ -26,10 +26,12 @@ class NotableEvents extends React.Component {
 	}
 
 	render () {
-		const {bins, calendars, loading, error} = this.props;
-
+		const {bins, calendars, loading, error, limit = 5} = this.props;
 		const props = {
-			bins, calendars, loading, error
+			bins: (bins || []).slice(0, limit),
+			calendars,
+			loading,
+			error
 		};
 
 		return (
