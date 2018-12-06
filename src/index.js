@@ -1,2 +1,2 @@
 export * from './widgets';
-export Calendar from './calendar';
+export * from './calendar';

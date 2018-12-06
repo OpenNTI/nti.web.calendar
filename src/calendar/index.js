@@ -1,3 +1,2 @@
-import View from './View';
-
-export default View;
+export Calendar from './View';
+export NotableEvents from './NotableEvents';
