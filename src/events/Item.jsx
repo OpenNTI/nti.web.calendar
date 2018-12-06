@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {LinkTo} from '@nti/web-routing';
 
 import Registry from './Registry';
 
@@ -44,22 +45,14 @@ export default class EventItem extends React.Component {
 		const dayIndex = bins.indexOf(bin.name);
 
 		return (
-			<div className="item-container"
-				onClick={() => {
-					const {onItemClick} = this.props;
-
-					if(onItemClick) {
-						onItemClick(item);
-					}
-				}}
-			>
+			<LinkTo.Object className="event-link" object={item}>
 				<Cmp
 					item={item}
 					day={dayIndex}
 					numberOfDays={bins.length}
 					{...props}
 				/>
-			</div>
+			</LinkTo.Object>
 		);
 	}
 }

@@ -15,9 +15,11 @@ export default class DateIconStore extends Stores.BoundStore {
 
 			const batch = await service.getBatch(collection.getLink('events'), { batchSize: 1, notBefore: today.getTime() / 1000, notAfter: endOfDay.getTime() / 1000 });
 
-			this.set({
-				todaysCount: batch.FilteredTotalItemCount
-			});
+			if(batch.FilteredTotalItemCount > 0) {
+				this.set({
+					todaysCount: batch.FilteredTotalItemCount
+				});
+			}
 		} catch (e) {
 			this.set({
 				error: e
