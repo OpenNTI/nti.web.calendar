@@ -18,7 +18,7 @@ export default class CalendarStore extends Stores.BoundStore {
 		super();
 
 		this.set({
-			filters: []
+			filters: JSON.parse(localStorage.getItem('calendar-filters')) || []
 		});
 	}
 
@@ -90,7 +90,7 @@ export default class CalendarStore extends Stores.BoundStore {
 				loading: false,
 				bins: this.eventBinner.bins,
 				calendars: collection.Items,
-				canCreate: collection && collection.Items.some(x=>x.hasLink('create_calendar_event'))
+				canCreate: collection && collection.Items.some(x => x.hasLink('create_calendar_event'))
 			});
 		} catch (e) {
 			this.set({
@@ -149,6 +149,7 @@ export default class CalendarStore extends Stores.BoundStore {
 	addFilter = (filter) => {
 		const filters = this.get('filters');
 		this.set({ filters: [...filters, filter ]});
+		localStorage.setItem('calendar-filters', JSON.stringify([...filters, filter ]));
 		this.loadInitialBatch();
 	}
 
@@ -156,7 +157,9 @@ export default class CalendarStore extends Stores.BoundStore {
 		const filters = this.get('filters');
 		const index = filters.findIndex(x => x === filter);
 		filters.splice(index, 1);
-		this.set({ filters: filters.slice() });
+		const newFilters = filters.slice();
+		localStorage.setItem('calendar-filters', JSON.stringify(newFilters));
+		this.set({ filters: newFilters });
 	}
 
 	getAvailableCalendars () {
