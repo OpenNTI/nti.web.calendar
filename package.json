@@ -42,6 +42,8 @@
     "@nti/lib-store": "^1.6.0",
     "@nti/web-client": "^1.1.3",
     "@nti/web-commons": "0.x.x",
+    "@nti/web-routing": "^0.13.0",
+    "@nti/web-storage": "^1.2.0",
     "@nti/web-whiteboard": "^0.6.0",
     "classnames": "^2.0.0",
     "prop-types": "^15.5.8"
