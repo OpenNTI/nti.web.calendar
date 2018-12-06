@@ -1,15 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Scroll, Loading } from '@nti/web-commons';
 import cx from 'classnames';
 
 import Editor from '../events/editor';
 
+import Body from './Body';
 import Header from './Header';
 import Store from './Store';
-import Day from './day';
-
-const { BoundaryMonitor } = Scroll;
 
 @Store.connect(['bins', 'loading', 'loaded', 'error',  'calendars', 'canCreate', 'filters'])
 export default class Calendar extends React.Component {
@@ -55,16 +52,17 @@ export default class Calendar extends React.Component {
 		} = this.props;
 		const { showEventEditor } = this.state;
 
+		const bodyProps = {
+			loading,
+			error,
+			bins,
+			calendars
+		};
+
 		return (
 			<div className={cx('calendar-main', className)}>
 				<Header calendars={calendars} filters={filters} addFilter={store.addFilter} removeFilter={store.removeFilter} onClose={onClose}/>
-				<div className="calendar-body">
-					{loading && <Loading.Spinner className="calendar-body-loading"/>}
-					{error && this.renderError()}
-					<BoundaryMonitor>
-						{bins && bins.length > 0 && bins.map(bin => <Day calendars={calendars} key={bin.name} bin={bin} />)}
-					</BoundaryMonitor>
-				</div>
+				<Body {...bodyProps} />
 				{canCreate && <div className="add-event" onClick={() => this.setState({showEventEditor: true})}><i className="icon-add"/></div>}
 				{showEventEditor && (
 					<Editor
