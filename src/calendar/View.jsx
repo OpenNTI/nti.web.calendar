@@ -8,7 +8,7 @@ import Body from './Body';
 import Header from './Header';
 import Store from './Store';
 
-@Store.connect(['bins', 'loading', 'loaded', 'error',  'calendars', 'canCreate', 'filters'])
+@Store.connect(['calendars', 'canCreate', 'filters'])
 export default class Calendar extends React.Component {
 	static deriveBindingFromProps (props) {
 		return props.entity || null;
@@ -18,52 +18,43 @@ export default class Calendar extends React.Component {
 		entity: PropTypes.object,
 		store: PropTypes.object,
 		canCreate: PropTypes.bool,
-		bins: PropTypes.array,
 		calendars: PropTypes.array,
 		className: PropTypes.string,
 		filters: PropTypes.array,
 		onClose: PropTypes.func,
-		loading: PropTypes.bool,
-		error: PropTypes.object
 	}
 
 	state = {}
 
-	renderError () {
-		const { error } = this.props;
-		return (
-			<div className="calendar-error">
-				{error.message || 'Unable to load.'}
-			</div>
-		);
-	}
-
 	render () {
 		const {
-			bins,
 			calendars,
 			canCreate,
 			className,
 			filters,
 			store,
 			onClose,
-			loading,
-			error
 		} = this.props;
 		const { showEventEditor } = this.state;
 
-		const bodyProps = {
-			loading,
-			error,
-			bins,
-			calendars
-		};
-
 		return (
 			<div className={cx('calendar-main', className)}>
-				<Header calendars={calendars} filters={filters} addFilter={store.addFilter} removeFilter={store.removeFilter} onClose={onClose}/>
-				<Body {...bodyProps} />
-				{canCreate && <div className="add-event" onClick={() => this.setState({showEventEditor: true})}><i className="icon-add"/></div>}
+				<Header
+					calendars={calendars}
+					filters={filters}
+					addFilter={store.addFilter}
+					removeFilter={store.removeFilter}
+					onClose={onClose}
+				/>
+				<Body />
+				{canCreate && (
+					<div
+						className="add-event"
+						onClick={() => this.setState({showEventEditor: true})}
+					>
+						<i className="icon-add"/>
+					</div>
+				)}
 				{showEventEditor && (
 					<Editor
 						onCancel={() => this.setState({showEventEditor: false})}

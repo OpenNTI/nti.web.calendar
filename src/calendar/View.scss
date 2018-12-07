@@ -6,37 +6,6 @@
 	border-radius: 5px;
 	background-color: #393939;
 
-	.calendar-body {
-		padding-bottom: 15px;
-		border-bottom-left-radius: 5px;
-		border-bottom-right-radius: 5px;
-		overflow: auto;
-		max-height: calc(100% - 40px);
-		min-height: 200px;
-
-		.calendar-error {
-			text-align: center;
-			color: white;
-			margin-top: 15px;
-		}
-
-		.calendar-body-loading {
-			margin: auto;
-			position: absolute;
-			top: 0;
-			left: 0;
-			bottom: 0;
-			right: 0;
-		}
-
-		.calendar-day {
-			.day-header {
-				position: sticky;
-				top: 0;
-			}
-		}
-	}
-
 	.add-event {
 		background-color: $primary-red;
 		color: white;

@@ -86,7 +86,7 @@ export default class CalendarStore extends Stores.BoundStore {
 			});
 
 			this.set({
-				hasMore: batch.Items.length >= batchSize,
+				hasNext: batch.FilteredTotalItemCount >= batchSize,
 				hasPrev: true
 			});
 
@@ -109,48 +109,60 @@ export default class CalendarStore extends Stores.BoundStore {
 	async loadMoreBefore () {
 		const collection = this.collection;
 
-		if (!this.get('hasMore') || !collection) { return; }
+		if (!this.get('hasPrev') || !collection) { return; }
+
+		this.set({
+			prevLoading: true
+		});
+
 		const batchSize = this.get('batchSize');
 		const filters = this.get('filters');
-		const firstEvent = this.eventBinner.getfirstEvent();
+		const firstEvent = this.eventBinner.getFirstEvent();
 		const service = await getService();
-		const firstDate = firstEvent.getStartDate();
+		const firstDate = firstEvent.getStartTime();
 		const batch = await service.getBatch(collection.getLink('events'), {
 			batchSize,
 			batchStart: 0,
-			notBefore: firstDate.getTime() / 1000
+			notAfter: (firstDate.getTime() / 1000) - 1,
+			'excluded_context_ntiids': filters
 		});
 
 		this.eventBinner.insertEvents(batch.Items);
 
 		this.set({
-			loading: false,
+			prevLoading: false,
 			bins: this.eventBinner.bins,
-			hasMore: batch.Items.length >= batchSize
+			hasPrev: batch.FilteredTotalItemCount >= batchSize,
 		});
 	}
 
 	async loadMoreAfter () {
 		const collection = this.collection;
 
-		if (!this.get('hasMore') || !collection) { return; }
+		if (!this.get('hasNext') || !collection) { return; }
+
+		this.set({
+			nextloading: true
+		});
+
 		const batchSize = this.get('batchSize');
 		const filters = this.get('filters');
 		const lastEvent = this.eventBinner.getLastEvent();
 		const service = await getService();
-		const lastDate = lastEvent.getStartDate();
+		const lastDate = lastEvent.getStartTime();
 		const batch = await service.getBatch(collection.getLink('events'), {
 			batchSize,
 			batchStart: 0,
-			notBefore: lastDate.getTime() / 1000
+			notBefore: lastDate.getTime() / 1000,
+			'excluded_context_ntiids': filters
 		});
 
 		this.eventBinner.insertEvents(batch.Items);
 
 		this.set({
-			loading: false,
+			nextloading: false,
 			bins: this.eventBinner.bins,
-			hasMore: batch.Items.length >= batchSize
+			hasNext: batch.FilteredTotalItemCount >= batchSize,
 		});
 	}
 
