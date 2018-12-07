@@ -22,12 +22,14 @@ class NotableEvents extends React.Component {
 		bins: PropTypes.array,
 		calendars: PropTypes.array,
 		loading: PropTypes.bool,
-		error: PropTypes.object
+		error: PropTypes.object,
+		children: PropTypes.any
 	}
 
 	render () {
-		const {bins, calendars, loading, error, limit = 5} = this.props;
+		const {bins, calendars, loading, error, limit = 5, children} = this.props;
 		const props = {
+			pullToLoad: false,
 			bins: (bins || []).slice(0, limit),
 			calendars,
 			loading,
@@ -35,7 +37,10 @@ class NotableEvents extends React.Component {
 		};
 
 		return (
-			<Body {...props} />
+			<>
+				<Body {...props} />
+				{!loading && children}
+			</>
 		);
 	}
 }

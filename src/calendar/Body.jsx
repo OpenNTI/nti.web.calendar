@@ -20,7 +20,8 @@ export default class CalendarBody extends React.Component {
 		hasNext: PropTypes.bool,
 		hasPrev: PropTypes.bool,
 		nextLoading: PropTypes.bool,
-		prevLoading: PropTypes.bool
+		prevLoading: PropTypes.bool,
+		pullToLoad: PropTypes.bool
 	}
 
 	static defaultProps = {
@@ -67,7 +68,8 @@ export default class CalendarBody extends React.Component {
 			hasPrev,
 			prevLoading,
 			hasNext,
-			nextLoading
+			nextLoading,
+			pullToLoad = true
 		} = this.props;
 
 		return (
@@ -80,9 +82,9 @@ export default class CalendarBody extends React.Component {
 				{loading && <Loading.Spinner className="calendar-body-loading"/>}
 				{error && this.renderError()}
 
-				<BodyEdge mainLoading={loading} loading={prevLoading} hasMore={hasPrev} error={error} />
+				{pullToLoad && <BodyEdge mainLoading={loading} loading={prevLoading} hasMore={hasPrev} error={error} />}
 				{bins.map(bin => <Day calendars={calendars} key={bin.name} bin={bin} />)}
-				<BodyEdge mainLoading={loading} loading={nextLoading} hasMore={hasNext} error={error} />
+				{pullToLoad && <BodyEdge mainLoading={loading} loading={nextLoading} hasMore={hasNext} error={error} />}
 			</BoundaryMonitor>
 		);
 	}
