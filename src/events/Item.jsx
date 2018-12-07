@@ -6,6 +6,12 @@ import Registry from './Registry';
 
 const registry = Registry.getInstance();
 
+function makeContextFor (catalogEntry) {
+	return {
+		courseNTIID: catalogEntry.CourseNTIID
+	};
+}
+
 export default class EventItem extends React.Component {
 	static canRender (item) {
 		return !!registry.getItemFor(item.MimeType);
@@ -45,7 +51,7 @@ export default class EventItem extends React.Component {
 		const dayIndex = bins.indexOf(bin.name);
 
 		return (
-			<LinkTo.Object className="event-link" object={item}>
+			<LinkTo.Object className="event-link" object={item} context={makeContextFor(props.catalogEntry)}>
 				<Cmp
 					item={item}
 					day={dayIndex}
