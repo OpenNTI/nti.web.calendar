@@ -6,6 +6,19 @@ const BY = Symbol('By');
 const BINNER = Symbol('Binner');
 const BINS = Symbol('Bins');
 
+function trimPrecedingPhantoms (bins) {
+	const firstNonPhantomIndex = bins.findIndex(bin => !bin.phantom);
+
+	return bins.slice(firstNonPhantomIndex);
+}
+
+function trimTrailingPhantoms (bins) {
+	const reversed = ([...bins]).reverse();
+	const firstNonPhantomIndex = reversed.findIndex(bin => !bin.phantom);
+
+	return reversed.slice(firstNonPhantomIndex).reverse();
+}
+
 export default class EventBinner {
 	static day = day
 
@@ -21,7 +34,6 @@ export default class EventBinner {
 			this.insertEvent(event);
 		}
 	}
-
 
 	insertEvent (event) {
 		if (!event || !event.getStartTime || !event.getEndTime) { throw new Error('Invalid Event Inserted'); }
@@ -39,38 +51,42 @@ export default class EventBinner {
 		}
 	}
 
+	getBins (trimPreceding, trimTrailing) {
+		let bins = Object.values(this[BINS])
+			.sort((a, b) => {
+				const aStart = new Date(a.name);
+				const bStart = new Date(b.name);
 
-	get bins () {
-		const bins = Object.values(this[BINS]);
+				return aStart < bStart ? -1 : (aStart === bStart ? 0 : 1);
+			});
 
-		return bins.sort((a, b) => {
-			const aStart = new Date(a.name);
-			const bStart = new Date(b.name);
+		if (trimPreceding) {
+			bins = trimPrecedingPhantoms(bins);
+		}
 
-			return aStart < bStart ? -1 : (aStart === bStart ? 0 : 1);
-		});
+		if (trimTrailing) {
+			bins = trimTrailingPhantoms(bins);
+		}
+
+		return bins;
 	}
 
-	getFirstEvent () {
-		const {bins} = this;
+	getFirstEvent (trimPreceding, trimTrailing) {
+		const bins = this.getBins(trimPreceding, trimTrailing);
 		const first = bins && bins[0];
 
 		if (!first) { return null; }
 
-		const {items} = first;
-
-		return items ? items[0] : null;
+		return first.getFirstRealEvent();
 	}
 
 
-	getLastEvent () {
-		const {bins} = this;
+	getLastEvent (trimPreceding, trimTrailing) {
+		const bins = this.getBins(trimPreceding, trimTrailing);
 		const last = bins && bins[bins.length - 1];
 
 		if (!last) { return null; }
 
-		const {items} = last;
-
-		return items ? items[items.length - 1] : null;
+		return last.getLastRealEvent();
 	}
 }

@@ -1,4 +1,4 @@
-function getNameForDate (date) {
+export function getNameForDate (date) {
 	return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} 13:00`;
 }
 

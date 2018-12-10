@@ -1,3 +1,5 @@
+import { getNameForDate } from './binners/by-day';
+
 const NAME = Symbol('Name');
 const ITEMS = Symbol('Items');
 const BINNER = Symbol('Binner');
@@ -29,8 +31,40 @@ class Bin {
 		return end ? (end.getEndTime() || end.getStartTime()) : null;
 	}
 
+	get phantom () {
+		const {items, name} = this;
+		const binner = this[BINNER];
+
+		return !items.some(item => binner(item)[0] === name);
+	}
+
 	getBinsFor (item) {
 		return this[BINNER](item);
+	}
+
+	getFirstRealEvent () {
+		const {items, name} = this;
+		const binner = this[BINNER];
+
+		for (let item of items) {
+			if (binner(item)[0] === name) {
+				return item;
+			}
+		}
+	}
+
+
+	getLastRealEvent () {
+		const {items, name} = this;
+		const binner = this[BINNER];
+
+		for (let i = items.length - 1; i >= 0; i--) {
+			const item = items[i];
+
+			if (binner(item)[0] === name) {
+				return item;
+			}
+		}
 	}
 
 	[Symbol.iterator] () {
@@ -99,7 +133,6 @@ export function insertEvent (bin, event) {
 	if (!inserted) {
 		newItems.push(event);
 	}
-
 
 	return new Bin(bin.name, getUniqueEvents(newItems), bin[BINNER]);
 }
