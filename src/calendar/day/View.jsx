@@ -33,11 +33,12 @@ export default class Day extends React.Component {
 		const { showEditor, event } = this.state;
 		const { bin, bin: { name, items }, calendars } = this.props;
 		const date = new Date(name);
-
+		const today = new Date();
+		const year = today.getFullYear();
 		return (
 			<div className="calendar-day">
 				<div className="day-header">
-					<time>{DateTime.isToday(date) ? `Today ${DateTime.format(date, 'MMMM DD')}` : DateTime.format(date, 'ddd MMMM DD')}</time>
+					<time>{DateTime.isToday(date) ? `Today ${DateTime.format(date, 'MMMM DD')}` : DateTime.format(date, `ddd MMMM DD  ${date.getFullYear() !== year ? ' YYYY' : ''}`)}</time>
 				</div>
 				<div className="day-events">
 					{items.length === 0 && (
