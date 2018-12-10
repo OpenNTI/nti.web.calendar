@@ -1,3 +1,3 @@
 export * from './widgets';
-export * from './events';
+export * as Event from './events';
 export * from './calendar';

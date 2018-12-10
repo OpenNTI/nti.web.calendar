@@ -4,6 +4,7 @@
 	background-color: white;
 	text-align: center;
 	width: 810px;
+	max-width: calc(100vw);
 
 	&.saving {
 		opacity: 0.5;
