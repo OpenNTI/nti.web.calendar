@@ -21,7 +21,7 @@ describe('EventBinner', () => {
 		binner.insertEvents([twoDays, today]);
 
 		test('Returns the correct bins', () => {
-			const {bins} = binner;
+			const bins = binner.getBins();
 
 			expect(bins.length).toEqual(4);
 
