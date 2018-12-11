@@ -13,6 +13,12 @@ function getMimeTypeFor (calendar) {
 	return null;
 }
 
+function getToday () {
+	const today = new Date();
+	today.setHours(0, 0, 0, 0);
+	return today;
+}
+
 export default class CalendarStore extends Stores.BoundStore {
 	constructor () {
 		super();
@@ -24,7 +30,7 @@ export default class CalendarStore extends Stores.BoundStore {
 			prevLoading: false,
 			hasNext: false,
 			hasPrev: true,
-			loading: false
+			loaded: false
 		});
 	}
 
@@ -81,14 +87,23 @@ export default class CalendarStore extends Stores.BoundStore {
 		try {
 			const service = await getService();
 			const batchSize = this.get('batchSize');
-			const today = new Date();
-			today.setHours(0, 0, 0, 0);
-			const batch = await service.getBatch(collection.getLink('events'), {
+			const today = getToday();
+
+			let batch = await service.getBatch(collection.getLink('events'), {
 				batchSize,
 				batchStart: 0,
 				notBefore: today.getTime() / 1000,
 				'excluded_context_ntiids': filters
 			});
+
+			if (batch.Items.length === 0) {
+				batch = await service.getBatch(collection.getLink('events'), {
+					batchSize,
+					batchStart: 0,
+					notAfter: today.getTime() / 1000,
+					'excluded_context_ntiids': filters
+				});
+			}
 
 			const hasMore = batch.FilteredTotalItemCount >= batchSize;
 
@@ -98,6 +113,7 @@ export default class CalendarStore extends Stores.BoundStore {
 				hasNext: hasMore,
 				hasPrev: true,
 				loading: false,
+				loaded: true,
 				bins: this.eventBinner.getBins(false, hasMore),
 				calendars: collection.Items,
 				canCreate: collection && collection.Items.some(x => x.hasLink('create_calendar_event'))
@@ -121,9 +137,11 @@ export default class CalendarStore extends Stores.BoundStore {
 
 		const batchSize = this.get('batchSize');
 		const filters = this.get('filters');
+
 		const firstEvent = this.eventBinner.getFirstEvent(true, true);
+		const firstDate = (firstEvent && firstEvent.getStartTime()) || getToday();
+
 		const service = await getService();
-		const firstDate = firstEvent.getStartTime();
 		const batch = await service.getBatch(collection.getLink('events'), {
 			batchSize,
 			batchStart: 0,

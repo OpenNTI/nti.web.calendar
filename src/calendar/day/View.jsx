@@ -17,7 +17,8 @@ export default class Day extends React.Component {
 			name: PropTypes.string,
 			items: PropTypes.array
 		}),
-		calendars: PropTypes.array
+		calendars: PropTypes.array,
+		setRef: PropTypes.func
 	}
 
 	state = {}
@@ -31,12 +32,13 @@ export default class Day extends React.Component {
 
 	render () {
 		const { showEditor, event } = this.state;
-		const { bin, bin: { name, items }, calendars } = this.props;
+		const { bin, bin: { name, items }, calendars, setRef } = this.props;
 		const date = new Date(name);
 		const today = new Date();
 		const year = today.getFullYear();
+
 		return (
-			<div className="calendar-day">
+			<div ref={setRef} className="calendar-day">
 				<div className="day-header">
 					<time>{DateTime.isToday(date) ? `Today ${DateTime.format(date, 'MMMM DD')}` : DateTime.format(date, `ddd MMMM DD  ${date.getFullYear() !== year ? ', YYYY' : ''}`)}</time>
 				</div>
