@@ -8,7 +8,7 @@ const registry = Registry.getInstance();
 
 function makeContextFor (catalogEntry) {
 	return {
-		courseNTIID: catalogEntry.CourseNTIID
+		courseNTIID: catalogEntry && catalogEntry.CourseNTIID
 	};
 }
 
