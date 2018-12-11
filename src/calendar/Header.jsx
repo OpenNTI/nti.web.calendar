@@ -21,7 +21,8 @@ export default class CalendarHeader extends React.Component {
 		filters: PropTypes.array,
 		addFilter: PropTypes.func,
 		removeFilter: PropTypes.func,
-		onClose: PropTypes.func
+		onClose: PropTypes.func,
+		exportLink: PropTypes.func
 	}
 
 	state = {
@@ -48,6 +49,8 @@ export default class CalendarHeader extends React.Component {
 	}
 
 	renderExport () {
+		const { exportLink } = this.props;
+
 		return (
 			<div className="export-calendar">
 				<div className="export-content">
@@ -58,7 +61,9 @@ export default class CalendarHeader extends React.Component {
 						{t('exportHeader')}
 					</div>
 					<div className="export-message">{t('exportMessage')}</div>
-					<div className="export-link">{t('exportLink')}</div>
+					<div className="export-link">
+						<a href={exportLink} download>{t('exportLink')}</a>
+					</div>
 				</div>
 			</div>
 		);

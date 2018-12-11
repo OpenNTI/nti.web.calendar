@@ -36,6 +36,7 @@ export default class Calendar extends React.Component {
 			onClose,
 		} = this.props;
 		const { showEventEditor } = this.state;
+		const exportLink = store && store.collection && store.collection.getLink('export');
 
 		return (
 			<div className={cx('calendar-main', className)}>
@@ -45,6 +46,7 @@ export default class Calendar extends React.Component {
 					addFilter={store.addFilter}
 					removeFilter={store.removeFilter}
 					onClose={onClose}
+					exportLink={exportLink}
 				/>
 				<Body />
 				{canCreate && (
