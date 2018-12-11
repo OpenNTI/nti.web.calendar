@@ -4,4 +4,13 @@
 	align-items: center;
 	justify-content: space-around;
 	margin: 4px 0;
+
+	> .icon-wrapper {
+		flex: 0 0 auto;
+		margin-right: 0.625rem;
+	}
+
+	& > * {
+		flex: 1 1 auto;
+	}
 }
