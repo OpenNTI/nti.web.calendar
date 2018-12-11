@@ -12,13 +12,6 @@ const t = scoped('nti.web.calendar.body', {
 	empty: 'No Calendar Events.'
 });
 
-
-function isToday (date) {
-	const other = new Date(date);
-	const today = new Date();
-	return other.setHours(0, 0, 0, 0) === today.setHours(0, 0, 0, 0);
-}
-
 @Store.connect(['bins', 'loading', 'error', 'calendars', 'loadMoreAfter', 'loadMoreBefore', 'hasPrev', 'prevLoading', 'hasNext', 'nextLoading', 'loaded'])
 export default class CalendarBody extends React.Component {
 
@@ -57,6 +50,7 @@ export default class CalendarBody extends React.Component {
 	}
 
 	attachBoundaryRef = x => this.boundaryNode = x;
+	setToday = x => this.today = x;
 
 	onTop = () => {
 		if (!this.props.hasPrev) { return; }
@@ -120,7 +114,7 @@ export default class CalendarBody extends React.Component {
 				{pullToLoad && <BodyEdge mainLoading={loading} loading={prevLoading} hasMore={hasPrev} error={error} />}
 				{bins.map(bin => (
 					<Day
-						setRef={x => isToday(bin.name) ? this.today = x : null}
+						setToday={this.setToday}
 						calendars={calendars}
 						key={bin.name}
 						bin={bin}

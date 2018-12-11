@@ -11,6 +11,12 @@ const t = scoped('nti.web.calendar.day', {
 	today: 'Today'
 });
 
+function isToday (date) {
+	const other = new Date(date);
+	const today = new Date();
+	return other.setHours(0, 0, 0, 0) === today.setHours(0, 0, 0, 0);
+}
+
 export default class Day extends React.Component {
 	static propTypes = {
 		bin: PropTypes.shape({
@@ -18,7 +24,7 @@ export default class Day extends React.Component {
 			items: PropTypes.array
 		}),
 		calendars: PropTypes.array,
-		setRef: PropTypes.func
+		setToday: PropTypes.func
 	}
 
 	state = {}
@@ -30,15 +36,23 @@ export default class Day extends React.Component {
 		});
 	}
 
+	setToday = (x) => {
+		const { bin, setToday } = this.props;
+
+		if (setToday && isToday(bin.name)) {
+			setToday(x);
+		}
+	}
+
 	render () {
 		const { showEditor, event } = this.state;
-		const { bin, bin: { name, items }, calendars, setRef } = this.props;
+		const { bin, bin: { name, items }, calendars } = this.props;
 		const date = new Date(name);
 		const today = new Date();
 		const year = today.getFullYear();
 
 		return (
-			<div ref={setRef} className="calendar-day">
+			<div ref={this.setToday} className="calendar-day">
 				<div className="day-header">
 					<time>{DateTime.isToday(date) ? `Today ${DateTime.format(date, 'MMMM DD')}` : DateTime.format(date, `ddd MMMM DD  ${date.getFullYear() !== year ? ', YYYY' : ''}`)}</time>
 				</div>
