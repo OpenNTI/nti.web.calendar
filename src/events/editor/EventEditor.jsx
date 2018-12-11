@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {DialogButtons, DateTime, Input, Prompt} from '@nti/web-commons';
+import {DateTime, Input, Prompt} from '@nti/web-commons';
 import {scoped} from '@nti/lib-locale';
 import {ImageUpload} from '@nti/web-whiteboard';
 import {Connectors} from '@nti/lib-store';
@@ -8,14 +8,14 @@ import cx from 'classnames';
 
 import DateInput from './DateInput';
 
-const {Dialog} = Prompt;
+const {SaveCancel} = Prompt;
 
 const t = scoped('calendar.editor.Editor', {
 	eventTitle: 'Event Title',
 	eventDescription: 'Description...',
 	eventLocation: 'Location',
 	calendar: 'Calendar',
-	save: 'Save',
+	save: 'Done',
 	cancel: 'Cancel',
 	close: 'Close',
 	edit: 'Edit',
@@ -25,16 +25,26 @@ const t = scoped('calendar.editor.Editor', {
 	event: 'Event',
 	start: 'Start',
 	end: 'End',
+	title: 'View Event',
 	searchCalendar: 'Search Calendars'
 });
+
+
+const EDIT_TEXT = {
+	title: 'Edit Event',
+	save: 'Save',
+	cancel: 'Cancel'
+};
+
+const editScope = scoped('calendar.editor.Editor.edit', EDIT_TEXT);
 
 export default
 @Connectors.Any.connect(['createEvent', 'createError', 'saving', 'getAvailableCalendars'])
 class EventEditor extends React.Component {
 	static propTypes = {
-		calendar: PropTypes.object.isRequired,
 		event: PropTypes.object,
 		onCancel: PropTypes.func,
+		onDismiss: PropTypes.func,
 		onSuccess: PropTypes.func,
 		createEvent: PropTypes.func,
 		createError: PropTypes.string,
@@ -209,16 +219,24 @@ class EventEditor extends React.Component {
 	}
 
 	onCancel = () => {
-		const {onCancel} = this.props;
+		const {onCancel, onDismiss} = this.props;
 
 		if(onCancel) {
 			onCancel();
+		}
+
+		if(onDismiss) {
+			onDismiss();
 		}
 	}
 
 	onSave = async () => {
 		const {event, createEvent, onSuccess, create} = this.props;
-		const {calendar, title, description, location, startDate, endDate, imgBlob} = this.state;
+		const {viewMode, calendar, title, description, location, startDate, endDate, imgBlob} = this.state;
+
+		if(viewMode) {
+			return this.onCancel();
+		}
 
 		const calendarEvent = await createEvent(calendar, event, title, description, location, startDate, endDate, imgBlob);
 
@@ -231,49 +249,6 @@ class EventEditor extends React.Component {
 		}
 	}
 
-	renderButtons () {
-		const {saving, editable} = this.props;
-		const {viewMode} = this.state;
-
-		if(viewMode) {
-			let buttons = [
-				{
-					label: t('close'),
-					onClick: this.onCancel,
-				}
-			];
-
-			if(editable) {
-				buttons.push({
-					label: t('edit'),
-					onClick: () => { this.setState({viewMode: false});}
-				});
-			}
-
-			return (
-				<DialogButtons
-					buttons={buttons}
-				/>
-			);
-		}
-
-
-		return (
-			<DialogButtons
-				buttons={[
-					{
-						label: t('cancel'),
-						onClick: this.onCancel,
-					},
-					{
-						label: t('save'),
-						disabled: saving,
-						onClick: this.onSave
-					}
-				]}
-			/>
-		);
-	}
 
 	renderError () {
 		const {createError} = this.props;
@@ -289,7 +264,14 @@ class EventEditor extends React.Component {
 		const cls = cx('calendar-event-editor', {saving, 'view-only': viewMode});
 
 		return (
-			<Dialog>
+			<SaveCancel
+				className="event-view-dialog"
+				getString={viewMode ? t : editScope}
+				onCancel={this.onCancel}
+				onSave={this.onSave}
+				disableSave={saving}
+				nonDialog
+			>
 				<div className={cls}>
 					{this.renderError()}
 					<div className="contents">
@@ -299,9 +281,8 @@ class EventEditor extends React.Component {
 						</div>
 						{this.renderOtherInfo()}
 					</div>
-					{this.renderButtons()}
 				</div>
-			</Dialog>
+			</SaveCancel>
 		);
 	}
 }
