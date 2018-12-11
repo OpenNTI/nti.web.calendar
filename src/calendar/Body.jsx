@@ -1,13 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Scroll, Loading } from '@nti/web-commons';
+import { scoped } from '@nti/lib-locale';
 
 import Day from './day';
 import Store from './Store';
 import BodyEdge from './BodyEdge';
 const { BoundaryMonitor } = Scroll;
 
-@Store.connect(['bins', 'loading', 'error', 'calendars', 'loadMoreAfter', 'loadMoreBefore', 'hasPrev', 'prevLoading', 'hasNext', 'nextLoading'])
+const t = scoped('nti.web.calendar.body', {
+	empty: 'No Calendar Events.'
+});
+
+
+function isToday (date) {
+	const other = new Date(date);
+	const today = new Date();
+	return other.setHours(0, 0, 0, 0) === today.setHours(0, 0, 0, 0);
+}
+
+@Store.connect(['bins', 'loading', 'error', 'calendars', 'loadMoreAfter', 'loadMoreBefore', 'hasPrev', 'prevLoading', 'hasNext', 'nextLoading', 'loaded'])
 export default class CalendarBody extends React.Component {
 
 	static propTypes = {
@@ -21,7 +33,8 @@ export default class CalendarBody extends React.Component {
 		hasPrev: PropTypes.bool,
 		nextLoading: PropTypes.bool,
 		prevLoading: PropTypes.bool,
-		pullToLoad: PropTypes.bool
+		pullToLoad: PropTypes.bool,
+		loaded: PropTypes.bool
 	}
 
 	static defaultProps = {
@@ -29,10 +42,17 @@ export default class CalendarBody extends React.Component {
 	}
 
 	componentDidUpdate (prevProps) {
-		const mainLoading = prevProps.loading === true && this.props.loading === false;
+		const { hasPrev, loading, loadMoreBefore } = this.props;
+
+		const hasFinishedLoading = prevProps.loading === true && loading === false;
 		const prevLoading = prevProps.prevLoading === true && this.props.prevLoading === false;
-		if ((mainLoading || prevLoading) && this.boundaryNode) {
-			this.boundaryNode.setScrollTop(50);
+
+		if ((hasFinishedLoading || prevLoading) && this.boundaryNode) {
+			this.boundaryNode.setScrollTop(this.today && (this.today.offsetTop - this.boundaryNode.getOffsetTop()) || 50);
+		}
+
+		if (hasFinishedLoading && this.boundaryNode && !this.boundaryNode.canScroll() && hasPrev) {
+			loadMoreBefore();
 		}
 	}
 
@@ -59,9 +79,18 @@ export default class CalendarBody extends React.Component {
 		);
 	}
 
+	renderEmpty () {
+		return (
+			<div className="calendar-body">
+				<div className="calendar-empty">{t('empty')}</div>
+			</div>
+		);
+	}
+
 	render () {
 		const {
 			loading,
+			loaded,
 			error,
 			calendars,
 			bins,
@@ -72,18 +101,31 @@ export default class CalendarBody extends React.Component {
 			pullToLoad = true
 		} = this.props;
 
+		const isEmpty = !hasNext && !hasPrev && bins.length === 0;
+
+		if (isEmpty) {
+			return this.renderEmpty();
+		}
+
 		return (
 			<BoundaryMonitor
 				ref={this.attachBoundaryRef}
 				className="calendar-body"
-				onTop={!loading ? this.onTop : null}
-				onBottom={!loading ? this.onBottom : null}
+				onTop={loaded ? this.onTop : null}
+				onBottom={loaded ? this.onBottom : null}
 			>
 				{loading && <Loading.Spinner className="calendar-body-loading"/>}
 				{error && this.renderError()}
 
 				{pullToLoad && <BodyEdge mainLoading={loading} loading={prevLoading} hasMore={hasPrev} error={error} />}
-				{bins.map(bin => <Day calendars={calendars} key={bin.name} bin={bin} />)}
+				{bins.map(bin => (
+					<Day
+						setRef={x => isToday(bin.name) ? this.today = x : null}
+						calendars={calendars}
+						key={bin.name}
+						bin={bin}
+					/>
+				))}
 				{pullToLoad && <BodyEdge mainLoading={loading} loading={nextLoading} hasMore={hasNext} error={error} />}
 			</BoundaryMonitor>
 		);
