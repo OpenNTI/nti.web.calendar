@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import {DateTime, Input, Prompt} from '@nti/web-commons';
 import {scoped} from '@nti/lib-locale';
 import {ImageUpload} from '@nti/web-whiteboard';
-import {Connectors} from '@nti/lib-store';
 import cx from 'classnames';
+
+import Store from '../../calendar/Store';
 
 import DateInput from './DateInput';
 
@@ -37,9 +38,14 @@ const EDIT_TEXT = {
 };
 
 const editScope = scoped('calendar.editor.Editor.edit', EDIT_TEXT);
+const editableScope = scoped('calendar.editor.Editor.editable', {
+	title: 'View Event',
+	save: 'Edit',
+	cancel: 'Cancel'
+});
 
 export default
-@Connectors.Any.connect(['createEvent', 'createError', 'saving', 'getAvailableCalendars'])
+@Store.connect(['createEvent', 'createError', 'saving', 'availableCalendars'])
 class EventEditor extends React.Component {
 	static propTypes = {
 		event: PropTypes.object,
@@ -52,7 +58,7 @@ class EventEditor extends React.Component {
 		editable: PropTypes.bool,
 		create: PropTypes.bool,
 		nonDialog: PropTypes.bool,
-		getAvailableCalendars: PropTypes.func
+		availableCalendars: PropTypes.array
 	}
 
 	state = {}
@@ -60,14 +66,13 @@ class EventEditor extends React.Component {
 	constructor (props) {
 		super(props);
 
-		const {event, getAvailableCalendars, create} = props;
+		const {event, availableCalendars, create} = props;
 
 		let defaultStartDate = new Date();
 		defaultStartDate.setSeconds(0);
 		defaultStartDate.setMinutes(defaultStartDate.getMinutes() + 59);
 		defaultStartDate.setMinutes(0);
 
-		const availableCalendars = getAvailableCalendars();
 		const calendarFromEvent = event && this.getMatchingCalendar(event, availableCalendars);
 
 		this.state = {
@@ -77,7 +82,7 @@ class EventEditor extends React.Component {
 			title: event && event.title,
 			description: event && event.description,
 			location: event && event.location,
-			calendar: calendarFromEvent || availableCalendars[0],
+			calendar: calendarFromEvent || (availableCalendars && availableCalendars[0]),
 			event: props.event,
 			// check icon for null string.  if we remove an icon and PUT to the record, it won't be null, but "null"
 			img: props.event && props.event.icon && props.event.icon !== 'null' && {src: props.event.icon},
@@ -85,8 +90,20 @@ class EventEditor extends React.Component {
 		};
 	}
 
+	componentDidUpdate (oldProps) {
+		if(oldProps.availableCalendars !== this.props.availableCalendars) {
+			const {event, availableCalendars} = this.props;
+
+			const calendarFromEvent = event && this.getMatchingCalendar(event, availableCalendars);
+
+			this.setState({
+				calendar: calendarFromEvent || availableCalendars[0],
+			});
+		}
+	}
+
 	getMatchingCalendar (event, availableCalendars) {
-		return availableCalendars.filter(c => {
+		return (availableCalendars || []).filter(c => {
 			return c.getID() === event.ContainerId;
 		})[0];
 	}
@@ -138,14 +155,14 @@ class EventEditor extends React.Component {
 	}
 
 	renderCalendarSelect () {
-		const { event } = this.props;
-		const { availableCalendars, calendar } = this.state;
+		const { event, availableCalendars } = this.props;
+		const { calendar } = this.state;
 
 		return (
 			<div className="input-section calendar">
 				<div className="section-title">{t('calendar')}</div>
 				<Input.Select onChange={this.onCalendarSelect} value={calendar} placeholder={t('searchCalendar')} disabled={!!event} searchable>
-					{availableCalendars.map((choice, choiceIndex) => {
+					{(availableCalendars || []).map((choice, choiceIndex) => {
 						return (
 							<Input.Select.Option
 								value={choice}
@@ -221,6 +238,13 @@ class EventEditor extends React.Component {
 
 	onCancel = () => {
 		const {onCancel, onDismiss} = this.props;
+		const {viewMode} = this.state;
+
+		if(!viewMode) {
+			this.setState({viewMode: true});
+
+			return;
+		}
 
 		if(onCancel) {
 			onCancel();
@@ -232,10 +256,18 @@ class EventEditor extends React.Component {
 	}
 
 	onSave = async () => {
-		const {event, createEvent, onSuccess, create} = this.props;
+		const {event, createEvent, onSuccess, editable, create} = this.props;
 		const {viewMode, calendar, title, description, location, startDate, endDate, imgBlob} = this.state;
 
 		if(viewMode) {
+			if(editable) {
+				this.setState({
+					viewMode: false
+				});
+
+				return;
+			}
+
 			return this.onCancel();
 		}
 
@@ -260,14 +292,14 @@ class EventEditor extends React.Component {
 	}
 
 	render () {
-		const {saving, nonDialog} = this.props;
+		const {saving, nonDialog, editable} = this.props;
 		const {viewMode} = this.state;
 		const cls = cx('calendar-event-editor', {saving, 'view-only': viewMode});
 
 		return (
 			<SaveCancel
 				className="event-view-dialog"
-				getString={viewMode ? t : editScope}
+				getString={viewMode ? editable ? editableScope : t : editScope}
 				onCancel={this.onCancel}
 				onSave={this.onSave}
 				disableSave={saving}

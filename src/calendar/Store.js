@@ -61,6 +61,9 @@ export default class CalendarStore extends Stores.BoundStore {
 			const collection = await service.getCollection('Calendars');
 
 			this.collection = await collection.refresh();
+
+			this.set('availableCalendars', this.getAvailableCalendars());
+
 			this.loadInitialBatch();
 		} catch (e) {
 			this.set({
