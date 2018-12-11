@@ -78,7 +78,7 @@ export default class CalendarStore extends Stores.BoundStore {
 		const filters = this.get('filters');
 		const collection = this.collection;
 
-		this.eventBinner = new EventBinner();
+		this.eventBinner = new EventBinner(null, true);
 
 		if (!collection) { return; }
 

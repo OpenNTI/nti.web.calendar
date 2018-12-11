@@ -22,10 +22,16 @@ function trimTrailingPhantoms (bins) {
 export default class EventBinner {
 	static day = day
 
-	constructor (by) {
+	constructor (by, insertToday) {
 		this[BY] = by;
 		this[BINNER] = getBinner(by);
 		this[BINS] = {};
+
+		if (insertToday) {
+			// Create a placeholder bin for today
+			const today = this[BINNER]({ getStartTime: () => new Date(), getEndTime: () => { } });
+			this[BINS][today[0]] = createBin(today[0], null, this[BINNER]);
+		}
 	}
 
 
@@ -73,20 +79,28 @@ export default class EventBinner {
 
 	getFirstEvent (trimPreceding, trimTrailing) {
 		const bins = this.getBins(trimPreceding, trimTrailing);
-		const first = bins && bins[0];
 
-		if (!first) { return null; }
+		for (let i = 0; i < bins.length - 1; i++) {
+			let bin = bins[i];
+			let event = bin.getFirstRealEvent();
 
-		return first.getFirstRealEvent();
+			if (event) {
+				return event;
+			}
+		}
 	}
 
 
 	getLastEvent (trimPreceding, trimTrailing) {
 		const bins = this.getBins(trimPreceding, trimTrailing);
-		const last = bins && bins[bins.length - 1];
 
-		if (!last) { return null; }
+		for (let i = bins.length - 1; i > 0; i--) {
+			let bin = bins[i];
+			let event = bin.getLastRealEvent();
 
-		return last.getLastRealEvent();
+			if (event) {
+				return event;
+			}
+		}
 	}
 }
