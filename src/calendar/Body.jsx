@@ -58,7 +58,7 @@ class CalendarBody extends React.Component {
 		const hasFinishedLoading = prevProps.loading === true && loading === false;
 		const prevLoading = prevProps.prevLoading === true && this.props.prevLoading === false;
 
-		if ((hasFinishedLoading || prevLoading) && this.boundaryNode) {
+		if ((hasFinishedLoading || prevLoading) && this.boundaryNode && this.today) {
 			if (todayScrollPosition) {
 				this.boundaryNode.setScrollTop(this.today.offsetTop - todayScrollPosition - this.boundaryNode.getOffsetTop());
 			} else {
