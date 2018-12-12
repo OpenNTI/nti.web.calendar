@@ -67,7 +67,7 @@ class CalendarBody extends React.Component {
 		}
 
 		if (hasFinishedLoading && this.boundaryNode && !this.boundaryNode.canScroll() && hasPrev) {
-			this.setState({ todayScrollPosition: this.today.offsetTop });
+			this.setState({ todayScrollPosition: this.today && this.today.offsetTop });
 			loadMoreBefore();
 		}
 	}
