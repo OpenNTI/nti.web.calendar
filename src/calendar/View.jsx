@@ -19,7 +19,8 @@ export default class Calendar extends React.Component {
 		canCreate: PropTypes.bool,
 		className: PropTypes.string,
 		onClose: PropTypes.func,
-		headless: PropTypes.bool
+		headless: PropTypes.bool,
+		readOnly: PropTypes.bool
 	}
 
 	state = {}
@@ -30,6 +31,7 @@ export default class Calendar extends React.Component {
 			className,
 			headless,
 			onClose,
+			readOnly
 		} = this.props;
 		const { showEventEditor } = this.state;
 
@@ -37,7 +39,7 @@ export default class Calendar extends React.Component {
 			<div className={cx('calendar-main', className)}>
 				{!headless && <Header onClose={onClose} />}
 				<Body />
-				{canCreate && (
+				{!readOnly && canCreate && (
 					<div
 						className="add-event"
 						onClick={() => this.setState({showEventEditor: true})}
@@ -49,7 +51,7 @@ export default class Calendar extends React.Component {
 					<Editor
 						onCancel={() => this.setState({showEventEditor: false})}
 						onSuccess={() => this.setState({showEventEditor: false})}
-						create
+						create={!readOnly && canCreate}
 					/>
 				)}
 			</div>
