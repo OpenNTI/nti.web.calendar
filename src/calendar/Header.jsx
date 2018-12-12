@@ -20,7 +20,6 @@ class CalendarHeader extends React.Component {
 		calendars: PropTypes.array,
 		filters: PropTypes.array,
 		onClose: PropTypes.func,
-		exportLink: PropTypes.func,
 		store: PropTypes.shape({
 			addFilter: PropTypes.func,
 			removeFilter: PropTypes.func
