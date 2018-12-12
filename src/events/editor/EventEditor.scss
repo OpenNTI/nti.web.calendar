@@ -1,14 +1,19 @@
 @import '~@nti/style-common';
 
+$header-ranges: (
+	short: (null, 580px),
+	wide: (580px, null)
+);
+
 .event-view-dialog {
 	height: 100%;
+	background-color: white;
 
 	.dialog-buttons {
 		background-color: white;
 	}
 
 	.calendar-event-editor {
-		background-color: white;
 		text-align: center;
 		width: 810px;
 		max-width: calc(100vw);
@@ -71,7 +76,6 @@
 		}
 
 		.contents {
-			max-height: calc(100vh - 215px);
 			overflow-y: auto;
 
 			.header-info {
@@ -79,9 +83,18 @@
 				padding-top: 30px;
 				box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.15);
 
+				@include responsive-range(short, $header-ranges) {
+					display: block;
+				}
+
 				.date {
 					min-width: 80px;
 					text-align: center;
+
+					@include responsive-range(short, $header-ranges) {
+						text-align: left;
+						margin-left: 40px;
+					}
 
 					.month {
 						text-transform: uppercase;
@@ -101,6 +114,10 @@
 					padding-right: 40px;
 					margin-bottom: 16px;
 					width: 100%;
+
+					@include responsive-range(short, $header-ranges) {
+						padding-left: 40px;
+					}
 
 					.title {
 						font-size: 18px;
@@ -134,6 +151,7 @@
 
 					.image-and-description {
 						display: flex;
+						flex-wrap: wrap;
 
 						.image-upload {
 							background-color: #fbfbfb;
@@ -167,7 +185,11 @@
 							width: 200px;
 							max-height: 132px;
 							position: relative;
-							margin: 0;
+							margin: 0 10px 0 0;
+
+							@include responsive-range(short, $header-ranges) {
+								margin-bottom: 10px;
+							}
 
 							.nti-image-editor {
 								max-width: 200px;
@@ -228,8 +250,15 @@
 
 						.textarea-container {
 							width: 100%;
-							margin-left: 10px;
+							max-width: calc(100% - 210px);
+							min-width: 250px;
 							background-color: white;
+
+							@include responsive-range(short, $header-ranges) {
+								width: 100%;
+								max-width: 100%;
+								margin-bottom: 10px;
+							}
 						}
 
 						.description {
@@ -257,6 +286,10 @@
 				max-height: 500px;
 				overflow: auto;
 
+				@include responsive-range(short, $header-ranges) {
+					padding-left: 40px;
+				}
+
 				i.icon-chevron-down {
 					color: #b8b8b8;
 					font-size: 12px;
@@ -268,6 +301,7 @@
 					input {
 						background-color: white;
 						width: 440px;
+						max-width: calc(100% - 40px);
 						height: 40px;
 						box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
 						border: none;
@@ -278,6 +312,7 @@
 					&.calendar {
 						.nti-select-input {
 							width: 440px;
+							max-width: calc(100% - 40px);
 
 							&.disabled {
 								opacity: 0.5;
@@ -307,6 +342,8 @@
 					padding-left: 10px;
 					position: relative;
 					cursor: pointer;
+					margin-right: 15px;
+					margin-bottom: 10px;
 
 					i {
 						position: absolute;
