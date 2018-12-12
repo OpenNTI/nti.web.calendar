@@ -237,10 +237,10 @@ class EventEditor extends React.Component {
 	}
 
 	onCancel = () => {
-		const {onCancel, onDismiss} = this.props;
+		const {onCancel, onDismiss, create} = this.props;
 		const {viewMode} = this.state;
 
-		if(!viewMode) {
+		if(!viewMode && !create) {
 			this.setState({viewMode: true});
 
 			return;
