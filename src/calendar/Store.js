@@ -19,6 +19,12 @@ function getToday () {
 	return today;
 }
 
+function appendToFormData (formData, fieldName, value) {
+	if(value) {
+		formData.append(fieldName, value);
+	}
+}
+
 export default class CalendarStore extends Stores.BoundStore {
 	constructor () {
 		super();
@@ -96,6 +102,8 @@ export default class CalendarStore extends Stores.BoundStore {
 				batchSize,
 				batchStart: 0,
 				notBefore: today.getTime() / 1000,
+				sortOn: 'start_time',
+				sortOrder: 'ascending',
 				'excluded_context_ntiids': filters
 			});
 
@@ -104,6 +112,8 @@ export default class CalendarStore extends Stores.BoundStore {
 					batchSize,
 					batchStart: 0,
 					notAfter: today.getTime() / 1000,
+					sortOn: 'start_time',
+					sortOrder: 'ascending',
 					'excluded_context_ntiids': filters
 				});
 			}
@@ -149,6 +159,8 @@ export default class CalendarStore extends Stores.BoundStore {
 			batchSize,
 			batchStart: 0,
 			notAfter: (firstDate.getTime() / 1000) - 1,
+			sortOn: 'start_time',
+			sortOrder: 'descending',
 			'excluded_context_ntiids': filters
 		});
 
@@ -179,6 +191,8 @@ export default class CalendarStore extends Stores.BoundStore {
 			batchSize,
 			batchStart: 0,
 			notBefore: lastDate.getTime() / 1000,
+			sortOn: 'start_time',
+			sortOrder: 'ascending',
 			'excluded_context_ntiids': filters
 		});
 
@@ -225,27 +239,12 @@ export default class CalendarStore extends Stores.BoundStore {
 			const service = await getService();
 			const formData = new FormData();
 
-			formData.append('MimeType', getMimeTypeFor(calendar));
-
-			if(title) {
-				formData.append('title', title);
-			}
-
-			if(description) {
-				formData.append('description', description);
-			}
-
-			if(location) {
-				formData.append('location', location);
-			}
-
-			if(startDate) {
-				formData.append('start_time', startDate.toISOString());
-			}
-
-			if(endDate) {
-				formData.append('end_time', endDate.toISOString());
-			}
+			appendToFormData(formData, 'MimeType', getMimeTypeFor(calendar));
+			appendToFormData(formData, 'title', title);
+			appendToFormData(formData, 'description', description);
+			appendToFormData(formData, 'location', location);
+			appendToFormData(formData, 'start_time', startDate && startDate.toISOString());
+			appendToFormData(formData, 'end_time', endDate && endDate.toISOString());
 
 			if(img !== undefined) {
 				formData.append('icon', img || null);
