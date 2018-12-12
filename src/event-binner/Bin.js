@@ -92,7 +92,7 @@ class Bin {
 
 function getUniqueEvents (events) {
 	const {unique} = events.reduce((acc, event) => {
-		const id = event.getID();
+		const id = (event.getUniqueIdentifier && event.getUniqueIdentifier()) || event.getID();
 
 		if (acc.seen[id]) { return acc; }
 
