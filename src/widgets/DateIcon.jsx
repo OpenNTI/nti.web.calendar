@@ -5,21 +5,29 @@ import {Calendar} from '@nti/web-commons';
 import Store from './DateIconStore';
 
 export default
-@Store.connect(['todaysCount'])
+@Store.connect(['todaysCount', 'markSeen', 'hasSeen'])
 class DateIcon extends React.PureComponent {
 
 	static propTypes = {
 		className: PropTypes.string,
 		date: PropTypes.object,
-		todaysCount: PropTypes.number
+		todaysCount: PropTypes.number,
+		markSeen: PropTypes.func,
+		hasSeen: PropTypes.bool
+	}
+
+	state = {}
+
+	onClick = () => {
+		this.props.markSeen();
 	}
 
 	render () {
-		const {todaysCount, ...otherProps} = this.props;
+		const {hasSeen, todaysCount, ...otherProps} = this.props;
 
 		return (
-			<div className="nti-calendar-date-icon-container">
-				<Calendar.DateIcon {...otherProps} badge={todaysCount}/>
+			<div className="nti-calendar-date-icon-container" onClick={this.onClick}>
+				<Calendar.DateIcon {...otherProps} viewed={hasSeen} badge={todaysCount}/>
 			</div>
 		);
 	}
