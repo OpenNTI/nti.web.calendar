@@ -47,27 +47,22 @@ class CalendarBody extends React.Component {
 		bins: []
 	}
 
-	state = {
-		todayScrollPosition: null
-	}
-
 	componentDidUpdate (prevProps) {
 		const { hasPrev, loading, loadMoreBefore } = this.props;
-		const { todayScrollPosition } = this.state;
 
 		const hasFinishedLoading = prevProps.loading === true && loading === false;
 		const prevLoading = prevProps.prevLoading === true && this.props.prevLoading === false;
 
 		if ((hasFinishedLoading || prevLoading) && this.boundaryNode && this.today) {
-			if (todayScrollPosition) {
-				this.boundaryNode.setScrollTop(this.today.offsetTop - todayScrollPosition - this.boundaryNode.getOffsetTop());
+			if (this.todayScrollPosition) {
+				this.boundaryNode.setScrollTop(this.today.offsetTop - this.todayScrollPosition - this.boundaryNode.getOffsetTop());
 			} else {
 				this.boundaryNode.setScrollTop(this.today.offsetTop - this.boundaryNode.getOffsetTop());
 			}
 		}
 
 		if (hasFinishedLoading && this.boundaryNode && !this.boundaryNode.canScroll() && hasPrev) {
-			this.setState({ todayScrollPosition: this.today && this.today.offsetTop });
+			this.todayScrollPosition = this.today.offsetTop;
 			loadMoreBefore();
 		}
 	}
@@ -77,7 +72,7 @@ class CalendarBody extends React.Component {
 
 	onTop = () => {
 		if (!this.props.hasPrev) { return; }
-		this.setState({ todayScrollPosition: this.today.offsetTop });
+		this.todayScrollPosition = this.today.offsetTop;
 		this.props.loadMoreBefore();
 	}
 
