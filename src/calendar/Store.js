@@ -221,6 +221,7 @@ export default class CalendarStore extends Stores.BoundStore {
 		const newFilters = filters.slice();
 		localStorage.setItem('calendar-filters', JSON.stringify(newFilters));
 		this.set({ filters: newFilters });
+		this.loadInitialBatch();
 	}
 
 	getAvailableCalendars () {

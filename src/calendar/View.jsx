@@ -8,7 +8,7 @@ import Body from './Body';
 import Header from './Header';
 import Store from './Store';
 
-@Store.connect(['calendars', 'canCreate'])
+@Store.connect(['canCreate'])
 export default class Calendar extends React.Component {
 	static deriveBindingFromProps (props) {
 		return props.entity || null;
@@ -16,7 +16,6 @@ export default class Calendar extends React.Component {
 
 	static propTypes = {
 		entity: PropTypes.object,
-		store: PropTypes.object,
 		canCreate: PropTypes.bool,
 		className: PropTypes.string,
 		onClose: PropTypes.func,

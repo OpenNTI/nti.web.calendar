@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { scoped } from '@nti/lib-locale';
 import cx from 'classnames';
+import { Connectors } from '@nti/lib-store';
 
-import Store from './Store';
 import CalendarList from './calendar-list';
 
 const t = scoped('nti.web.calendar.header', {
@@ -14,16 +14,17 @@ const t = scoped('nti.web.calendar.header', {
 });
 
 export default
-@Store.connect(['calendars', 'filters'])
+@Connectors.Any.connect(['calendars', 'filters', 'collection', 'addFilter', 'removeFilter'])
 class CalendarHeader extends React.Component {
 	static propTypes = {
 		calendars: PropTypes.array,
-		filters: PropTypes.array,
+		filters: PropTypes.array.isRequired,
 		onClose: PropTypes.func,
-		store: PropTypes.shape({
-			addFilter: PropTypes.func,
-			removeFilter: PropTypes.func
-		}).isRequired
+		collection: PropTypes.shape({
+			getLink: PropTypes.func.isRequired
+		}),
+		addFilter: PropTypes.func.isRequired,
+		removeFilter: PropTypes.func.isRequired
 	}
 
 	state = {
@@ -50,8 +51,8 @@ class CalendarHeader extends React.Component {
 	}
 
 	renderExport () {
-		const { store } = this.props;
-		const exportLink = store && store.collection && store.collection.getLink('export');
+		const { collection } = this.props;
+		const exportLink = collection && collection.getLink('export');
 
 		return (
 			<div className="export-calendar">
@@ -72,7 +73,7 @@ class CalendarHeader extends React.Component {
 	}
 
 	render () {
-		const { calendars, filters, store: {addFilter, removeFilter} } = this.props;
+		const { calendars, filters, addFilter, removeFilter } = this.props;
 		const { showFilters, showOptions } = this.state;
 		return (
 			<>
