@@ -12,7 +12,19 @@ const t = scoped('nti.web.calendar.body', {
 	empty: 'No Calendar Events.'
 });
 
-@Store.connect(['bins', 'loading', 'error', 'calendars', 'loadMoreAfter', 'loadMoreBefore', 'hasPrev', 'prevLoading', 'hasNext', 'nextLoading', 'loaded'])
+@Store.connect([
+	'bins',
+	'loading',
+	'error',
+	'calendars',
+	'loadMoreAfter',
+	'loadMoreBefore',
+	'hasPrev',
+	'prevLoading',
+	'hasNext',
+	'nextLoading',
+	'loaded'
+])
 export default class CalendarBody extends React.Component {
 
 	static propTypes = {

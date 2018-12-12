@@ -1,12 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Flyout, Prompt } from '@nti/web-commons';
 import { scoped } from '@nti/lib-locale';
 import cx from 'classnames';
 
+import Store from './Store';
 import CalendarList from './calendar-list';
-
-const { Dialog } = Prompt;
 
 const t = scoped('nti.web.calendar.header', {
 	title: 'Calendars',
@@ -15,14 +13,18 @@ const t = scoped('nti.web.calendar.header', {
 	exportMessage: 'Export your calendars and add them to your favorite app. They will stay in sync as new events are added.'
 });
 
-export default class CalendarHeader extends React.Component {
+export default
+@Store.connect(['calendars', 'filters'])
+class CalendarHeader extends React.Component {
 	static propTypes = {
 		calendars: PropTypes.array,
 		filters: PropTypes.array,
-		addFilter: PropTypes.func,
-		removeFilter: PropTypes.func,
 		onClose: PropTypes.func,
-		exportLink: PropTypes.func
+		exportLink: PropTypes.func,
+		store: PropTypes.shape({
+			addFilter: PropTypes.func,
+			removeFilter: PropTypes.func
+		}).isRequired
 	}
 
 	state = {
@@ -49,7 +51,8 @@ export default class CalendarHeader extends React.Component {
 	}
 
 	renderExport () {
-		const { exportLink } = this.props;
+		const { store } = this.props;
+		const exportLink = store && store.collection && store.collection.getLink('export');
 
 		return (
 			<div className="export-calendar">
@@ -70,7 +73,7 @@ export default class CalendarHeader extends React.Component {
 	}
 
 	render () {
-		const { calendars, filters, addFilter, removeFilter } = this.props;
+		const { calendars, filters, store: {addFilter, removeFilter} } = this.props;
 		const { showFilters, showOptions } = this.state;
 		return (
 			<>

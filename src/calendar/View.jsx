@@ -8,7 +8,7 @@ import Body from './Body';
 import Header from './Header';
 import Store from './Store';
 
-@Store.connect(['calendars', 'canCreate', 'filters'])
+@Store.connect(['calendars', 'canCreate'])
 export default class Calendar extends React.Component {
 	static deriveBindingFromProps (props) {
 		return props.entity || null;
@@ -18,36 +18,25 @@ export default class Calendar extends React.Component {
 		entity: PropTypes.object,
 		store: PropTypes.object,
 		canCreate: PropTypes.bool,
-		calendars: PropTypes.array,
 		className: PropTypes.string,
-		filters: PropTypes.array,
 		onClose: PropTypes.func,
+		headless: PropTypes.bool
 	}
 
 	state = {}
 
 	render () {
 		const {
-			calendars,
 			canCreate,
 			className,
-			filters,
-			store,
+			headless,
 			onClose,
 		} = this.props;
 		const { showEventEditor } = this.state;
-		const exportLink = store && store.collection && store.collection.getLink('export');
 
 		return (
 			<div className={cx('calendar-main', className)}>
-				<Header
-					calendars={calendars}
-					filters={filters}
-					addFilter={store.addFilter}
-					removeFilter={store.removeFilter}
-					onClose={onClose}
-					exportLink={exportLink}
-				/>
+				{!headless && <Header onClose={onClose} />}
 				<Body />
 				{canCreate && (
 					<div
