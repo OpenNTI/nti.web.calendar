@@ -24,7 +24,8 @@ class CalendarHeader extends React.Component {
 			getLink: PropTypes.func.isRequired
 		}),
 		addFilter: PropTypes.func.isRequired,
-		removeFilter: PropTypes.func.isRequired
+		removeFilter: PropTypes.func.isRequired,
+		additionalControls: PropTypes.any
 	}
 
 	state = {
@@ -73,7 +74,7 @@ class CalendarHeader extends React.Component {
 	}
 
 	render () {
-		const { calendars, filters, addFilter, removeFilter } = this.props;
+		const { additionalControls: AdditionalControls = null, calendars, filters, addFilter, removeFilter } = this.props;
 		const { showFilters, showOptions } = this.state;
 		return (
 			<>
@@ -84,6 +85,7 @@ class CalendarHeader extends React.Component {
 						<i className="icon-chevron-up-10" />
 					</div>
 					<div className="controls">
+						<AdditionalControls />
 						<i className={cx('icon-more', { active: showOptions })} onClick={this.onOptionsClick} />
 						<i className="icon-bold-x" onClick={this.onClose}/>
 					</div>

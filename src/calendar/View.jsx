@@ -19,17 +19,17 @@ export default class Calendar extends React.Component {
 		canCreate: PropTypes.bool,
 		className: PropTypes.string,
 		onClose: PropTypes.func,
-		headless: PropTypes.bool,
-		readOnly: PropTypes.bool
+		readOnly: PropTypes.bool,
+		additionalControls: PropTypes.any // component to be rendered in the header
 	}
 
 	state = {}
 
 	render () {
 		const {
+			additionalControls,
 			canCreate,
 			className,
-			headless,
 			onClose,
 			readOnly
 		} = this.props;
@@ -37,7 +37,7 @@ export default class Calendar extends React.Component {
 
 		return (
 			<div className={cx('calendar-main', className)}>
-				{!headless && <Header onClose={onClose} />}
+				<Header onClose={onClose} additionalControls={additionalControls} />
 				<Body />
 				{!readOnly && canCreate && (
 					<div
