@@ -18,7 +18,8 @@ export default class CourseItem extends React.Component {
 	}
 
 	onClick = () => {
-		this.props.onClick(this.props.item.NTIID);
+		const { item: { CatalogEntry }} = this.props;
+		this.props.onClick(CatalogEntry && CatalogEntry.NTIID);
 	}
 
 	render () {

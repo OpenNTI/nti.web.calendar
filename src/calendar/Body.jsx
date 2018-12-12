@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Scroll, Loading } from '@nti/web-commons';
+import { Connectors } from '@nti/lib-store';
 import { scoped } from '@nti/lib-locale';
 
 import Day from './day';
-import Store from './Store';
 import BodyEdge from './BodyEdge';
 const { BoundaryMonitor } = Scroll;
 
@@ -12,7 +12,8 @@ const t = scoped('nti.web.calendar.body', {
 	empty: 'No Calendar Events.'
 });
 
-@Store.connect([
+export default
+@Connectors.Any.connect([
 	'bins',
 	'loading',
 	'error',
@@ -25,7 +26,7 @@ const t = scoped('nti.web.calendar.body', {
 	'nextLoading',
 	'loaded'
 ])
-export default class CalendarBody extends React.Component {
+class CalendarBody extends React.Component {
 
 	static propTypes = {
 		bins: PropTypes.array,
