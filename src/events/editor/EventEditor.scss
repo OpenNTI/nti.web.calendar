@@ -153,6 +153,10 @@ $header-ranges: (
 						display: flex;
 						flex-wrap: wrap;
 
+						.nti-image-upload {
+							margin-right: 10px;
+						}
+
 						.image-upload {
 							background-color: #fbfbfb;
 							min-width: 210px;
@@ -185,7 +189,7 @@ $header-ranges: (
 							width: 200px;
 							max-height: 132px;
 							position: relative;
-							margin: 0 10px 0 0;
+							margin: 0;
 
 							@include responsive-range(short, $header-ranges) {
 								margin-bottom: 10px;
