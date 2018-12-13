@@ -214,7 +214,7 @@ export default class CalendarStore extends Stores.BoundStore {
 		const batch = await service.getBatch(collection.getLink('events'), {
 			batchSize,
 			batchStart: 0,
-			notAfter: (firstDate.getTime() / 1000) - 1,
+			notAfter: (firstDate.getTime() / 1000),
 			sortOn: 'start_time',
 			sortOrder: 'descending',
 			'excluded_context_ntiids': filters
