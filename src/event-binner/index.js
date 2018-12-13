@@ -41,6 +41,42 @@ export default class EventBinner {
 		}
 	}
 
+	findBinFor (event) {
+		if(!event) {
+			return null;
+		}
+
+		const bins = this[BINNER](event);
+		let binMatch = null;
+
+		for (let bin of bins) {
+			const existing = this[BINS][bin];
+
+			if (existing) {
+				for(let item of existing.items) {
+					if(item.getUniqueIdentifier() === event.getUniqueIdentifier()) {
+						binMatch = existing;
+					}
+				}
+			}
+		}
+
+		return binMatch;
+	}
+
+	async updateEvent (event) {
+		this.removeEvent(event);
+		this.insertEvent(event);
+	}
+
+	removeEvent (event) {
+		const binWithEvent = this.findBinFor(event);
+
+		if(binWithEvent) {
+			binWithEvent.removeItem(event);
+		}
+	}
+
 	insertEvent (event) {
 		if (!event || !event.getStartTime || !event.getEndTime) { throw new Error('Invalid Event Inserted'); }
 

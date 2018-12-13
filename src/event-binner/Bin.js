@@ -67,6 +67,31 @@ class Bin {
 		}
 	}
 
+	async updateItem (item) {
+		if(!item) {
+			return;
+		}
+
+		const requests = this[ITEMS].map(x=>{
+			if(x.getUniqueIdentifier() === item.getUniqueIdentifier()) {
+				return x.refresh();
+			}
+			else {
+				return Promise.resolve(x);
+			}
+		});
+
+		this[ITEMS] = await Promise.all(requests);
+	}
+
+	removeItem (item) {
+		if(!item) {
+			return;
+		}
+
+		this[ITEMS] = this[ITEMS].filter(x=>x.getUniqueIdentifier() !== item.getUniqueIdentifier());
+	}
+
 	[Symbol.iterator] () {
 		const snapshot = (this.items || []).slice();
 		const {length} = snapshot;

@@ -1,9 +1,18 @@
 import { getService } from '@nti/web-client';
 import { Stores } from '@nti/lib-store';
+import AppDispatcher from '@nti/lib-dispatcher';
 
 import EventBinner from '../event-binner';
 
+const EVENT_HANDLERS = Symbol('EventHandlers');
+
 const BATCH_SIZE = 100;
+
+export const EVENTS = {
+	CREATED: 'Calendar-Event-Created',
+	CHANGED: 'Calendar-Event-Changed',
+	DELETED: 'Calendar-Event-Deleted'
+};
 
 function getMimeTypeFor (calendar) {
 	if(calendar.MimeType === 'application/vnd.nextthought.courseware.coursecalendar') {
@@ -29,6 +38,12 @@ export default class CalendarStore extends Stores.BoundStore {
 	constructor () {
 		super();
 
+		this[EVENT_HANDLERS] = {
+			[EVENTS.CREATED]: this.handleCreated,
+			[EVENTS.CHANGED]: this.handleChanged,
+			[EVENTS.DELETED]: this.handleDeleted
+		};
+
 		this.set({
 			batchSize: BATCH_SIZE,
 			filters: JSON.parse(localStorage.getItem('calendar-filters')) || [],
@@ -37,6 +52,47 @@ export default class CalendarStore extends Stores.BoundStore {
 			hasNext: false,
 			hasPrev: true,
 			loaded: false
+		});
+
+		AppDispatcher.register(this.handleDispatch);
+	}
+
+	handleDispatch = (payload) => {
+		if (!payload) {
+			return;
+		} else {
+			const {action} = payload;
+			const {data: {calendarEvent}, type} = action;
+
+			const handler = this[EVENT_HANDLERS][type];
+
+			if(handler) {
+				handler(calendarEvent);
+			}
+		}
+	}
+
+	handleCreated = (calendarEvent) => {
+		this.eventBinner.insertEvents([calendarEvent]);
+
+		this.set({
+			bins: this.eventBinner.getBins(false)
+		});
+	}
+
+	handleChanged = async (calendarEvent) => {
+		await this.eventBinner.updateEvent(calendarEvent);
+
+		this.set({
+			bins: this.eventBinner.getBins(false)
+		});
+	}
+
+	handleDeleted = (calendarEvent) => {
+		this.eventBinner.removeEvent(calendarEvent);
+
+		this.set({
+			bins: this.eventBinner.getBins(false)
 		});
 	}
 
@@ -255,9 +311,11 @@ export default class CalendarStore extends Stores.BoundStore {
 			}
 
 			let calendarEvent;
+			let type = EVENTS.CREATED;
 
 			if(event) {
 				calendarEvent = await service.putParseResponse(event.getLink('edit'), formData);
+				type = EVENTS.CHANGED;
 			}
 			else {
 				calendarEvent = await service.postParseResponse(calendar.getLink('create_calendar_event'), formData);
@@ -267,7 +325,13 @@ export default class CalendarStore extends Stores.BoundStore {
 				saving: false
 			});
 
-			this.load();
+			// dispatch here so that any instance of this store gets the memo
+			AppDispatcher.handleRequestAction({
+				type,
+				data: {
+					calendarEvent
+				}
+			});
 
 			return calendarEvent;
 		}

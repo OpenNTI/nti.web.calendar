@@ -1,6 +1,9 @@
 import { getService, getAppUsername } from '@nti/web-client';
 import { Stores } from '@nti/lib-store';
 import { LocalStorage } from '@nti/web-storage';
+import AppDispatcher from '@nti/lib-dispatcher';
+
+import {EVENTS} from '../calendar/Store';
 
 function makeKey () {
 	return getAppUsername() + '-hasSeenTodaysEvents';
@@ -11,6 +14,29 @@ function makeDateStr (date) {
 }
 
 export default class DateIconStore extends Stores.BoundStore {
+	constructor () {
+		super();
+
+		AppDispatcher.register(this.handleDispatch);
+	}
+
+	handleDispatch = (payload) => {
+		if (!payload) {
+			return;
+		} else {
+			const {action} = payload;
+			const {type} = action;
+
+			for(let key of Object.keys(EVENTS)) {
+				if(EVENTS[key] === type) {
+					this.load();
+
+					return;
+				}
+			}
+		}
+	}
+
 	markSeen () {
 		const key = makeKey();
 		const data = {
