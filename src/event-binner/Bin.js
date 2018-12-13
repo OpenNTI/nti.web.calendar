@@ -1,5 +1,3 @@
-import { getNameForDate } from './binners/by-day';
-
 const NAME = Symbol('Name');
 const ITEMS = Symbol('Items');
 const BINNER = Symbol('Binner');
