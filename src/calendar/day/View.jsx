@@ -17,6 +17,12 @@ function isToday (date) {
 	return other.setHours(0, 0, 0, 0) === today.setHours(0, 0, 0, 0);
 }
 
+const n = () => {};
+const keyFor = event => (event.getUniqueIdentifier || n)()
+	|| event.NTIID
+	|| (event.getCreatedTime || n)()
+	|| event.title;
+
 export default class Day extends React.Component {
 	static propTypes = {
 		bin: PropTypes.shape({
@@ -63,7 +69,7 @@ export default class Day extends React.Component {
 					{items.length > 0 && (
 						items.map(item => (
 							<Item
-								key={item.NTIID || (item.getCreatedTime && item.getCreatedTime()) || item.title}
+								key={keyFor(item)}
 								bin={bin}
 								item={item}
 								onItemClick={this.onItemClick}
