@@ -82,7 +82,6 @@ class CalendarHeader extends React.Component {
 					<div className={cx('calendars-list', { open: showFilters })} onClick={this.onFiltersClick}>
 						{t('title')}
 						<i className="icon-chevron-down-10" />
-						<i className="icon-chevron-up-10" />
 					</div>
 					<div className="controls">
 						<AdditionalControls />

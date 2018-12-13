@@ -15,22 +15,15 @@
 		display: flex;
 		align-items: center;
 
-		i.icon-chevron-down-10, i.icon-chevron-up-10 {
+		i.icon-chevron-down-10 {
 			color: #b8b8b8;
-			padding-left: 5px;
-		}
-
-		i.icon-chevron-up-10 {
-			display: none;
+			margin-left: 5px;
+			transition: transform 0.2s ease-out;
 		}
 
 		&.open {
 			i.icon-chevron-down-10 {
-				display: none;
-			}
-
-			i.icon-chevron-up-10 {
-				display: initial;
+				transform: rotate(-180deg);
 			}
 		}
 	}
