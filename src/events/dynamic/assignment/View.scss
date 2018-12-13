@@ -19,6 +19,11 @@
 			flex-direction: column;
 			justify-content: center;
 
+			.assignment-title {
+				word-break: break-word;
+				line-height: 15px;
+			}
+
 			.assignment-subtitle {
 				color: rgba(255, 255, 255, 0.7);
 				font-size: 10px;
