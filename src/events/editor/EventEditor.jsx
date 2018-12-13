@@ -31,13 +31,16 @@ const t = scoped('calendar.editor.Editor', {
 });
 
 
-const EDIT_TEXT = {
+const createScope = scoped('', {
+	title: 'Create Event',
+	save: 'Create',
+	cancel: 'Cancel'
+});
+const editScope = scoped('calendar.editor.Editor.edit', {
 	title: 'Edit Event',
 	save: 'Save',
 	cancel: 'Cancel'
-};
-
-const editScope = scoped('calendar.editor.Editor.edit', EDIT_TEXT);
+});
 const editableScope = scoped('calendar.editor.Editor.editable', {
 	title: 'View Event',
 	save: 'Edit',
@@ -291,15 +294,36 @@ class EventEditor extends React.Component {
 		}
 	}
 
+	getScope () {
+		const {editable, create} = this.props;
+		const {viewMode} = this.state;
+
+		if(viewMode) {
+			if(editable) {
+				return editableScope;
+			}
+
+			return t;
+		}
+		else {
+			if(create) {
+				return createScope;
+			}
+			else {
+				return editScope;
+			}
+		}
+	}
+
 	render () {
-		const {saving, nonDialog, editable} = this.props;
+		const {saving, nonDialog} = this.props;
 		const {viewMode} = this.state;
 		const cls = cx('calendar-event-editor', {saving, 'view-only': viewMode});
 
 		return (
 			<SaveCancel
 				className="event-view-dialog"
-				getString={viewMode ? editable ? editableScope : t : editScope}
+				getString={this.getScope()}
 				onCancel={this.onCancel}
 				onSave={this.onSave}
 				disableSave={saving}
