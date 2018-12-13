@@ -84,7 +84,7 @@ class CalendarHeader extends React.Component {
 						<i className="icon-chevron-down-10" />
 					</div>
 					<div className="controls">
-						<AdditionalControls />
+						{AdditionalControls && <AdditionalControls />}
 						<i className={cx('icon-more', { active: showOptions })} onClick={this.onOptionsClick} />
 						<i className="icon-bold-x" onClick={this.onClose}/>
 					</div>
