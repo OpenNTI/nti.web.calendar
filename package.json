@@ -38,6 +38,7 @@
   },
   "dependencies": {
     "@nti/lib-commons": "^2.5.4",
+    "@nti/lib-dispatcher": "^1.3.0",
     "@nti/lib-locale": "^1.0.7",
     "@nti/lib-store": "^1.6.0",
     "@nti/web-client": "^1.1.3",
