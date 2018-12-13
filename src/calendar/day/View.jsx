@@ -17,10 +17,9 @@ function isToday (date) {
 	return other.setHours(0, 0, 0, 0) === today.setHours(0, 0, 0, 0);
 }
 
-const n = () => {};
-const keyFor = event => (event.getUniqueIdentifier || n)()
+const keyFor = event => (event.getUniqueIdentifier && event.getUniqueIdentifier())
 	|| event.NTIID
-	|| (event.getCreatedTime || n)()
+	|| (event.getCreatedTime && event.getCreatedTime())
 	|| event.title;
 
 export default class Day extends React.Component {
