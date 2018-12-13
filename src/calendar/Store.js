@@ -135,9 +135,27 @@ export default class CalendarStore extends Stores.BoundStore {
 		}
 	}
 
+	async loadBatch (link, params = {}) {
+		const service = await getService();
+		const batchSize = this.get('batchSize');
+		const filters = this.get('filters');
+
+		const defaults = {
+			batchSize,
+			batchStart: 0,
+			sortOn: 'start_time',
+			sortOrder: 'ascending',
+			'excluded_context_ntiids': filters
+		};
+
+		return service.getBatch(link, {
+			...defaults,
+			...params
+		});
+	}
+
 
 	async loadInitialBatch () {
-		const filters = this.get('filters');
 		const collection = this.collection;
 
 		this.eventBinner = new EventBinner(null, true);
@@ -150,27 +168,17 @@ export default class CalendarStore extends Stores.BoundStore {
 		});
 
 		try {
-			const service = await getService();
 			const batchSize = this.get('batchSize');
 			const today = getToday();
+			const link = collection.getLink('events');
 
-			let batch = await service.getBatch(collection.getLink('events'), {
-				batchSize,
-				batchStart: 0,
-				notBefore: today.getTime() / 1000,
-				sortOn: 'start_time',
-				sortOrder: 'ascending',
-				'excluded_context_ntiids': filters
+			let batch = await this.loadBatch(link, {
+				// notBefore: today.getTime() / 1000,
 			});
 
 			if (batch.Items.length === 0) {
-				batch = await service.getBatch(collection.getLink('events'), {
-					batchSize,
-					batchStart: 0,
+				batch = await this.loadBatch(link, {
 					notAfter: today.getTime() / 1000,
-					sortOn: 'start_time',
-					sortOrder: 'ascending',
-					'excluded_context_ntiids': filters
 				});
 			}
 
@@ -196,7 +204,7 @@ export default class CalendarStore extends Stores.BoundStore {
 	}
 
 	async loadMoreBefore () {
-		const collection = this.collection;
+		const {collection} = this;
 
 		if (!this.get('hasPrev') || !collection) { return; }
 
@@ -205,19 +213,12 @@ export default class CalendarStore extends Stores.BoundStore {
 		});
 
 		const batchSize = this.get('batchSize');
-		const filters = this.get('filters');
 
 		const firstEvent = this.eventBinner.getFirstEvent(true, true);
 		const firstDate = (firstEvent && firstEvent.getStartTime()) || getToday();
 
-		const service = await getService();
-		const batch = await service.getBatch(collection.getLink('events'), {
-			batchSize,
-			batchStart: 0,
+		const batch = await this.loadBatch(collection.getLink('events'), {
 			notAfter: (firstDate.getTime() / 1000),
-			sortOn: 'start_time',
-			sortOrder: 'descending',
-			'excluded_context_ntiids': filters
 		});
 
 		this.eventBinner.insertEvents(batch.Items);
@@ -239,17 +240,10 @@ export default class CalendarStore extends Stores.BoundStore {
 		});
 
 		const batchSize = this.get('batchSize');
-		const filters = this.get('filters');
 		const lastEvent = this.eventBinner.getLastEvent(true, true);
-		const service = await getService();
 		const lastDate = lastEvent.getStartTime();
-		const batch = await service.getBatch(collection.getLink('events'), {
-			batchSize,
-			batchStart: 0,
+		const batch = await this.loadBatch(collection.getLink('events'), {
 			notBefore: lastDate.getTime() / 1000,
-			sortOn: 'start_time',
-			sortOrder: 'ascending',
-			'excluded_context_ntiids': filters
 		});
 
 		const hasMore = batch.FilteredTotalItemCount >= batchSize;
