@@ -193,7 +193,7 @@ export default class CalendarStore extends Stores.BoundStore {
 				loaded: true,
 				bins: this.eventBinner.getBins(false, hasMore),
 				calendars: collection.Items,
-				canCreate: collection && collection.Items.some(x => x.hasLink('create_calendar_event'))
+				canCreate: collection && collection.Items && collection.Items.some(x => x.hasLink('create_calendar_event'))
 			});
 		} catch (e) {
 			this.set({

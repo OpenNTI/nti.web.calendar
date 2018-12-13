@@ -12,6 +12,20 @@ const t = scoped('nti.web.calendar.body', {
 	empty: 'No Calendar Events.'
 });
 
+function hasRealData (bins) {
+	if(!bins || bins.length === 0) {
+		return false;
+	}
+
+	for(let bin of bins) {
+		if(bin.items && bin.items.length > 0) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
 export default
 @Connectors.Any.connect([
 	'bins',
@@ -113,7 +127,7 @@ class CalendarBody extends React.Component {
 			pullToLoad = true
 		} = this.props;
 
-		const isEmpty = !hasNext && !hasPrev && bins.length === 0;
+		const isEmpty = !hasNext && !hasPrev && !hasRealData(bins);
 
 		if (isEmpty) {
 			return this.renderEmpty();
