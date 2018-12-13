@@ -129,7 +129,7 @@ class CalendarBody extends React.Component {
 				{loading && <Loading.Spinner className="calendar-body-loading"/>}
 				{error && this.renderError()}
 
-				{pullToLoad && <BodyEdge mainLoading={loading} loading={prevLoading} hasMore={hasPrev} error={error} />}
+				{pullToLoad && <BodyEdge mainLoading={!!loading} loading={prevLoading} hasMore={hasPrev} error={error} />}
 				{bins.map(bin => (
 					<Day
 						setToday={this.setToday}
@@ -138,7 +138,7 @@ class CalendarBody extends React.Component {
 						bin={bin}
 					/>
 				))}
-				{pullToLoad && <BodyEdge mainLoading={loading} loading={nextLoading} hasMore={hasNext} error={error} />}
+				{pullToLoad && <BodyEdge mainLoading={!!loading} loading={nextLoading} hasMore={hasNext} error={error} />}
 			</BoundaryMonitor>
 		);
 	}
