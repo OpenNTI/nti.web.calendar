@@ -62,7 +62,7 @@ export default class CalendarStore extends Stores.BoundStore {
 			return;
 		} else {
 			const {action} = payload;
-			const {data: {calendarEvent}, type} = action;
+			const {data: {calendarEvent} = {}, type} = action;
 
 			const handler = this[EVENT_HANDLERS][type];
 
