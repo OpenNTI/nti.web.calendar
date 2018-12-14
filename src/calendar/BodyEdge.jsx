@@ -13,17 +13,12 @@ export default class BodyEdge extends React.Component {
 	render () {
 		const { mainLoading, loading, hasMore, error } = this.props;
 		const isLoading = mainLoading || loading;
-		const noMoreEvents = !mainLoading && !loading && !hasMore;
 		const hasMoreEvents = !isLoading && !error && hasMore;
 		return (
 			<>
 				{loading && (<Loading.Spinner className="calendar-edge-loading" />)}
 				{hasMoreEvents && (<div className="calendar-edge-spacer" />)}
-				{noMoreEvents && (
-					<div className="calendar-edge-empty">
-						There are no more events to load.
-					</div>
-				)}
+
 			</>
 		);
 	}
