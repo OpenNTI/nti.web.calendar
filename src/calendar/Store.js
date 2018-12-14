@@ -4,6 +4,8 @@ import AppDispatcher from '@nti/lib-dispatcher';
 
 import EventBinner from '../event-binner';
 
+import {getToday} from './util';
+
 const EVENT_HANDLERS = Symbol('EventHandlers');
 
 const BATCH_SIZE = 100;
@@ -20,12 +22,6 @@ function getMimeTypeFor (calendar) {
 	}
 
 	return null;
-}
-
-function getToday () {
-	const today = new Date();
-	today.setHours(0, 0, 0, 0);
-	return today;
 }
 
 function appendToFormData (formData, fieldName, value) {
