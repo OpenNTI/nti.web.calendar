@@ -41,27 +41,23 @@ export default class EventBinner {
 		}
 	}
 
-	findBinFor (event) {
+	findBinsFor (event) {
 		if(!event) {
 			return null;
 		}
 
-		const bins = this[BINNER](event);
-		let binMatch = null;
+		const bins = Object.values(this[BINS]);
+		let binMatches = [];
 
 		for (let bin of bins) {
-			const existing = this[BINS][bin];
-
-			if (existing) {
-				for(let item of existing.items) {
-					if(item.getUniqueIdentifier() === event.getUniqueIdentifier()) {
-						binMatch = existing;
-					}
+			for(let item of bin.items) {
+				if(item.getUniqueIdentifier() === event.getUniqueIdentifier()) {
+					binMatches.push(bin);
 				}
 			}
 		}
 
-		return binMatch;
+		return binMatches;
 	}
 
 	async updateEvent (event) {
@@ -69,12 +65,26 @@ export default class EventBinner {
 		this.insertEvent(event);
 	}
 
-	removeEvent (event) {
-		const binWithEvent = this.findBinFor(event);
+	trimBins () {
+		for(let key of Object.keys(this[BINS])) {
+			const bin = this[BINS][key];
 
-		if(binWithEvent) {
-			binWithEvent.removeItem(event);
+			if(!bin.items || bin.items.length === 0) {
+				delete this[BINS][key];
+			}
 		}
+	}
+
+	removeEvent (event) {
+		const binsWithEvent = this.findBinsFor(event);
+
+		if(binsWithEvent) {
+			for(let binWithEvent of binsWithEvent) {
+				binWithEvent.removeItem(event);
+			}
+		}
+
+		this.trimBins();
 	}
 
 	insertEvent (event) {
