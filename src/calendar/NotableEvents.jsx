@@ -1,26 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
+import {Loading} from '@nti/web-commons';
 
-import Body from './Body';
-import Store from './Store';
+import Day from './day';
+import Store from './NotableEventsStore';
+
+const bindings = {};
+function getBinding (limit) {
+	// reuse same object to avoid unneccessary store reloads
+	if (!bindings[limit]) {
+		bindings[limit] = {limit};
+	}
+	return bindings[limit];
+}
 
 export default
 @Store.connect(['bins', 'loading', 'error',  'calendars'])
 class NotableEvents extends React.Component {
 
-	constructor (props) {
-		super(props);
-		const {store, limit = 5} = props || {};
-		(store || {}).batchSize = limit;
-	}
-
-	static deriveBindingFromProps  = ({entity} = {}) => entity || null;
+	static deriveBindingFromProps = ({limit = 5} = {}) => getBinding(limit);
 
 	static propTypes = {
-		entity: PropTypes.object,
-		store: PropTypes.object,
 		bins: PropTypes.array,
 		calendars: PropTypes.array,
+		limit: PropTypes.number,
 		loading: PropTypes.bool,
 		error: PropTypes.object,
 		children: PropTypes.any
@@ -28,19 +32,21 @@ class NotableEvents extends React.Component {
 
 	render () {
 		const {bins, calendars, loading, error, limit = 5, children} = this.props;
-		const props = {
-			pullToLoad: false,
-			bins: (bins || []).slice(0, limit),
-			calendars,
-			loading,
-			error
-		};
+		const empty = !bins || bins.length === 0;
 
 		return (
-			<>
-				<Body {...props} />
+			<div className={cx('notable-events', {loading, error, empty})}>
+				{loading && <Loading.Spinner className="calendar-body-loading"/>}
+				{error && this.renderError()}
+				{(bins || []).slice(0, limit).map(bin => (
+					<Day
+						calendars={calendars}
+						key={bin.name}
+						bin={bin}
+					/>
+				))}
 				{!loading && children}
-			</>
+			</div>
 		);
 	}
 }
