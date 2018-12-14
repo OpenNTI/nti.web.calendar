@@ -51,7 +51,9 @@ export default class CalendarStore extends Stores.BoundStore {
 			prevLoading: false,
 			hasNext: false,
 			hasPrev: true,
-			loaded: false
+			loaded: false,
+			batchStartPrev: 0,
+			batchStartNext: 0
 		});
 
 		AppDispatcher.register(this.handleDispatch);
@@ -179,6 +181,16 @@ export default class CalendarStore extends Stores.BoundStore {
 			if (batch.Items.length === 0) {
 				batch = await this.loadBatch(link, {
 					notAfter: today.getTime() / 1000,
+					sortOrder: 'descending',
+					sortOn: 'end_time'
+				});
+
+				this.set({
+					batchStartPrev: this.get('batchStartPrev') + this.get('batchSize')
+				});
+			} else {
+				this.set({
+					batchStartNext: this.get('batchStartNext') + this.get('batchSize')
 				});
 			}
 
@@ -191,9 +203,9 @@ export default class CalendarStore extends Stores.BoundStore {
 				hasPrev: true,
 				loading: false,
 				loaded: true,
-				bins: this.eventBinner.getBins(false, hasMore),
+				bins: this.eventBinner.getBins(true, hasMore),
 				calendars: collection.Items,
-				canCreate: collection && collection.Items && collection.Items.some(x => x.hasLink('create_calendar_event'))
+				canCreate: collection && collection.Items && collection.Items.some(x => x.hasLink('create_calendar_event')),
 			});
 		} catch (e) {
 			this.set({
@@ -214,19 +226,15 @@ export default class CalendarStore extends Stores.BoundStore {
 
 		const batchSize = this.get('batchSize');
 
-		const firstEvent = this.eventBinner.getFirstEvent(true, true);
-		const firstDate = (firstEvent && firstEvent.getStartTime()) || getToday();
-
-		const batch = await this.loadBatch(collection.getLink('events'), {
-			notAfter: (firstDate.getTime() / 1000),
-		});
+		const batch = await this.loadBatch(collection.getLink('events'), { batchStart: this.get('batchStartPrev'), sortOrder: 'descending', sortOn: 'end_time' });
 
 		this.eventBinner.insertEvents(batch.Items);
-
+		const hasPrev = batch.FilteredTotalItemCount >= batchSize;
 		this.set({
+			batchStartPrev: this.get('batchStartPrev') + this.get('batchSize'),
 			prevLoading: false,
-			bins: this.eventBinner.getBins(false, this.get('hasNext')),
-			hasPrev: batch.FilteredTotalItemCount >= batchSize,
+			bins: this.eventBinner.getBins(hasPrev, this.get('hasNext')),
+			hasPrev
 		});
 	}
 
@@ -240,19 +248,16 @@ export default class CalendarStore extends Stores.BoundStore {
 		});
 
 		const batchSize = this.get('batchSize');
-		const lastEvent = this.eventBinner.getLastEvent(true, true);
-		const lastDate = lastEvent.getStartTime();
-		const batch = await this.loadBatch(collection.getLink('events'), {
-			notBefore: lastDate.getTime() / 1000,
-		});
+		const batch = await this.loadBatch(collection.getLink('events'), { batchStart: this.get('batchStartNext') });
 
 		const hasMore = batch.FilteredTotalItemCount >= batchSize;
 
 		this.eventBinner.insertEvents(batch.Items);
 
 		this.set({
+			batchStartNext: this.get('batchStartNext') + batchSize,
 			nextLoading: false,
-			bins: this.eventBinner.getBins(false, hasMore),
+			bins: this.eventBinner.getBins(this.get('hasPrev'), hasMore),
 			hasNext: hasMore,
 		});
 	}

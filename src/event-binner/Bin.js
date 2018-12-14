@@ -1,12 +1,14 @@
 const NAME = Symbol('Name');
 const ITEMS = Symbol('Items');
 const BINNER = Symbol('Binner');
+const TODAY = Symbol('Today');
 
 class Bin {
-	constructor (name, items = [], binner) {
+	constructor (name, items = [], binner, today) {
 		this[NAME] = name;
 		this[ITEMS] = items;
 		this[BINNER] = binner;
+		this[TODAY] = today;
 	}
 
 	get name () {
@@ -32,8 +34,14 @@ class Bin {
 	get phantom () {
 		const {items, name} = this;
 		const binner = this[BINNER];
+		const bin = new Date(name);
+		const today = new Date(this[TODAY]);
+		const isPast = bin < today;
+		const getBinToCheck = (bins) => (isPast ? bins[bins.length - 1] : bins[0]);
 
-		return !items.some(item => binner(item)[0] === name);
+		if (name === this[TODAY]) { return false; }
+
+		return !items.some(item => getBinToCheck(binner(item)) === name);
 	}
 
 	getBinsFor (item) {
@@ -157,10 +165,10 @@ export function insertEvent (bin, event) {
 		newItems.push(event);
 	}
 
-	return new Bin(bin.name, getUniqueEvents(newItems), bin[BINNER]);
+	return new Bin(bin.name, getUniqueEvents(newItems), bin[BINNER], bin[TODAY]);
 }
 
 
-export function createBin (name, event, binner) {
-	return new Bin(name, event ? [event] : [], binner);
+export function createBin (name, event, binner, today) {
+	return new Bin(name, event ? [event] : [], binner, today);
 }

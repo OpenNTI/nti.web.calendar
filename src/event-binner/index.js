@@ -5,6 +5,7 @@ import {createBin, insertEvent} from './Bin';
 const BY = Symbol('By');
 const BINNER = Symbol('Binner');
 const BINS = Symbol('Bins');
+const TODAY_BIN = Symbol('Today Bin');
 
 function trimPrecedingPhantoms (bins) {
 	const firstNonPhantomIndex = bins.findIndex(bin => !bin.phantom);
@@ -26,11 +27,11 @@ export default class EventBinner {
 		this[BY] = by;
 		this[BINNER] = getBinner(by);
 		this[BINS] = {};
+		this[TODAY_BIN] = this[BINNER]({getStartTime: () => new Date(), getEndTime: () => {}})[0];
 
 		if (insertToday) {
 			// Create a placeholder bin for today
-			const today = this[BINNER]({ getStartTime: () => new Date(), getEndTime: () => { } });
-			this[BINS][today[0]] = createBin(today[0], null, this[BINNER]);
+			this[BINS][this[TODAY_BIN]] = createBin(this[TODAY_BIN], null, this[BINNER], this[TODAY_BIN]);
 		}
 	}
 
@@ -98,7 +99,7 @@ export default class EventBinner {
 			if (existing) {
 				this[BINS][bin] = insertEvent(existing, event);
 			} else {
-				this[BINS][bin] = createBin(bin, event, this[BINNER]);
+				this[BINS][bin] = createBin(bin, event, this[BINNER], this[TODAY_BIN]);
 			}
 		}
 	}
