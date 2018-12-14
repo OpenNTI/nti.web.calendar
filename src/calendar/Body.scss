@@ -2,7 +2,9 @@
 	padding-bottom: 15px;
 	border-bottom-left-radius: 5px;
 	border-bottom-right-radius: 5px;
-	overflow: auto;
+	overflow-y: auto;
+	overflow-x: hidden;
+	max-height: 90%;
 	max-height: calc(100% - 40px);
 	min-height: 200px;
 
