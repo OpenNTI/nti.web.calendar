@@ -24,15 +24,10 @@ export default class DateIconStore extends Stores.BoundStore {
 		if (!payload) {
 			return;
 		} else {
-			const {action} = payload;
-			const {type} = action;
+			const {action: {type} = {}} = payload;
 
-			for(let key of Object.keys(EVENTS)) {
-				if(EVENTS[key] === type) {
-					this.load();
-
-					return;
-				}
+			if (type && Object.values(EVENTS).find(v => v === type)) {
+				this.load();
 			}
 		}
 	}
