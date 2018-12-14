@@ -173,7 +173,7 @@ export default class CalendarStore extends Stores.BoundStore {
 			const link = collection.getLink('events');
 
 			let batch = await this.loadBatch(link, {
-				// notBefore: today.getTime() / 1000,
+				notBefore: today.getTime() / 1000
 			});
 
 			if (batch.Items.length === 0) {
