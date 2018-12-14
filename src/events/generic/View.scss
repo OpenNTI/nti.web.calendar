@@ -1,18 +1,26 @@
+@import "~@nti/style-common";
+
 .event-generic {
 	.event-generic-meta {
 		background-color: #fff;
 		border-radius: 5px;
 		padding: 5px 10px;
-		width: 226px;
 		min-height: 40px;
 		display: flex;
 		flex-direction: column;
-		justify-content: center;
+		overflow: hidden;
+		flex: 1 1 auto;
 
 		.event-generic-title {
 			color: #494949;
 			font-size: 14px;
 			font-weight: 600;
+			hyphens: auto;
+			overflow: hidden;
+			word-break: break-word;
+			text-overflow: ellipsis;
+
+			@include limit-lines($lines: 2, $line-height: 1.4);
 		}
 
 		.event-generic-subtitle {

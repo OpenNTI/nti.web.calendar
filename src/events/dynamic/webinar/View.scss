@@ -5,7 +5,6 @@
 	flex-direction: row;
 	align-items: center;
 	min-height: 40px;
-	justify-content: space-around;
 	margin: 4px 0;
 	color: white;
 
@@ -22,7 +21,10 @@
 			min-height: 40px;
 			display: flex;
 			flex-direction: column;
-			justify-content: center;
+
+			.webinar-title {
+				@include limit-lines($lines: 2, $line-height: 1.4);
+			}
 
 			.webinar-subtitle {
 				color: rgba(255, 255, 255, 0.67);

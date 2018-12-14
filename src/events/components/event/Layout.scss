@@ -2,8 +2,8 @@
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	justify-content: space-around;
 	margin: 4px 0;
+	overflow: hidden;
 
 	> .icon-wrapper {
 		flex: 0 0 auto;

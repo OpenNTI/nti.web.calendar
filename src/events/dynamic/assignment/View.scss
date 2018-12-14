@@ -1,9 +1,10 @@
+@import '~@nti/style-common';
+
 .assignment-event {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
 	min-height: 40px;
-	justify-content: space-around;
 	margin: 4px 0;
 
 	.assignment-main-container {
@@ -17,11 +18,16 @@
 			min-height: 40px;
 			display: flex;
 			flex-direction: column;
-			justify-content: center;
+			overflow: hidden;
+			flex: 1 1 auto;
 
 			.assignment-title {
+				hyphens: auto;
+				overflow: hidden;
 				word-break: break-word;
-				line-height: 15px;
+				text-overflow: ellipsis;
+
+				@include limit-lines($lines: 2, $line-height: 1.4);
 			}
 
 			.assignment-subtitle {
