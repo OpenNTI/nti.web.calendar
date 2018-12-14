@@ -10,7 +10,7 @@ const t = scoped('nti.web.calendar.header', {
 	title: 'Calendars',
 	exportHeader: 'Export your Calendars',
 	exportLink: 'Export Calendars',
-	exportMessage: 'Export your calendars and add them to your favorite app. They will stay in sync as new events are added.'
+	exportMessage: 'Export your calendars and add them to your favorite app.'
 });
 
 export default
