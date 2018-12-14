@@ -8,7 +8,8 @@ import { Event } from '../components';
 import Registry from '../Registry';
 
 const t = scoped('calendar.events.generic.View', {
-	dayIndex: 'Day %(count)s / %(total)s'
+	dayIndex: 'Day %(count)s / %(total)s',
+	allDay: 'ALL DAY'
 });
 
 const formatTime = x => DateTime.format(x, 'h:mm A');
@@ -62,6 +63,7 @@ export default class GenericEvent extends React.Component {
 					<div className="event-generic-title">{title}</div>
 					<List.SeparatedInline className="event-generic-subtitle">
 						{numberOfDays > 1 && <div className="event-day-index">{t('dayIndex', { count: day + 1, total: numberOfDays })}</div>}
+						{!showTime && t('allDay')}
 						{showTime && this.renderTime()}
 					</List.SeparatedInline>
 				</div>
