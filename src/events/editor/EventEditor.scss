@@ -13,6 +13,13 @@ $header-ranges: (
 		background-color: white;
 	}
 
+	// TODO: we should put this on the generic SaveCancel component
+	.save-cancel-content {
+		height: 90%;
+		height: calc(100% - 40px);
+		overflow: auto;
+	}
+
 	.calendar-event-editor {
 		text-align: center;
 		width: 810px;
@@ -87,7 +94,7 @@ $header-ranges: (
 					display: block;
 				}
 
-				.date {
+				& > .date {
 					min-width: 80px;
 					text-align: center;
 
