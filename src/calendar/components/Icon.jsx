@@ -4,7 +4,7 @@ import cx from 'classnames';
 
 export default function Icon ({ selected, onClick, url }) {
 	return (
-		<div className="icon-wrapper">
+		<div className={cx('icon-wrapper', { selected })}>
 			{selected && (
 				<i className="icon-check" />
 			)}
