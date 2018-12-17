@@ -59,7 +59,7 @@ export default class Day extends React.Component {
 		return (
 			<div ref={this.setToday} className="calendar-day">
 				<div className="day-header">
-					<time>{DateTime.isToday(date) ? `Today ${DateTime.format(date, 'MMMM DD')}` : DateTime.format(date, `ddd MMMM DD  ${date.getFullYear() !== year ? ', YYYY' : ''}`)}</time>
+					<time>{DateTime.isToday(date) ? `Today ${DateTime.format(date, 'MMMM D')}` : DateTime.format(date, `ddd MMMM D  ${date.getFullYear() !== year ? ', YYYY' : ''}`)}</time>
 				</div>
 				<div className="day-events">
 					{items.length === 0 && (
