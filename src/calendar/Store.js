@@ -13,7 +13,8 @@ const BATCH_SIZE = 100;
 export const EVENTS = {
 	CREATED: 'Calendar-Event-Created',
 	CHANGED: 'Calendar-Event-Changed',
-	DELETED: 'Calendar-Event-Deleted'
+	DELETED: 'Calendar-Event-Deleted',
+	ENROLLMENT_CHANGED: 'Course-Enrollment-Changed'
 };
 
 function getMimeTypeFor (calendar) {
@@ -37,9 +38,16 @@ export default class CalendarStore extends Stores.BoundStore {
 		this[EVENT_HANDLERS] = {
 			[EVENTS.CREATED]: this.handleCreated,
 			[EVENTS.CHANGED]: this.handleChanged,
-			[EVENTS.DELETED]: this.handleDeleted
+			[EVENTS.DELETED]: this.handleDeleted,
+			[EVENTS.ENROLLMENT_CHANGED]: this.handleEnrollmentChanged
 		};
 
+		this.clear();
+
+		AppDispatcher.register(this.handleCalendarChangeDispatch);
+	}
+
+	clear () {
 		this.set({
 			batchSize: BATCH_SIZE,
 			filters: JSON.parse(localStorage.getItem('calendar-filters')) || [],
@@ -49,18 +57,19 @@ export default class CalendarStore extends Stores.BoundStore {
 			hasPrev: true,
 			loaded: false,
 			batchStartPrev: 0,
-			batchStartNext: 0
+			batchStartNext: 0,
+			bins: [],
+			calendars: [],
 		});
-
-		AppDispatcher.register(this.handleDispatch);
 	}
 
-	handleDispatch = (payload) => {
+	handleCalendarChangeDispatch = (payload) => {
 		if (!payload) {
 			return;
 		} else {
 			const {action} = payload;
-			const {data: {calendarEvent} = {}, type} = action;
+			const {data, type} = action;
+			const calendarEvent = data && data.calendarEvent;
 
 			const handler = this[EVENT_HANDLERS][type];
 
@@ -92,6 +101,12 @@ export default class CalendarStore extends Stores.BoundStore {
 		this.set({
 			bins: this.eventBinner.getBins(false)
 		});
+	}
+
+	handleEnrollmentChanged = () => {
+		// reload available calendars and events
+		this.clear();
+		this.load();
 	}
 
 	set batchSize (batchSize) {
