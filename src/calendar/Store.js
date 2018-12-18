@@ -158,13 +158,12 @@ export default class CalendarStore extends Stores.BoundStore {
 			batchStart: 0,
 			sortOn: 'start_time',
 			sortOrder: 'ascending',
-			'excluded_context_ntiids': filters
 		};
 
-		return service.getBatch(link, {
+		return service.getPostBatch(link, {
 			...defaults,
 			...params
-		});
+		}, { 'excluded_context_ntiids': filters });
 	}
 
 
