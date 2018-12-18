@@ -69,14 +69,22 @@ class CalendarBody extends React.Component {
 
 		if ((hasFinishedLoading || prevLoading) && this.boundaryNode && this.today) {
 			if (this.todayScrollPosition) {
-				this.boundaryNode.setScrollTop(this.today.offsetTop - this.todayScrollPosition - this.boundaryNode.getOffsetTop());
+				console.log('this.today.offsetTop: ', this.today.offsetTop); // eslint-disable-line
+				console.log('this.todayScrollPosition: ', this.todayScrollPosition); // eslint-disable-line
+				console.log('Before: this.boundaryNode.getOffsetTop(): ', this.boundaryNode.getOffsetTop()); // eslint-disable-line
+				this.boundaryNode.setScrollTop(this.today.offsetTop - this.todayScrollPosition - this.boundaryNode.getOffsetTop()); // eslint-disable-line
+				console.log('After: this.boundaryNode.getOffsetTop(): ', this.boundaryNode.node.scrollTop); // eslint-disable-line
 			} else {
+				console.log('this.today.offsetTop: ', this.today.offsetTop); // eslint-disable-line
+				console.log('Before: this.boundaryNode.getOffsetTop(): ', this.boundaryNode.getOffsetTop()); // eslint-disable-line
 				this.boundaryNode.setScrollTop(this.today.offsetTop - this.boundaryNode.getOffsetTop());
+				console.log('After: this.boundaryNode.getOffsetTop(): ', this.boundaryNode.node.scrollTop); // eslint-disable-line
 			}
 		}
 
 		if (hasFinishedLoading && this.boundaryNode && !this.boundaryNode.canScroll() && hasPrev) {
 			this.todayScrollPosition = this.today && this.today.offsetTop;
+			console.log('this.todayScrollPosition: ', this.todayScrollPosition); // eslint-disable-line
 			loadMoreBefore();
 		}
 	}
