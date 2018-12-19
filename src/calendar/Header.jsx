@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { scoped } from '@nti/lib-locale';
 import cx from 'classnames';
 import { Connectors } from '@nti/lib-store';
+import { getService } from '@nti/web-client';
 
 import CalendarList from './calendar-list';
 
@@ -30,10 +31,25 @@ class CalendarHeader extends React.Component {
 
 	state = {
 		showOptions: false,
-		showFilters: false
+		showFilters: false,
+		feedUrl: ''
 	}
 
 	attachFlyoutRef = x => this.flyout = x;
+
+	async componentDidUpdate (prevProps) {
+		const { collection } = this.props;
+
+		if (!!collection && (prevProps.collection && prevProps.collection.href) !== (collection && collection.href) ) {
+			const service = await getService();
+			const exportLink = collection && collection.getLink('GenerateFeedURL');
+			const feedUrl = await service.get(exportLink);
+			this.setState({
+				feedUrl
+			});
+		}
+	}
+
 
 	onOptionsClick = () => {
 		this.setState({ showOptions: !this.state.showOptions, showFilters: false });
@@ -52,9 +68,7 @@ class CalendarHeader extends React.Component {
 	}
 
 	renderExport () {
-		const { collection } = this.props;
-		const exportLink = collection && collection.getLink('export');
-
+		const { feedUrl } = this.state;
 		return (
 			<div className="export-calendar">
 				<div className="export-content">
@@ -66,7 +80,7 @@ class CalendarHeader extends React.Component {
 					</div>
 					<div className="export-message">{t('exportMessage')}</div>
 					<div className="export-link">
-						<a href={exportLink} download>{t('exportLink')}</a>
+						<a href={feedUrl} target="_blank" rel="noopener noreferrer">{t('exportLink')}</a>
 					</div>
 				</div>
 			</div>
