@@ -5,12 +5,10 @@ import cx from 'classnames';
 import { Connectors } from '@nti/lib-store';
 
 import CalendarList from './calendar-list';
+import CalendarExport from './export';
 
 const t = scoped('nti.web.calendar.header', {
-	title: 'Calendars',
-	exportHeader: 'Export your Calendars',
-	exportLink: 'Export Calendars',
-	exportMessage: 'Export your calendars and add them to your favorite app.'
+	title: 'Calendars'
 });
 
 export default
@@ -53,22 +51,10 @@ class CalendarHeader extends React.Component {
 
 	renderExport () {
 		const { collection } = this.props;
-		const exportLink = collection && collection.getLink('export');
 
 		return (
 			<div className="export-calendar">
-				<div className="export-content">
-					<div className="export-header">
-						<div className="download-icon">
-							<i className="icon-download" />
-						</div>
-						{t('exportHeader')}
-					</div>
-					<div className="export-message">{t('exportMessage')}</div>
-					<div className="export-link">
-						<a href={exportLink} download>{t('exportLink')}</a>
-					</div>
-				</div>
+				<CalendarExport calendar={collection} />
 			</div>
 		);
 	}
