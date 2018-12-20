@@ -148,19 +148,21 @@ class CalendarBody extends React.Component {
 				onTop={loaded ? this.onTop : null}
 				onBottom={loaded ? this.onBottom : null}
 			>
-				{loading && <Loading.Spinner className="calendar-body-loading"/>}
-				{error && this.renderError()}
+				<div>
+					{loading && <Loading.Spinner className="calendar-body-loading"/>}
+					{error && this.renderError()}
 
-				{pullToLoad && <BodyEdge mainLoading={!!loading} loading={prevLoading} hasMore={hasPrev} error={error} />}
-				{bins.map(bin => (
-					<Day
-						setToday={this.setToday}
-						calendars={calendars}
-						key={bin.name}
-						bin={bin}
-					/>
-				))}
-				{pullToLoad && <BodyEdge mainLoading={!!loading} loading={nextLoading} hasMore={hasNext} error={error} />}
+					{pullToLoad && <BodyEdge mainLoading={!!loading} loading={prevLoading} hasMore={hasPrev} error={error} />}
+					{bins.map(bin => (
+						<Day
+							setToday={this.setToday}
+							calendars={calendars}
+							key={bin.name}
+							bin={bin}
+						/>
+					))}
+					{pullToLoad && <BodyEdge mainLoading={!!loading} loading={nextLoading} hasMore={hasNext} error={error} />}
+				</div>
 			</BoundaryMonitor>
 		);
 	}
