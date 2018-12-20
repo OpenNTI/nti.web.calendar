@@ -17,7 +17,7 @@ const t = scoped('nti-calendar.export', {
 	copyButton: 'Copy'
 });
 
-@Store.connect(['loading', 'error', 'feedLink'])
+@Store.connect(['loading', 'error', 'feedLink', 'exportLink'])
 class CalendarExport extends React.Component {
 	static deriveBindingFromProps (props) {
 		return props.calendar;
@@ -60,17 +60,19 @@ class CalendarExport extends React.Component {
 						<div className="message">
 							{t('message')}
 						</div>
-						<a href={exportLink} target="_blank" rel="noopener noreferrer" download className="export">
+						<a href={exportLink} download className="export">
 							{t('link')}
 						</a>
-						<div className="feed">
-							<Input.Label label={copied ? t('copiedLabel') : t('copyLabel')} >
-								<Input.Text readOnly value={feedLink} />
-							</Input.Label>
-							<CopyToClipboard text={feedLink} onCopy={this.onCopy}>
-								<Button>{t('copyButton')}</Button>
-							</CopyToClipboard>
-						</div>
+						{feedLink && (
+							<div className="feed">
+								<Input.Label label={copied ? t('copiedLabel') : t('copyLabel')} >
+									<Input.Text readOnly value={feedLink} />
+								</Input.Label>
+								<CopyToClipboard text={feedLink} onCopy={this.onCopy}>
+									<Button>{t('copyButton')}</Button>
+								</CopyToClipboard>
+							</div>
+						)}
 					</div>
 				)}
 			</div>

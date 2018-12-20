@@ -15,6 +15,7 @@ export default class CalendarExportStore extends Stores.BoundStore {
 	async load () {
 		this.set({
 			loading: true,
+			exportLink: null,
 			feedLink: null,
 			error: null
 		});
@@ -22,7 +23,7 @@ export default class CalendarExportStore extends Stores.BoundStore {
 		if (!this.binding) { return; }
 
 		try {
-			const feedLink = await this.binding.fetchLink(FEED_REL);
+			const feedLink = this.binding.hasLink(FEED_REL) && await this.binding.fetchLink(FEED_REL);
 
 			this.set({
 				loading: false,
