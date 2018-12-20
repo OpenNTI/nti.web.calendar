@@ -8,6 +8,10 @@
 	max-height: calc(100% - 40px);
 	min-height: 200px;
 
+	.is-ie & {
+		overflow-y: scroll;
+	}
+
 	.calendar-empty {
 		color: white;
 		text-align: center;
