@@ -54,12 +54,20 @@
 			flex-direction: row;
 			align-items: flex-end;
 
-			.nti-text-input {
-				border-radius: 2px 0 0 2px;
-				border-right-width: 0;
+			.nti-labeled-input {
+				flex: 1 1 auto;
+				overflow: hidden;
+
+				.nti-text-input {
+					width: 100%;
+					border-radius: 2px 0 0 2px;
+					border-right-width: 0;
+				}
 			}
 
+
 			.nti-button {
+				flex: 0 0 auto;
 				height: 34px;
 				line-height: 34px;
 				padding: 0 1.25rem;
