@@ -31,7 +31,7 @@ const t = scoped('calendar.editor.Editor', {
 });
 
 
-const createScope = scoped('', {
+const createScope = scoped('calendar.editor.Editor.create', {
 	title: 'Create Event',
 	save: 'Create',
 	cancel: 'Cancel'
