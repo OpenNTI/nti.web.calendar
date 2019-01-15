@@ -276,11 +276,11 @@ class EventEditor extends React.Component {
 
 		const calendarEvent = await createEvent(calendar, event, title, description, location, startDate, endDate, imgBlob);
 
-		if(create && onSuccess) {
+		if(create && onSuccess && calendarEvent) {
 			onSuccess(calendarEvent);
 		}
 
-		if(!create) {
+		if(!create && calendarEvent) {
 			this.setState({viewMode: true});
 		}
 	}
