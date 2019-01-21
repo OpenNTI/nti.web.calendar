@@ -21,7 +21,7 @@ class DateIcon extends React.PureComponent {
 
 		return (
 			<div className="nti-calendar-date-icon-container" onClick={() => { markSeen(); }}>
-				<Calendar.DateIcon {...otherProps} viewed={hasSeen} badge={todaysCount}/>
+				<Calendar.DateIcon {...otherProps} viewed={hasSeen} badge={todaysCount || 0}/>
 			</div>
 		);
 	}
