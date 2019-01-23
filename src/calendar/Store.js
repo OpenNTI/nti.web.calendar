@@ -25,8 +25,8 @@ function getMimeTypeFor (calendar) {
 	return null;
 }
 
-function appendToFormData (formData, fieldName, value) {
-	if(value) {
+function appendToFormData (formData, fieldName, value, force) {
+	if(value || force) {
 		formData.append(fieldName, value);
 	}
 }
@@ -305,12 +305,15 @@ export default class CalendarStore extends Stores.BoundStore {
 			const service = await getService();
 			const formData = new FormData();
 
-			appendToFormData(formData, 'MimeType', getMimeTypeFor(calendar));
-			appendToFormData(formData, 'title', title);
-			appendToFormData(formData, 'description', description);
-			appendToFormData(formData, 'location', location);
-			appendToFormData(formData, 'start_time', startDate && startDate.toISOString());
-			appendToFormData(formData, 'end_time', endDate && endDate.toISOString());
+			// pass in event to determine whether to force append the value.  On initial creation, we don't want
+			// the formData to have empty values.  However, on edit (when we have an existing event), we do want
+			// to have empty values in there and we'll let the server error out if anything required is missing
+			appendToFormData(formData, 'MimeType', getMimeTypeFor(calendar), event);
+			appendToFormData(formData, 'title', title, event);
+			appendToFormData(formData, 'description', description, event);
+			appendToFormData(formData, 'location', location, event);
+			appendToFormData(formData, 'start_time', startDate && startDate.toISOString(), event);
+			appendToFormData(formData, 'end_time', endDate && endDate.toISOString(), event);
 
 			if(img !== undefined) {
 				formData.append('icon', img || null);
