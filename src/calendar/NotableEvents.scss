@@ -1,0 +1,11 @@
+@import "~@nti/style-common";
+
+.notable-events {
+	&.empty {
+		.empty-message {
+			text-align: center;
+			color: $tertiary-grey;
+			padding: 10px;
+		}
+	}
+}

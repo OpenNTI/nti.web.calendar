@@ -1,10 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import {scoped} from '@nti/lib-locale';
 import {Loading} from '@nti/web-commons';
 
 import Day from './day';
 import Store from './NotableEventsStore';
+
+const t = scoped('nti-web-calendar.NotableEvents', {
+	emptyMessage: 'There are no upcoming events'
+});
+
 
 const bindings = {};
 function getBinding (limit) {
@@ -46,6 +52,7 @@ class NotableEvents extends React.Component {
 					/>
 				))}
 				{!loading && children}
+				{!loading && empty && <div className="empty-message">{t('emptyMessage')}</div>}
 			</div>
 		);
 	}
