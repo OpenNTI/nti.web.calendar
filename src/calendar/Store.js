@@ -25,10 +25,49 @@ function getMimeTypeFor (calendar) {
 	return null;
 }
 
-function appendToFormData (formData, fieldName, value, force) {
-	if(value || force) {
-		formData.append(fieldName, value);
+function getFormDataForCreating (data) {
+	const formData = new FormData();
+	const keys = Object.keys(data);
+
+	for (let key of keys) {
+		const value = data[key];
+
+		if (value != null) {
+			formData.append(key, value);
+		}
 	}
+
+	return formData;
+}
+
+function getFormDataForUpdating (event, data) {
+	const formData = new FormData();
+
+	const maybeAdd = (dataKey, eventKey) => {
+		if (data[dataKey] !== event[eventKey || dataKey]) {
+			formData.append(dataKey, data[dataKey]);
+		}
+	};
+
+	const maybeAddDate = (dataKey, eventKey) => {
+		const dataValue = data[dataKey];
+		const eventValue = event[eventKey] && event[eventKey]() && event[eventKey]().toISOString();
+
+		if (dataValue !== eventValue && (dataValue || eventValue)) {
+			formData.append(dataKey, dataValue);
+		}
+	};
+
+	maybeAdd('icon');
+	maybeAdd('MimeType');
+	maybeAdd('title');
+	maybeAdd('description');
+	maybeAdd('location');
+
+	maybeAddDate('start_time', 'getStartTime');
+	maybeAddDate('end_time', 'getEndTime');
+
+	return formData;
 }
 
 export default class CalendarStore extends Stores.BoundStore {
@@ -303,24 +342,16 @@ export default class CalendarStore extends Stores.BoundStore {
 
 		try {
 			const service = await getService();
-			const formData = new FormData();
+			const data = {
+				MimeType: getMimeTypeFor(calendar),
+				title, description, location,
+				'start_time': startDate && startDate.toISOString(),
+				'end_time': endDate && endDate.toISOString(),
+				icon: img
+			};
+			debugger;
+			const formData = event ? getFormDataForUpdating(event, data) : getFormDataForCreating(data);
 
-			// pass in event to determine whether to force append the value.  On initial creation, we don't want
-			// the formData to have empty values.  However, on edit (when we have an existing event), we do want
-			// to have empty values in there and we'll let the server error out if anything required is missing
-			appendToFormData(formData, 'MimeType', getMimeTypeFor(calendar), event);
-			appendToFormData(formData, 'title', title, event);
-			appendToFormData(formData, 'description', description, event);
-			appendToFormData(formData, 'location', location, event);
-			appendToFormData(formData, 'start_time', startDate && startDate.toISOString(), event);
-			appendToFormData(formData, 'end_time', endDate && endDate.toISOString(), event);
-
-			if(img !== undefined) {
-				formData.append('icon', img || null);
-			}
-			else if (event && event.icon) {
-				formData.append('icon', event.icon);
-			}
 
 			let calendarEvent;
 			let type = EVENTS.CREATED;
