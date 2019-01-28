@@ -349,7 +349,6 @@ export default class CalendarStore extends Stores.BoundStore {
 				'end_time': endDate && endDate.toISOString(),
 				icon: img
 			};
-			debugger;
 			const formData = event ? getFormDataForUpdating(event, data) : getFormDataForCreating(data);
 
 
