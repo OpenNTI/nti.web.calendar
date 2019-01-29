@@ -281,7 +281,10 @@ class EventEditor extends React.Component {
 		}
 
 		if(!create && calendarEvent) {
-			this.setState({viewMode: true});
+			this.setState({
+				viewMode: true,
+				img: calendarEvent.icon !== 'null' && {src: calendarEvent.icon},
+			});
 		}
 	}
 
