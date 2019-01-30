@@ -58,11 +58,8 @@ function getFormDataForUpdating (event, data) {
 		}
 	};
 
-	if(data.icon) {
-		maybeAdd('icon');
-	}
-	else {
-		formData.append('icon', null);
+	if(data.icon !== undefined) {
+		maybeAdd('icon', data.icon);
 	}
 
 	maybeAdd('MimeType');
