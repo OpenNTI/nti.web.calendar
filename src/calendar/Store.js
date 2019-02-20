@@ -40,38 +40,32 @@ function getFormDataForCreating (data) {
 	return formData;
 }
 
-function getFormDataForUpdating (event, data) {
+function getFormDataForUpdating (newData, oldData) {
 	const formData = new FormData();
+	let didChange = false;
 
-	const maybeAdd = (dataKey, eventKey) => {
-		if (data[dataKey] !== event[eventKey || dataKey]) {
-			formData.append(dataKey, data[dataKey]);
+	const maybeAdd = (key) => {
+		if (newData[key] !== oldData[key]) {
+			didChange = true;
+			formData.append(key, newData[key]);
 		}
 	};
 
-	const maybeAddDate = (dataKey, eventKey) => {
-		const dataValue = data[dataKey];
-		const eventValue = event[eventKey] && event[eventKey]() && event[eventKey]().toISOString();
-
-		if (dataValue !== eventValue && (dataValue || eventValue)) {
-			formData.append(dataKey, dataValue);
-		}
-	};
-
-	if(data.icon !== undefined) {
-		maybeAdd('icon', data.icon);
+	if (newData.icon !== undefined) {
+		didChange = true;
+		formData.append('icon', newData.icon);
 	}
 
 	maybeAdd('MimeType');
 	maybeAdd('title');
 	maybeAdd('description');
 	maybeAdd('location');
+	maybeAdd('start_time');
+	maybeAdd('end_time');
 
-	maybeAddDate('start_time', 'getStartTime');
-	maybeAddDate('end_time', 'getEndTime');
-
-	return formData;
+	return didChange ? formData : null;
 }
+
 
 export default class CalendarStore extends Stores.BoundStore {
 	constructor () {
@@ -345,15 +339,32 @@ export default class CalendarStore extends Stores.BoundStore {
 
 		try {
 			const service = await getService();
-			const data = {
+			const newData = {
 				MimeType: getMimeTypeFor(calendar),
 				title, description, location,
 				'start_time': startDate && startDate.toISOString(),
 				'end_time': endDate && endDate.toISOString(),
 				icon: img
 			};
-			const formData = event ? getFormDataForUpdating(event, data) : getFormDataForCreating(data);
+			const oldData = !event ? null :
+				{
+					MimeType: event.MimeType,
+					title: event.title,
+					description: event.description,
+					location: event.location,
+					icon: event.icon,
+					'start_time': event.getStartTime() && event.getStartTime().toISOString(),
+					'end_time': event.getEndTime() && event.getEndTime().toISOString()
 
+				};
+			const formData = event ? getFormDataForUpdating(newData, oldData) : getFormDataForCreating(newData);
+
+			if (!formData && event) {
+				this.set({
+					saving: false
+				});
+				return event;
+			}
 
 			let calendarEvent;
 			let type = EVENTS.CREATED;
