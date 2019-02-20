@@ -310,18 +310,34 @@ export default class CalendarStore extends Stores.BoundStore {
 
 	addFilter = (filter) => {
 		const filters = this.get('filters');
-		this.set({ filters: [...filters, filter ]});
+
+		this.set({
+			filters: [...filters, filter ],
+			batchStartNext: 0,
+			batchStartPrev: 0
+		});
+
 		localStorage.setItem('calendar-filters', JSON.stringify([...filters, filter ]));
+
 		this.loadInitialBatch();
 	}
 
 	removeFilter = (filter) => {
 		const filters = this.get('filters');
 		const index = filters.findIndex(x => x === filter);
+
 		filters.splice(index, 1);
+
 		const newFilters = filters.slice();
+
 		localStorage.setItem('calendar-filters', JSON.stringify(newFilters));
-		this.set({ filters: newFilters });
+
+		this.set({
+			filters: newFilters,
+			batchStartNext: 0,
+			batchStartPrev: 0
+		});
+
 		this.loadInitialBatch();
 	}
 
