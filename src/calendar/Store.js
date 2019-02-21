@@ -385,8 +385,10 @@ export default class CalendarStore extends Stores.BoundStore {
 			let calendarEvent;
 			let type = EVENTS.CREATED;
 
-			if(event) {
+			if (event) {
 				calendarEvent = await service.putParseResponse(event.getLink('edit'), formData);
+				event.refresh(calendarEvent);
+				calendarEvent = event;
 				type = EVENTS.CHANGED;
 			}
 			else {

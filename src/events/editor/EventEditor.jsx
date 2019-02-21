@@ -47,6 +47,24 @@ const editableScope = scoped('calendar.editor.Editor.editable', {
 	cancel: 'Cancel'
 });
 
+function getStateFromEvent (event) {
+	let defaultStartDate = new Date();
+
+	defaultStartDate.setSeconds(0);
+	defaultStartDate.setMinutes(defaultStartDate.getMinutes() + 59);
+	defaultStartDate.setMinutes(0);
+
+	return {
+		startDate: event ? event.getStartTime() : defaultStartDate,
+		endDate: event ? event.getEndTime() : new Date(defaultStartDate.getTime() + (60 * 60 * 1000)),
+		title: event && event.title,
+		description: event && event.description,
+		location: event && event.location,
+		// check icon for null string.  if we remove an icon and PUT to the record, it won't be null, but "null"
+		img: event && event.icon && event.icon !== 'null' && {src: event.icon},
+	};
+}
+
 export default
 @Store.connect(['createEvent', 'createError', 'saving', 'availableCalendars'])
 class EventEditor extends React.Component {
@@ -71,25 +89,14 @@ class EventEditor extends React.Component {
 
 		const {event, availableCalendars, create} = props;
 
-		let defaultStartDate = new Date();
-		defaultStartDate.setSeconds(0);
-		defaultStartDate.setMinutes(defaultStartDate.getMinutes() + 59);
-		defaultStartDate.setMinutes(0);
-
 		const calendarFromEvent = event && this.getMatchingCalendar(event, availableCalendars);
 
 		this.state = {
 			viewMode: !create,
-			startDate: event ? event.getStartTime() : defaultStartDate,
-			endDate: event ? event.getEndTime() : new Date(defaultStartDate.getTime() + (60 * 60 * 1000)),
-			title: event && event.title,
-			description: event && event.description,
-			location: event && event.location,
 			calendar: calendarFromEvent || (availableCalendars && availableCalendars[0]),
 			event: props.event,
-			// check icon for null string.  if we remove an icon and PUT to the record, it won't be null, but "null"
-			img: props.event && props.event.icon && props.event.icon !== 'null' && {src: props.event.icon},
-			availableCalendars
+			availableCalendars,
+			...getStateFromEvent(event)
 		};
 	}
 
@@ -283,7 +290,7 @@ class EventEditor extends React.Component {
 		if(!create && calendarEvent) {
 			this.setState({
 				viewMode: true,
-				img: calendarEvent.icon !== 'null' && {src: calendarEvent.icon},
+				...getStateFromEvent(calendarEvent)
 			});
 		}
 	}
