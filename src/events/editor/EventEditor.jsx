@@ -327,7 +327,7 @@ class EventEditor extends React.Component {
 
 	render () {
 		const {saving, nonDialog} = this.props;
-		const {viewMode} = this.state;
+		const {viewMode, calendar} = this.state;
 		const cls = cx('calendar-event-editor', {saving, 'view-only': viewMode});
 
 		return (
@@ -336,7 +336,7 @@ class EventEditor extends React.Component {
 				getString={this.getScope()}
 				onCancel={this.onCancel}
 				onSave={this.onSave}
-				disableSave={saving}
+				disableSave={saving || (!calendar && !viewMode)}
 				nonDialog={nonDialog}
 			>
 				<div className={cls}>
