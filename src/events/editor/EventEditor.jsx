@@ -79,6 +79,7 @@ class EventEditor extends React.Component {
 		editable: PropTypes.bool,
 		create: PropTypes.bool,
 		nonDialog: PropTypes.bool,
+		noControls: PropTypes.bool,
 		availableCalendars: PropTypes.array
 	}
 
@@ -325,31 +326,47 @@ class EventEditor extends React.Component {
 		}
 	}
 
-	render () {
-		const {saving, nonDialog} = this.props;
-		const {viewMode, calendar} = this.state;
+	renderEvent () {
+		const {
+			props: {saving},
+			state: {viewMode}
+		} = this;
+
 		const cls = cx('calendar-event-editor', {saving, 'view-only': viewMode});
 
 		return (
-			<SaveCancel
-				className="event-view-dialog"
-				getString={this.getScope()}
-				onCancel={this.onCancel}
-				onSave={this.onSave}
-				disableSave={saving || (!calendar && !viewMode)}
-				nonDialog={nonDialog}
-			>
-				<div className={cls}>
-					{this.renderError()}
-					<div className="contents">
-						<div className="header-info">
-							{this.renderDateInfo()}
-							{this.renderEventInfo()}
-						</div>
-						{this.renderOtherInfo()}
+			<div className={cls}>
+				{this.renderError()}
+				<div className="contents">
+					<div className="header-info">
+						{this.renderDateInfo()}
+						{this.renderEventInfo()}
 					</div>
+					{this.renderOtherInfo()}
 				</div>
-			</SaveCancel>
+			</div>
+		);
+	}
+
+	render () {
+		const {saving, nonDialog, noControls} = this.props;
+		const {viewMode, calendar} = this.state;
+		const className = 'event-view-dialog';
+
+		const Cmp = noControls ? 'div' : SaveCancel;
+		const props = noControls ? {className} : {
+			className,
+			getString: this.getScope(),
+			onCancel: this.onCancel,
+			onSave: this.onSave,
+			disableSave: saving || (!calendar && !viewMode),
+			nonDialog
+		};
+
+		return (
+			<Cmp {...props}>
+				{this.renderEvent()}
+			</Cmp>
 		);
 	}
 }
