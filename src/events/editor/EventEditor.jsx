@@ -101,13 +101,13 @@ class EventEditor extends React.Component {
 		};
 	}
 
-	componentDidUpdate (oldProps) {
-		if(oldProps.availableCalendars !== this.props.availableCalendars) {
-			const {event, availableCalendars} = this.props;
-
+	componentDidUpdate ({availableCalendars: prevCals, event: prevEvent}) {
+		const {availableCalendars, event} = this.props;
+		if(prevCals !== availableCalendars || prevEvent !== event) {
 			const calendarFromEvent = event && this.getMatchingCalendar(event, availableCalendars);
 
 			this.setState({
+				...getStateFromEvent(event),
 				calendar: calendarFromEvent || availableCalendars[0],
 			});
 		}
@@ -349,9 +349,9 @@ class EventEditor extends React.Component {
 	}
 
 	render () {
-		const {saving, nonDialog, noControls} = this.props;
+		const {saving, nonDialog, noControls, className: css} = this.props;
 		const {viewMode, calendar} = this.state;
-		const className = 'event-view-dialog';
+		const className = cx('event-view-dialog', css);
 
 		const Cmp = noControls ? 'div' : SaveCancel;
 		const props = noControls ? {className} : {

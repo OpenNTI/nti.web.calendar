@@ -1,11 +1,12 @@
 import { getService } from '@nti/web-client';
 import { Stores } from '@nti/lib-store';
 import AppDispatcher from '@nti/lib-dispatcher';
+import {Models} from '@nti/lib-interfaces';
 
 import EventBinner from '../event-binner';
 
 import {EVENTS} from './Store';
-import {getCalendarCollection, getToday} from './util';
+import {getToday} from './util';
 
 const defaultParams = {
 	batchSize: 5,
@@ -14,11 +15,12 @@ const defaultParams = {
 	sortOrder: 'ascending',
 };
 
-export default class NotableEventsStore extends Stores.BoundStore {
+const isModel = c => (c || {}).MimeType === Models.calendar.CourseCalendar.MimeType;
+
+export default class CalendarEventsStore extends Stores.BoundStore {
 
 	constructor () {
 		super();
-
 		AppDispatcher.register(this.handleDispatch);
 	}
 
@@ -30,8 +32,29 @@ export default class NotableEventsStore extends Stores.BoundStore {
 		}
 	}
 
+	async getCalendar () {
+		let calendar = this.get('calendar');
+
+		if (!calendar) {
+			const {calendar: c} = this.binding || {};
+
+			calendar = isModel(c) ? c : (
+				await getService().then(s => s.getObject(c))
+			);
+
+			this.set({calendar});
+		}
+
+		return calendar;
+	}
+
 	async load () {
-		const {binding} = this;
+		const calendar = await this.getCalendar();
+
+		if (!calendar) {
+			return;
+		}
+
 		const notBefore = getToday().getTime() / 1000;
 		let error;
 
@@ -44,22 +67,16 @@ export default class NotableEventsStore extends Stores.BoundStore {
 
 		try {
 			const service = await getService();
-			let collection = await getCalendarCollection(true);
-
-			if (!collection) { return; }
-
-			const link = collection.getLink('events');
+			const link = calendar.getLink('contents');
 
 			const batch = await service.getBatch(link, {
 				...defaultParams,
-				notBefore,
-				...(binding || {})
+				notBefore
 			});
 
 			this.eventBinner.insertEvents(batch.Items);
 
 			this.set({
-				calendars: collection.Items,
 				loading: false,
 				bins: this.eventBinner.getBins(),
 			});
