@@ -72,7 +72,7 @@ export default class Day extends React.Component {
 								bin={bin}
 								item={item}
 								onItemClick={this.onItemClick}
-								catalogEntry={(calendars.filter(x => x.NTIID === item.ContainerId)[0] || {}).CatalogEntry}
+								catalogEntry={((calendars || []).filter(x => x.NTIID === item.ContainerId)[0] || {}).CatalogEntry}
 							/>
 						))
 					)}
