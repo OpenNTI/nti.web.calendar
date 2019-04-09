@@ -4,7 +4,7 @@ import { DateTime, List, Presentation } from '@nti/web-commons';
 import cx from 'classnames';
 
 import { Icon } from '../../../calendar/components';
-import { Event } from '../../components';
+import { Layout } from '../../components';
 import Registry from '../../Registry';
 
 @Registry.register('application/vnd.nextthought.webinar.webinarcalendarevent')
@@ -21,7 +21,7 @@ export default class WebinarEvent extends React.Component {
 		const { item, item: { title }, catalogEntry} = this.props;
 
 		return (
-			<Event.Layout className={cx('webinar-event')}>
+			<Layout className={cx('webinar-event')}>
 				<Presentation.Asset propName="url" contentPackage={catalogEntry} type="thumb">
 					<Icon />
 				</Presentation.Asset>
@@ -33,7 +33,7 @@ export default class WebinarEvent extends React.Component {
 						</List.SeparatedInline>
 					</div>
 				</div>
-			</Event.Layout>
+			</Layout>
 		);
 	}
 }

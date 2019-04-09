@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Calendar} from '@nti/web-commons';
+import {DateTime} from '@nti/web-commons';
 
 import Store from './DateIconStore';
 
@@ -21,7 +21,7 @@ class DateIcon extends React.PureComponent {
 
 		return (
 			<div className="nti-calendar-date-icon-container" onClick={() => { markSeen(); }}>
-				<Calendar.DateIcon {...otherProps} viewed={hasSeen} badge={todaysCount || 0}/>
+				<DateTime.DateIcon {...otherProps} viewed={hasSeen} badge={todaysCount || 0}/>
 			</div>
 		);
 	}

@@ -4,7 +4,7 @@ import { List, DateTime, Presentation } from '@nti/web-commons';
 import {scoped} from '@nti/lib-locale';
 
 import { Icon } from '../../calendar/components';
-import { Event } from '../components';
+import { Layout } from '../components';
 import Registry from '../Registry';
 
 const t = scoped('calendar.events.generic.View', {
@@ -55,7 +55,7 @@ export default class GenericEvent extends React.Component {
 		const { numberOfDays, day, item: { title }, catalogEntry } = this.props;
 		const showTime = ((numberOfDays > 1 && (day === 0 || day + 1 === numberOfDays)) || numberOfDays === 1);
 		return (
-			<Event.Layout className="event-generic">
+			<Layout className="event-generic">
 				<Presentation.Asset propName="url" contentPackage={catalogEntry} type="thumb">
 					<Icon />
 				</Presentation.Asset>
@@ -67,7 +67,7 @@ export default class GenericEvent extends React.Component {
 						{showTime && this.renderTime()}
 					</List.SeparatedInline>
 				</div>
-			</Event.Layout>
+			</Layout>
 		);
 	}
 }
