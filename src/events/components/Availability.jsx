@@ -25,6 +25,7 @@ function isToday (date) {
 
 export default function EventAvailability (props) {
 	const {
+		eventType,
 		startTime,
 		endTime,
 		icon,
@@ -65,6 +66,7 @@ export default function EventAvailability (props) {
 	return (
 		<div className={cx('availability-info')}>
 			{completed && !minimal && <CircularProgress width={20} height={20} isComplete />}
+			{eventType && <div className={cx('event-type', 'separator')}>{eventType}</div>}
 			{completed && <div className={cx('completion-label', 'separator')}>{t('completed')}</div>}
 			{!completed && expired && <div className={cx('incomplete-label', 'separator')}>{t('absent')}</div>}
 			{(!icon || minimal) && !expired && <DateTime.Duration className={cx('duration', 'separator')} {...{startTime, endTime}} />}
@@ -74,6 +76,7 @@ export default function EventAvailability (props) {
 }
 
 EventAvailability.propTypes = {
+	eventType: PropTypes.string,
 	startTime: PropTypes.any,
 	endTime: PropTypes.any,
 	expired: PropTypes.bool,
