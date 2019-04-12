@@ -103,13 +103,21 @@ class EventEditor extends React.Component {
 
 	componentDidUpdate ({availableCalendars: prevCals, event: prevEvent}) {
 		const {availableCalendars, event} = this.props;
-		if(prevCals !== availableCalendars || prevEvent !== event) {
+		let state = null;
+
+		if (event !== prevEvent) {
+			state = {...getStateFromEvent(event)};
+		}
+
+		if (prevCals !== availableCalendars) {
 			const calendarFromEvent = event && this.getMatchingCalendar(event, availableCalendars);
 
-			this.setState({
-				...getStateFromEvent(event),
-				calendar: calendarFromEvent || availableCalendars[0],
-			});
+			state = state || {};
+			state.calendar = calendarFromEvent || availableCalendars[0];
+		}
+
+		if (state) {
+			this.setState(state);
 		}
 	}
 
