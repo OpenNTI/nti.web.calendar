@@ -45,7 +45,7 @@ export default function EventAvailability (props) {
 	}
 	else {
 		// determine if it's today
-		if (isToday(new Date(), startTime)) {
+		if (isToday(startTime)) {
 			timeDisplay = DateTime.format(startTime, '[Starts Today at] hh:mm a z');
 
 			/*
