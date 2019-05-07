@@ -1,4 +1,4 @@
-export getAvailableCalendars from './get-available-calendars';
+export getCourseCalendar from './get-course-calendar';
 export getCalendarCollection from './get-calendar-collection';
 
 export function getToday () {
