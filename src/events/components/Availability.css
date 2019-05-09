@@ -6,10 +6,15 @@
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	display: flex;
 	max-width: 100%;
 	line-height: 20px;
 	font-weight: bold;
+}
+
+.availability-info > * {
+	display: inline-block;
+	float: left;
+	vertical-align: middle;
 }
 
 .circular-progress {
