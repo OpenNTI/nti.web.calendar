@@ -9,12 +9,16 @@
 	max-width: 100%;
 	line-height: 20px;
 	font-weight: bold;
+	overflow-x: hidden;
 }
 
 .availability-info > * {
 	display: inline-block;
 	float: left;
 	vertical-align: middle;
+	max-width: 100%;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .circular-progress {
