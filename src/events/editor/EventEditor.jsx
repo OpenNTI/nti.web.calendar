@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {DateTime, Input, Prompt} from '@nti/web-commons';
+import {DateTime, Input, Prompt, Text} from '@nti/web-commons';
 import {scoped} from '@nti/lib-locale';
 import {ImageUpload} from '@nti/web-whiteboard';
 import cx from 'classnames';
@@ -146,7 +146,7 @@ class EventEditor extends React.Component {
 				<div className="title">
 					{
 						viewMode
-							? title
+							? <Text.Base linkify>{title}</Text.Base>
 							: <Input.Text placeholder={t('eventTitle')} value={title} onChange={(val) => this.setState({title: val})} maxLength="140"/>
 					}
 				</div>
@@ -161,7 +161,7 @@ class EventEditor extends React.Component {
 					}
 					{
 						viewMode
-							? <div className="desc">{description}</div>
+							? <Text.Base className="desc" linkify >{description}</Text.Base>
 							: <Input.TextArea value={description} onChange={(val) => this.setState({description: val})} placeholder={t('eventDescription')}/>
 					}
 				</div>
@@ -214,7 +214,7 @@ class EventEditor extends React.Component {
 				<div className="section-title">{t('location')}</div>
 				{
 					viewMode
-						? <div className="name">{location}</div>
+						? <Text.Base className="name" linkify>{location}</Text.Base>
 						: <Input.Text placeholder={t('eventLocation')} value={location} onChange={(val) => this.setState({location: val})} maxLength="140"/>
 				}
 			</div>
