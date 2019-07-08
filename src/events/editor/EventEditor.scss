@@ -55,6 +55,7 @@ $header-ranges: (
 					max-width: 200px;
 
 					.name {
+						font-size: 0.75rem;
 						color: $secondary-grey;
 					}
 				}
@@ -63,6 +64,7 @@ $header-ranges: (
 					display: flex;
 
 					.date-display {
+						font-size: 0.75rem;
 						color: $secondary-grey;
 						margin-right: 20px;
 					}
