@@ -16,6 +16,8 @@ export default class AssignmentEvent extends React.Component {
 				PropTypes.string,
 				PropTypes.instanceOf(Date)
 			]),
+			IsTimedAssignment: PropTypes.bool,
+			MaximumTimeAllowed: PropTypes.number,
 			totalPoints: PropTypes.number
 		}),
 		catalogEntry: PropTypes.object

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import CourseItem from './CourseItem';
-import CommunityItem from './CommunityItem';
+// import CommunityItem from './CommunityItem';
 
 const CourseCalendar = 'application/vnd.nextthought.courseware.coursecalendar';
 

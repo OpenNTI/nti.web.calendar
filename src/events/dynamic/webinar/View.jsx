@@ -12,7 +12,9 @@ export default class WebinarEvent extends React.Component {
 	static propTypes = {
 		item: PropTypes.shape({
 			title: PropTypes.string,
-			dueDate: PropTypes.string
+			dueDate: PropTypes.string,
+			getStartTime: PropTypes.func,
+			getEndTime: PropTypes.func,
 		}),
 		catalogEntry: PropTypes.object
 	}

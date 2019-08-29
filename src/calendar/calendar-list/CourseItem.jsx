@@ -8,6 +8,7 @@ export default class CourseItem extends React.Component {
 	static propTypes = {
 		item: PropTypes.shape({
 			CatalogEntry: PropTypes.shape({
+				NTIID: PropTypes.string.isRequired,
 				title: PropTypes.string.isRequired,
 				ProviderUniqueID: PropTypes.string.isRequired
 			}).isRequired,
