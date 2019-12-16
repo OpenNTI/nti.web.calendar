@@ -1,6 +1,7 @@
 import { getService } from '@nti/web-client';
 import { Stores } from '@nti/lib-store';
 import AppDispatcher from '@nti/lib-dispatcher';
+import {Events} from '@nti/web-session';
 
 import EventBinner from '../event-binner';
 
@@ -386,10 +387,11 @@ export default class CalendarStore extends Stores.BoundStore {
 			let type = EVENTS.CREATED;
 
 			if (event) {
-				calendarEvent = await service.putParseResponse(event.getLink('edit'), formData);
-				event.refresh(calendarEvent);
+				const raw = await service.put(event.getLink('edit'), formData);
+				await event.refresh(raw);
 				calendarEvent = event;
 				type = EVENTS.CHANGED;
+				Events.emit(Events.EVENT_UPDATED, raw);
 			}
 			else {
 				calendarEvent = await service.postParseResponse(calendar.getLink('create_calendar_event'), formData);
