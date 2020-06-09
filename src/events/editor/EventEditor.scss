@@ -171,6 +171,10 @@ $header-ranges: (
 							border: 1.5px dashed #e2e2e2;
 						}
 
+						img.preview {
+							max-width: 100%;
+						}
+
 						.image-preview {
 							position: relative;
 
