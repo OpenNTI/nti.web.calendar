@@ -147,7 +147,7 @@ export default class CalendarStore extends Stores.BoundStore {
 	}
 
 	set batchSize (batchSize) {
-		return this.set({batchSize});
+		this.set({batchSize});
 	}
 
 	async load () {
