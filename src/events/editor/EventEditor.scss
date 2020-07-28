@@ -158,6 +158,8 @@ $header-ranges: (
 					.image-and-description {
 						display: flex;
 						flex-wrap: wrap;
+						flex-direction: row;
+						align-items: flex-start;
 
 						.nti-image-upload {
 							margin-right: 10px;
@@ -173,6 +175,7 @@ $header-ranges: (
 
 						img.preview {
 							max-width: 100%;
+							height: auto;
 						}
 
 						.image-preview {
