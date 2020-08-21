@@ -1,3 +1,4 @@
+import './EventEditor.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {DateTime, Input, Prompt, Text} from '@nti/web-commons';

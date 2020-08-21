@@ -1,3 +1,4 @@
+import './Body.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Scroll, Loading } from '@nti/web-commons';
