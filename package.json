@@ -39,7 +39,7 @@
     "@nti/lib-interfaces": "NextThought/nti.lib.interfaces",
     "@nti/lib-locale": "NextThought/nti.lib.locale",
     "@nti/lib-store": "NextThought/nti.lib.store",
-    "@nti/web-charts": "NextThought/nti.web.component.charts",
+    "@nti/web-charts": "NextThought/nti.web.charts",
     "@nti/web-client": "NextThought/nti.web.client",
     "@nti/web-commons": "NextThought/nti.web.commons",
     "@nti/web-routing": "NextThought/nti.web.routing",
