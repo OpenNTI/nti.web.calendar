@@ -146,7 +146,7 @@ $header-ranges: (
 						font-size: 10px;
 						font-weight: bold;
 						text-transform: uppercase;
-						color: $tertiary-grey;
+						color: var(--tertiary-grey);
 						margin-bottom: 16px;
 						text-align: left;
 
@@ -313,7 +313,7 @@ $header-ranges: (
 				}
 
 				i.icon-chevron-down {
-					color: #b8b8b8;
+					color: var(--tertiary-grey);
 					font-size: 12px;
 					margin-top: 2px;
 					top: 14px;
@@ -351,7 +351,7 @@ $header-ranges: (
 						}
 
 						i.icon-chevron-down {
-							color: #b8b8b8;
+							color: var(--tertiary-grey);
 							font-size: 12px;
 							margin-top: 2px;
 							top: 10px;
@@ -417,7 +417,7 @@ $header-ranges: (
 
 					.subsection-title {
 						font-size: 10px;
-						color: $tertiary-grey;
+						color: var(--tertiary-grey);
 						text-transform: uppercase;
 						font-weight: bold;
 					}

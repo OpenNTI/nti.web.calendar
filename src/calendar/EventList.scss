@@ -4,7 +4,7 @@
 	&.empty {
 		.empty-message {
 			text-align: center;
-			color: $tertiary-grey;
+			color: var(--tertiary-grey);
 			padding: 10px;
 			background: white;
 		}
