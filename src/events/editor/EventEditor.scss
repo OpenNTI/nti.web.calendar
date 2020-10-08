@@ -112,7 +112,7 @@ $header-ranges: (
 
 					.day {
 						font-size: 28px;
-						color: $primary-grey;
+						color: var(--primary-grey);
 					}
 				}
 
@@ -137,7 +137,7 @@ $header-ranges: (
 							background-color: white;
 							font-size: 18px;
 							height: 40px;
-							color: $primary-grey;
+							color: var(--primary-grey);
 						}
 					}
 
@@ -397,7 +397,7 @@ $header-ranges: (
 				.section-title {
 					padding-top: 20px;
 					font-size: 16px;
-					color: $primary-grey;
+					color: var(--primary-grey);
 					margin-bottom: 10px;
 				}
 
