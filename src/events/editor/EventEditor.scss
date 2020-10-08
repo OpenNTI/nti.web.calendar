@@ -166,7 +166,7 @@ $header-ranges: (
 						}
 
 						.image-upload {
-							background-color: #fbfbfb;
+							background-color: var(--panel-background);
 							min-width: 210px;
 							height: 122px;
 							border-radius: 5px;
