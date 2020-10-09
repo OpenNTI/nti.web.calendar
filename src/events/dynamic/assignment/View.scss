@@ -16,7 +16,7 @@
 			color: #fff;
 			font-size: 14px;
 			font-weight: 600;
-			background-color: #f35252;
+			background-color: var(--primary-red);
 			padding: 5px 10px;
 			border-radius: 5px;
 			min-height: 40px;
@@ -56,7 +56,7 @@
 			}
 
 			.timed-assignment-label {
-				color: #b8b8b8;
+				color: var(--tertiary-grey);
 				font-size: 10px;
 				font-weight: bold;
 				letter-spacing: -0.21px;

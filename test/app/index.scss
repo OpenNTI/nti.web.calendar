@@ -1,7 +1,7 @@
 @import "~@nti/style-common/all";
 
 body {
-	font-family: 'Open Sans';
+	font-family: var(--body-font-family);
 	background: #e3e3e3;
 
 	.container {

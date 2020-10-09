@@ -12,7 +12,7 @@
 		flex: 1 1 auto;
 
 		.event-generic-title {
-			color: #494949;
+			color: var(--primary-grey);
 			font-size: 14px;
 			font-weight: 600;
 			hyphens: auto;
@@ -24,7 +24,7 @@
 		}
 
 		.event-generic-subtitle {
-			color: #b8b8b8;
+			color: var(--tertiary-grey);
 			font-size: 10px;
 			font-weight: bold;
 			letter-spacing: -0.21px;

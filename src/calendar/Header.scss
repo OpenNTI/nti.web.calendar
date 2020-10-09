@@ -16,7 +16,7 @@
 		align-items: center;
 
 		i.icon-chevron-down-10 {
-			color: #b8b8b8;
+			color: var(--tertiary-grey);
 			margin-left: 5px;
 			transition: transform 0.2s ease-out;
 			font-size: 16px;
@@ -34,7 +34,7 @@
 		display: flex;
 
 		i.icon-bold-x, i.icon-more {
-			color: #787878;
+			color: var(--secondary-grey-alt);
 			margin: 10px;
 			cursor: pointer;
 		}
@@ -57,7 +57,7 @@
 	// 	border-radius: 5px;
 
 	// 	.export-header {
-	// 		color: #494949;
+	// 		color: var(--primary-grey);
 	// 		font-size: 14px;
 	// 		font-weight: 600;
 	// 		line-height: 19px;
@@ -76,19 +76,19 @@
 	// 	}
 
 	// 	.export-message {
-	// 		color: #757474;
+	// 		color: var(--secondary-grey);
 	// 		font-size: 14px;
 	// 		margin: 15px 0;
 	// 	}
 
 	// 	.export-link {
-	// 		color: #3fb3f6;
+	// 		color: var(--primary-blue);
 	// 		font-size: 14px;
 	// 		cursor: pointer;
 
 	// 		a {
 	// 			text-decoration: none;
-	// 			color: #3fb3f6;
+	// 			color: var(--primary-blue);
 	// 		}
 	// 	}
 	// }

@@ -45,7 +45,7 @@
 		justify-content: space-around;
 
 		i.icon-search {
-			color: #b8b8b8;
+			color: var(--tertiary-grey);
 		}
 
 		input.calendar-search-input {
@@ -56,14 +56,14 @@
 			flex-grow: 1;
 
 			&::placeholder {
-				color: #b8b8b8;
+				color: var(--tertiary-grey);
 				font-style: italic;
 			}
 		}
 	}
 
 	.calendar-list-header {
-		color: #b8b8b8;
+		color: var(--tertiary-grey);
 		font-weight: bold;
 		font-size: 10px;
 		text-transform: uppercase;
