@@ -12,11 +12,14 @@
 		width: 40px;
 		height: 40px;
 		border-radius: 50%;
-		padding-top: 10px;
 		box-shadow: 0 3px 11px 0 rgba(0, 0, 0, 0.5);
 		position: absolute;
 		cursor: pointer;
 		bottom: 15px;
 		right: 15px;
+		//center icon alignment
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 }
