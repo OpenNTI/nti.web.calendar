@@ -46,8 +46,6 @@
     "@nti/web-session": "NextThought/nti.web.session",
     "@nti/web-storage": "NextThought/nti.web.storage",
     "@nti/web-whiteboard": "NextThought/nti.web.whiteboard",
-    "classnames": "^2.0.0",
-    "prop-types": "^15.5.8",
     "react-copy-to-clipboard": "^5.0.1"
   },
   "devDependencies": {
@@ -55,8 +53,12 @@
     "@nti/style-common": "NextThought/nti.style.common",
     "enzyme": "^3.0.0",
     "enzyme-adapter-react-16": "^1.0.1",
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0",
     "react-test-renderer": "^16.0.0"
+  },
+  "peerDependencies": {
+    "classnames": "*",
+    "react": "*",
+    "react-dom": "*",
+    "prop-types": "*"
   }
 }
