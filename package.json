@@ -50,9 +50,7 @@
   },
   "devDependencies": {
     "@nti/cmp-scripts": "^2.2.7",
-    "@nti/style-common": "NextThought/nti.style.common",
-    "enzyme": "^3.0.0",
-    "enzyme-adapter-react-16": "^1.0.1"
+    "@nti/style-common": "NextThought/nti.style.common"
   },
   "peerDependencies": {
     "classnames": "*",
