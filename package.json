@@ -49,13 +49,6 @@
     "react-copy-to-clipboard": "^5.0.1"
   },
   "devDependencies": {
-    "@nti/cmp-scripts": "^2.2.7",
-    "@nti/style-common": "NextThought/nti.style.common"
-  },
-  "peerDependencies": {
-    "classnames": "*",
-    "react": "*",
-    "react-dom": "*",
-    "prop-types": "*"
+    "@nti/cmp-scripts": "^2.31.8"
   }
 }
