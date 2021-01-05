@@ -27,7 +27,7 @@ const keyFor = event => (event.getUniqueIdentifier && event.getUniqueIdentifier(
 const formatDate = date => {
 	const year = new Date().getFullYear();
 	const format = DateTime.isToday(date)
-		? f => t('todyWithDate',f(DateTime.MONTH_NAME_DAY))
+		? f => t('todayWithDate',{date: f(DateTime.MONTH_NAME_DAY)})
 		: date.getFullYear() !== year
 			? DateTime.WEEKDAY_ABBR_MONTH_NAME_DAY_YEAR
 			: DateTime.WEEKDAY_ABBR_MONTH_NAME_DAY;
