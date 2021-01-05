@@ -54,7 +54,7 @@ export default class AssignmentEvent extends React.Component {
 						<List.SeparatedInline className="assignment-subtitle">
 							{dueDate && (
 								<div className="assignment-due">
-									Due {DateTime.format(new Date(dueDate), 'h:mm A z')}
+									Due {DateTime.format(new Date(dueDate), DateTime.TIME_WITH_ZONE)}
 								</div>
 							)}
 							{totalPoints && (

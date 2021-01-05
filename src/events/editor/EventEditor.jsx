@@ -133,8 +133,8 @@ class EventEditor extends React.Component {
 
 		return (
 			<div className="date">
-				<div className="month">{DateTime.format(startDate, 'MMM')}</div>
-				<div className="day">{DateTime.format(startDate, 'D')}</div>
+				<div className="month">{DateTime.format(startDate, DateTime.MONTH_ABBR)}</div>
+				<div className="day">{DateTime.format(startDate, DateTime.DAY_OF_THE_MONTH)}</div>
 			</div>
 		);
 	}
@@ -152,7 +152,7 @@ class EventEditor extends React.Component {
 					}
 				</div>
 				<div className="time-info">
-					<span className="date">{DateTime.format(startDate, 'dddd [at] hh:mm a z')}</span>
+					<span className="date">{DateTime.format(startDate, DateTime.WEEKDAY_AT_TIME_PADDED_WITH_ZONE)}</span>
 				</div>
 				<div className="image-and-description">
 					{
@@ -226,7 +226,7 @@ class EventEditor extends React.Component {
 		const {viewMode} = this.state;
 
 		if(viewMode) {
-			return <div className="date-display">{DateTime.format(value, 'LLL')}</div>;
+			return <div className="date-display">{DateTime.format(value, DateTime.MONTH_NAME_DAY_YEAR_TIME)}</div>;
 		}
 
 		return <DateInput date={value} label={label} onChange={(val) => this.setState({[field]: val})}/>;

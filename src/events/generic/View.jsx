@@ -13,7 +13,7 @@ const t = scoped('calendar.events.generic.View', {
 	allDay: 'ALL DAY'
 });
 
-const formatTime = x => DateTime.format(x, 'h:mm A');
+const formatTime = x => DateTime.format(x, DateTime.TIME);
 
 @Registry.register('application/vnd.nextthought.courseware.coursecalendarevent')
 export default class GenericEvent extends React.Component {

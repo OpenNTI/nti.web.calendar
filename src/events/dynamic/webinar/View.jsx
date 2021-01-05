@@ -23,6 +23,9 @@ export default class WebinarEvent extends React.Component {
 	render () {
 		const { item, item: { title }, catalogEntry} = this.props;
 
+		const start = DateTime.format(item.getStartTime(), DateTime.TIME_START_RANGE);
+		const end = DateTime.format(item.getEndTime(), DateTime.TIME);
+
 		return (
 			<Layout className={cx('webinar-event')}>
 				<Presentation.Asset propName="url" contentPackage={catalogEntry} type="thumb">
@@ -32,7 +35,7 @@ export default class WebinarEvent extends React.Component {
 					<div className="webinar-meta">
 						<div className="webinar-title">{title}</div>
 						<List.SeparatedInline className="webinar-subtitle">
-							<div className="times">{DateTime.format(item.getStartTime(), 'h:mm')}-{DateTime.format(item.getEndTime(), 'h:mm a')}</div>
+							<div className="times">{start}-{end}</div>
 						</List.SeparatedInline>
 					</div>
 				</div>

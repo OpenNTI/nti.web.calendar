@@ -9,7 +9,8 @@ import Editor from '../../events/editor/EventEditor';
 
 const t = scoped('nti.web.calendar.day', {
 	empty: 'No events yet...',
-	today: 'Today'
+	today: 'Today',
+	todayWithDate: 'Today %(date)s'
 });
 
 function isToday (date) {
@@ -22,6 +23,17 @@ const keyFor = event => (event.getUniqueIdentifier && event.getUniqueIdentifier(
 	|| event.NTIID
 	|| (event.getCreatedTime && event.getCreatedTime())
 	|| event.title;
+
+const formatDate = date => {
+	const year = new Date().getFullYear();
+	const format = DateTime.isToday(date)
+		? f => t('todyWithDate',f(DateTime.MONTH_NAME_DAY))
+		: date.getFullYear() !== year
+			? DateTime.WEEKDAY_ABBR_MONTH_NAME_DAY_YEAR
+			: DateTime.WEEKDAY_ABBR_MONTH_NAME_DAY;
+
+	return DateTime.format(date, format);
+};
 
 export default class Day extends React.Component {
 	static propTypes = {
@@ -54,13 +66,11 @@ export default class Day extends React.Component {
 		const { showEditor, event } = this.state;
 		const { bin, bin: { name, items }, calendars } = this.props;
 		const date = new Date(name);
-		const today = new Date();
-		const year = today.getFullYear();
 
 		return (
 			<div ref={this.setToday} className="calendar-day">
 				<div className="day-header">
-					<time>{DateTime.isToday(date) ? `Today ${DateTime.format(date, 'MMMM D')}` : DateTime.format(date, `ddd MMMM D  ${date.getFullYear() !== year ? ', YYYY' : ''}`)}</time>
+					<time>{formatDate(date)}</time>
 				</div>
 				<div className="day-events">
 					{items.length === 0 && (
