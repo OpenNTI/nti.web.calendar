@@ -1,2 +1,2 @@
-export Availability from './Availability';
-export Layout from './Layout';
+export { default as Availability } from './Availability';
+export { default as Layout } from './Layout';

@@ -2,6 +2,6 @@ import './generic';
 import './dynamic';
 
 export * from './components';
-export View from './editor';
+export { default as View } from './editor';
 
 export { default } from './Item';
