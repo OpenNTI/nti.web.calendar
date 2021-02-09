@@ -1,6 +1,7 @@
 import './EventEditor.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
+import {decorate} from '@nti/lib-commons';
 import {DateTime, Input, Prompt, Text} from '@nti/web-commons';
 import {scoped} from '@nti/lib-locale';
 import {ImageUpload} from '@nti/web-whiteboard';
@@ -66,8 +67,6 @@ function getStateFromEvent (event) {
 	};
 }
 
-export default
-@Store.connect(['createEvent', 'createError', 'saving', 'availableCalendars'])
 class EventEditor extends React.Component {
 	static propTypes = {
 		event: PropTypes.object,
@@ -379,3 +378,7 @@ class EventEditor extends React.Component {
 		);
 	}
 }
+
+export default decorate(EventEditor, [
+	Store.connect(['createEvent', 'createError', 'saving', 'availableCalendars'])
+]);

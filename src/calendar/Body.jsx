@@ -1,6 +1,7 @@
 import './Body.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
+import {decorate} from '@nti/lib-commons';
 import { Scroll, Loading } from '@nti/web-commons';
 import { Connectors } from '@nti/lib-store';
 import { scoped } from '@nti/lib-locale';
@@ -27,20 +28,7 @@ function hasRealData (bins) {
 	return false;
 }
 
-export default
-@Connectors.Any.connect([
-	'bins',
-	'loading',
-	'error',
-	'calendars',
-	'loadMoreAfter',
-	'loadMoreBefore',
-	'hasPrev',
-	'prevLoading',
-	'hasNext',
-	'nextLoading',
-	'loaded'
-])
+
 class CalendarBody extends React.Component {
 
 	static propTypes = {
@@ -161,3 +149,19 @@ class CalendarBody extends React.Component {
 		);
 	}
 }
+
+export default decorate(CalendarBody, [
+	Connectors.Any.connect([
+		'bins',
+		'loading',
+		'error',
+		'calendars',
+		'loadMoreAfter',
+		'loadMoreBefore',
+		'hasPrev',
+		'prevLoading',
+		'hasNext',
+		'nextLoading',
+		'loaded'
+	])
+]);

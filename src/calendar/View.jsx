@@ -2,6 +2,7 @@ import './View.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import {decorate} from '@nti/lib-commons';
 
 import Editor from '../events/editor';
 
@@ -9,8 +10,7 @@ import Body from './Body';
 import Header from './Header';
 import Store from './Store';
 
-@Store.connect(['canCreate'])
-export default class Calendar extends React.Component {
+class Calendar extends React.Component {
 	static deriveBindingFromProps (props) {
 		return props.entity || null;
 	}
@@ -59,3 +59,7 @@ export default class Calendar extends React.Component {
 		);
 	}
 }
+
+export default decorate(Calendar, [
+	Store.connect(['canCreate'])
+]);

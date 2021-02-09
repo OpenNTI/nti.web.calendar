@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {decorate} from '@nti/lib-commons';
 
 import EventList from './EventList';
 import Store from './CalendarEventsStore';
 
-export default
-@Store.connect(['bins', 'loading', 'error', 'calendars'])
 class CalendarEvents extends React.Component {
 
 	static deriveBindingFromProps = ({calendar}) => ({calendar});
@@ -33,3 +32,7 @@ class CalendarEvents extends React.Component {
 		);
 	}
 }
+
+export default decorate(CalendarEvents, [
+	Store.connect(['bins', 'loading', 'error', 'calendars'])
+]);

@@ -1,12 +1,11 @@
 import './DateIcon.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
+import {decorate} from '@nti/lib-commons';
 import {DateTime} from '@nti/web-commons';
 
 import Store from './DateIconStore';
 
-export default
-@Store.connect(['todaysCount', 'markSeen', 'hasSeen'])
 class DateIcon extends React.PureComponent {
 
 	static propTypes = {
@@ -27,3 +26,7 @@ class DateIcon extends React.PureComponent {
 		);
 	}
 }
+
+export default decorate(DateIcon, [
+	Store.connect(['todaysCount', 'markSeen', 'hasSeen'])
+]);

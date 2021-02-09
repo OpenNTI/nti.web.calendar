@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {decorate} from '@nti/lib-commons';
 
 import EventList from './EventList';
 import Store from './NotableEventsStore';
@@ -13,8 +14,6 @@ function getBinding (limit) {
 	return bindings[limit];
 }
 
-export default
-@Store.connect(['bins', 'loading', 'error', 'calendars'])
 class NotableEvents extends React.Component {
 
 	static deriveBindingFromProps = ({limit = 5} = {}) => getBinding(limit);
@@ -34,3 +33,7 @@ class NotableEvents extends React.Component {
 		);
 	}
 }
+
+export default decorate(NotableEvents, [
+	Store.connect(['bins', 'loading', 'error', 'calendars'])
+]);

@@ -1,6 +1,7 @@
 import './Header.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
+import {decorate} from '@nti/lib-commons';
 import { scoped } from '@nti/lib-locale';
 import cx from 'classnames';
 import { Connectors } from '@nti/lib-store';
@@ -12,8 +13,6 @@ const t = scoped('nti.web.calendar.header', {
 	title: 'Calendars'
 });
 
-export default
-@Connectors.Any.connect(['calendars', 'filters', 'collection', 'addFilter', 'removeFilter'])
 class CalendarHeader extends React.Component {
 	static propTypes = {
 		calendars: PropTypes.array,
@@ -84,3 +83,8 @@ class CalendarHeader extends React.Component {
 		);
 	}
 }
+
+
+export default decorate(CalendarHeader, [
+	Connectors.Any.connect(['calendars', 'filters', 'collection', 'addFilter', 'removeFilter'])
+]);

@@ -15,7 +15,6 @@ const t = scoped('calendar.events.generic.View', {
 
 const formatTime = x => DateTime.format(x, DateTime.TIME);
 
-@Registry.register('application/vnd.nextthought.courseware.coursecalendarevent')
 export default class GenericEvent extends React.Component {
 	static propTypes = {
 		item: PropTypes.shape({
@@ -72,3 +71,5 @@ export default class GenericEvent extends React.Component {
 		);
 	}
 }
+
+Registry.register('application/vnd.nextthought.courseware.coursecalendarevent')(GenericEvent);

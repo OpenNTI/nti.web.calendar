@@ -8,7 +8,6 @@ import { Icon } from '../../../calendar/components';
 import { Layout } from '../../components';
 import Registry from '../../Registry';
 
-@Registry.register('application/vnd.nextthought.assessment.assignmentcalendarevent')
 export default class AssignmentEvent extends React.Component {
 	static propTypes = {
 		item: PropTypes.shape({
@@ -70,3 +69,5 @@ export default class AssignmentEvent extends React.Component {
 		);
 	}
 }
+
+Registry.register('application/vnd.nextthought.assessment.assignmentcalendarevent')(AssignmentEvent);

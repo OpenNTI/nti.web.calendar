@@ -7,8 +7,6 @@ import cx from 'classnames';
 import { Icon } from '../../../calendar/components';
 import { Layout } from '../../components';
 import Registry from '../../Registry';
-
-@Registry.register('application/vnd.nextthought.webinar.webinarcalendarevent')
 export default class WebinarEvent extends React.Component {
 	static propTypes = {
 		item: PropTypes.shape({
@@ -43,3 +41,5 @@ export default class WebinarEvent extends React.Component {
 		);
 	}
 }
+
+Registry.register('application/vnd.nextthought.webinar.webinarcalendarevent')(WebinarEvent);
