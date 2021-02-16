@@ -4,6 +4,7 @@ import AppDispatcher from '@nti/lib-dispatcher';
 import {Events} from '@nti/web-session';
 
 import EventBinner from '../event-binner';
+import CalendarsStore from '../calendars/Store';
 
 import {getToday} from './util';
 
@@ -170,11 +171,7 @@ export default class CalendarStore extends Stores.BoundStore {
 
 		try {
 			const service = await getService();
-			const collection = await service.getCollection('Calendars');
-
-			this.collection = await collection.refresh();
-
-			this.set('availableCalendars', this.getAvailableCalendars());
+			this.collection = await service.getCollection('Calendars');
 
 			this.loadInitialBatch();
 		} catch (e) {
@@ -203,6 +200,26 @@ export default class CalendarStore extends Stores.BoundStore {
 		}, { 'excluded_context_ntiids': filters });
 	}
 
+	async fillInCalendars (events) {
+		this.CalendarMap = this.CalendarMap || new Map();
+
+		const service = await getService();
+
+		for (let event of events) {
+			if (this.CalendarMap.has(event.containerId)) { continue; }
+
+			const resolve = () => service.getObject(event.containerId);
+
+			this.CalendarMap.set(event.containerId, resolve());
+		}
+
+		const calendars = await Promise.all(
+			Array.from(this.CalendarMap.values())
+		);
+
+		this.set({calendars});
+	}
+
 
 	async loadInitialBatch () {
 		const collection = this.collection;
@@ -220,6 +237,8 @@ export default class CalendarStore extends Stores.BoundStore {
 			const batchSize = this.get('batchSize');
 			const today = getToday();
 			const link = collection.getLink('events');
+
+			const canCreate = await CalendarsStore.hasAdminCalendars();
 
 			let batch = await this.loadBatch(link, {
 				notBefore: today.getTime() / 1000
@@ -245,14 +264,15 @@ export default class CalendarStore extends Stores.BoundStore {
 
 			this.eventBinner.insertEvents(batch.Items, hasMore);
 
+			await this.fillInCalendars(batch.Items);
+
 			this.set({
 				hasNext: hasMore,
 				hasPrev: true,
 				loading: false,
 				loaded: true,
 				bins: this.eventBinner.getBins(true, hasMore),
-				calendars: collection.Items,
-				canCreate: collection && collection.Items && collection.Items.some(x => x.hasLink('create_calendar_event')),
+				canCreate
 			});
 		} catch (e) {
 			this.set({
@@ -272,11 +292,14 @@ export default class CalendarStore extends Stores.BoundStore {
 		});
 
 		const batchSize = this.get('batchSize');
-
 		const batch = await this.loadBatch(collection.getLink('events'), { batchStart: this.get('batchStartPrev'), sortOrder: 'descending', sortOn: 'end_time' });
 
-		this.eventBinner.insertEvents(batch.Items);
 		const hasPrev = batch.FilteredTotalItemCount >= batchSize;
+
+		this.eventBinner.insertEvents(batch.Items);
+
+		await this.fillInCalendars(batch.Items);
+
 		this.set({
 			batchStartPrev: this.get('batchStartPrev') + this.get('batchSize'),
 			prevLoading: false,
@@ -301,12 +324,25 @@ export default class CalendarStore extends Stores.BoundStore {
 
 		this.eventBinner.insertEvents(batch.Items);
 
+		await this.fillInCalendars(batch.Items);
+
 		this.set({
 			batchStartNext: this.get('batchStartNext') + batchSize,
 			nextLoading: false,
 			bins: this.eventBinner.getBins(this.get('hasPrev'), hasMore),
 			hasNext: hasMore,
 		});
+	}
+
+	setFilters (filters) {
+		this.set({
+			filters,
+			batchStartNext: 0,
+			batchStartPrev: 0
+		});
+
+		localStorage.setItem('calendar-filters', JSON.stringify([...filters]));
+		this.loadInitialBatch();
 	}
 
 	addFilter = (filter) => {

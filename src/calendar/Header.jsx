@@ -21,8 +21,7 @@ class CalendarHeader extends React.Component {
 		collection: PropTypes.shape({
 			getLink: PropTypes.func.isRequired
 		}),
-		addFilter: PropTypes.func.isRequired,
-		removeFilter: PropTypes.func.isRequired,
+		setFilters: PropTypes.func,
 		additionalControls: PropTypes.any
 	}
 
@@ -60,7 +59,7 @@ class CalendarHeader extends React.Component {
 	}
 
 	render () {
-		const { additionalControls: AdditionalControls = null, calendars, filters, addFilter, removeFilter } = this.props;
+		const { additionalControls: AdditionalControls = null, calendars, filters, setFilters } = this.props;
 		const { showFilters, showOptions } = this.state;
 		return (
 			<>
@@ -77,7 +76,7 @@ class CalendarHeader extends React.Component {
 				</div>
 				{showOptions && this.renderExport()}
 				{showFilters && (
-					<CalendarList calendars={calendars} filters={filters} addFilter={addFilter} removeFilter={removeFilter} />
+					<CalendarList calendars={calendars} filters={filters} setFilters={setFilters} />
 				)}
 			</>
 		);
@@ -86,5 +85,5 @@ class CalendarHeader extends React.Component {
 
 
 export default decorate(CalendarHeader, [
-	Connectors.Any.connect(['calendars', 'filters', 'collection', 'addFilter', 'removeFilter'])
+	Connectors.Any.connect(['calendars', 'filters', 'setFilters', 'collection', 'addFilter', 'removeFilter'])
 ]);
