@@ -25,7 +25,7 @@ const Container = styled.div`
 `;
 
 const Meta = styled.div`
-	flex: 1 1 auto;
+	flex: 1 0 50%;
 	padding-left: 10px;
 `;
 
