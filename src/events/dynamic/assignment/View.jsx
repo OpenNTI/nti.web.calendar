@@ -11,6 +11,7 @@ import Registry from '../../Registry';
 export default class AssignmentEvent extends React.Component {
 	static propTypes = {
 		item: PropTypes.shape({
+			CatalogEntry: PropTypes.object,
 			title: PropTypes.string,
 			dueDate: PropTypes.oneOfType([
 				PropTypes.string,
@@ -19,8 +20,7 @@ export default class AssignmentEvent extends React.Component {
 			IsTimedAssignment: PropTypes.bool,
 			MaximumTimeAllowed: PropTypes.number,
 			totalPoints: PropTypes.number
-		}),
-		catalogEntry: PropTypes.object
+		})
 	}
 
 	renderTimedAssignment () {
@@ -39,12 +39,12 @@ export default class AssignmentEvent extends React.Component {
 	}
 
 	render () {
-		const { item, catalogEntry } = this.props;
+		const { item } = this.props;
 		const { dueDate, totalPoints, title, IsTimedAssignment } = item;
 
 		return (
 			<Layout className={cx('assignment-event', { IsTimedAssignment })}>
-				<Presentation.Asset propName="url" contentPackage={catalogEntry} type="thumb">
+				<Presentation.Asset propName="url" contentPackage={item.CatalogEntry} type="thumb">
 					<Icon />
 				</Presentation.Asset>
 				<div className="assignment-main-container">

@@ -18,14 +18,14 @@ const formatTime = x => DateTime.format(x, DateTime.TIME);
 export default class GenericEvent extends React.Component {
 	static propTypes = {
 		item: PropTypes.shape({
+			CatalogEntry: PropTypes.func,
 			getStartTime: PropTypes.func.isRequired,
 			getEndTime: PropTypes.func.isRequired,
 			title: PropTypes.string.isRequired,
 			icon: PropTypes.string
 		}),
 		numberOfDays: PropTypes.number,
-		day: PropTypes.number,
-		catalogEntry: PropTypes.object,
+		day: PropTypes.number
 	};
 
 	renderTime () {
@@ -52,11 +52,11 @@ export default class GenericEvent extends React.Component {
 	}
 
 	render () {
-		const { numberOfDays, day, item: { title }, catalogEntry } = this.props;
+		const { numberOfDays, day, item: { title, CatalogEntry } } = this.props;
 		const showTime = ((numberOfDays > 1 && (day === 0 || day + 1 === numberOfDays)) || numberOfDays === 1);
 		return (
 			<Layout className="event-generic">
-				<Presentation.Asset propName="url" contentPackage={catalogEntry} type="thumb">
+				<Presentation.Asset propName="url" contentPackage={CatalogEntry} type="thumb">
 					<Icon />
 				</Presentation.Asset>
 				<div className="event-generic-meta">

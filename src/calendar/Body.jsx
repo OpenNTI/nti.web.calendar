@@ -33,7 +33,6 @@ class CalendarBody extends React.Component {
 
 	static propTypes = {
 		bins: PropTypes.array,
-		calendars: PropTypes.array,
 		loading: PropTypes.bool,
 		error: PropTypes.object,
 		loadMoreAfter: PropTypes.func,
@@ -108,7 +107,6 @@ class CalendarBody extends React.Component {
 			loading,
 			loaded,
 			error,
-			calendars,
 			bins,
 			hasPrev,
 			prevLoading,
@@ -138,7 +136,6 @@ class CalendarBody extends React.Component {
 					{bins.map(bin => (
 						<Day
 							setToday={this.setToday}
-							calendars={calendars}
 							key={bin.name}
 							bin={bin}
 						/>
@@ -155,7 +152,6 @@ export default decorate(CalendarBody, [
 		'bins',
 		'loading',
 		'error',
-		'calendars',
 		'loadMoreAfter',
 		'loadMoreBefore',
 		'hasPrev',

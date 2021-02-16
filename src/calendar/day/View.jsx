@@ -64,7 +64,7 @@ export default class Day extends React.Component {
 
 	render () {
 		const { showEditor, event } = this.state;
-		const { bin, bin: { name, items }, calendars } = this.props;
+		const { bin, bin: { name, items } } = this.props;
 		const date = new Date(name);
 
 		return (
@@ -83,7 +83,6 @@ export default class Day extends React.Component {
 								bin={bin}
 								item={item}
 								onItemClick={this.onItemClick}
-								catalogEntry={((calendars || []).filter(x => x.NTIID === item.ContainerId)[0] || {}).CatalogEntry}
 							/>
 						))
 					)}

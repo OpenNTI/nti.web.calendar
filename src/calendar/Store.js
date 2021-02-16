@@ -200,27 +200,6 @@ export default class CalendarStore extends Stores.BoundStore {
 		}, { 'excluded_context_ntiids': filters });
 	}
 
-	async fillInCalendars (events) {
-		this.CalendarMap = this.CalendarMap || new Map();
-
-		const service = await getService();
-
-		for (let event of events) {
-			if (this.CalendarMap.has(event.containerId)) { continue; }
-
-			const resolve = () => service.getObject(event.containerId);
-
-			this.CalendarMap.set(event.containerId, resolve());
-		}
-
-		const calendars = await Promise.all(
-			Array.from(this.CalendarMap.values())
-		);
-
-		this.set({calendars});
-	}
-
-
 	async loadInitialBatch () {
 		const collection = this.collection;
 
@@ -264,8 +243,6 @@ export default class CalendarStore extends Stores.BoundStore {
 
 			this.eventBinner.insertEvents(batch.Items, hasMore);
 
-			await this.fillInCalendars(batch.Items);
-
 			this.set({
 				hasNext: hasMore,
 				hasPrev: true,
@@ -298,8 +275,6 @@ export default class CalendarStore extends Stores.BoundStore {
 
 		this.eventBinner.insertEvents(batch.Items);
 
-		await this.fillInCalendars(batch.Items);
-
 		this.set({
 			batchStartPrev: this.get('batchStartPrev') + this.get('batchSize'),
 			prevLoading: false,
@@ -323,8 +298,6 @@ export default class CalendarStore extends Stores.BoundStore {
 		const hasMore = batch.FilteredTotalItemCount >= batchSize;
 
 		this.eventBinner.insertEvents(batch.Items);
-
-		await this.fillInCalendars(batch.Items);
 
 		this.set({
 			batchStartNext: this.get('batchStartNext') + batchSize,
