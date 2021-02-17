@@ -22,6 +22,10 @@ const Container = styled.div`
 	align-items: center;
 	justify-content: space-between;
 
+	&.disabled {
+		pointer-events: none;
+	}
+
 	&:not(:focus) {
 		box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
 	}
@@ -64,6 +68,8 @@ export default function CalendarSelect ({selected, event, onChange}) {
 		return () => mounted = false;
 	}, [event]);
 
+	const disabled = Boolean(event);
+
 	const flyoutRef = React.useRef();
 
 	const selectedCalendar = React.useMemo(() => selected ? ([selected.getID()]) : null, [selected]);
@@ -73,13 +79,13 @@ export default function CalendarSelect ({selected, event, onChange}) {
 	), []);
 
 	const trigger = (
-		<Container>
+		<Container disabled={disabled}>
 			{
 				selected ?
 					(<ListItem calendar={selected} />) :
 					(<Empty>{t('none')}</Empty>)
 			}
-			<Icons.Chevron.Down large />
+			{!disabled && (<Icons.Chevron.Down large />)}
 		</Container>
 	);
 
