@@ -138,6 +138,10 @@ $header-ranges: (
 							font-size: 18px;
 							height: 40px;
 							color: var(--primary-grey);
+
+							&:focus {
+								box-shadow: 0 0 3px 1px var(--primary-blue);
+							}
 						}
 					}
 
@@ -203,6 +207,10 @@ $header-ranges: (
 							max-height: 132px;
 							position: relative;
 							margin: 0;
+
+							&:focus-within {
+								box-shadow: 0 0 3px 1px var(--primary-blue);
+							}
 
 							@include responsive-range(short, $header-ranges) {
 								margin-bottom: 10px;
@@ -276,6 +284,10 @@ $header-ranges: (
 							min-width: 250px;
 							background-color: white;
 
+							&:focus-within {
+								box-shadow: 0 0 3px 1px var(--primary-blue);
+							}
+
 							@include responsive-range(short, $header-ranges) {
 								width: 100%;
 								max-width: 100%;
@@ -328,6 +340,10 @@ $header-ranges: (
 						box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
 						border: none;
 
+						&:focus {
+							box-shadow: 0 0 3px 1px var(--primary-blue);
+						}
+
 						@include responsive-range(short, $header-ranges) {
 							width: 300px;
 						}
@@ -361,7 +377,10 @@ $header-ranges: (
 
 				.flyout-trigger {
 					color: var(--secondary-grey);
-					box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+
+					&:not(:focus) {
+						box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+					}
 				}
 
 				.event-date-input {

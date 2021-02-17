@@ -33,6 +33,10 @@
 			margin-left: 0;
 			text-transform: uppercase;
 
+			&:focus {
+				box-shadow: 0 0 3px 1px var(--primary-blue);
+			}
+
 			i {
 				position: absolute;
 				right: 8px;

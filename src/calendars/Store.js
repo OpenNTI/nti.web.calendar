@@ -4,6 +4,29 @@ import {getService} from '@nti/web-client';
 const BatchSize = 20;
 
 class CalendarsStore extends Stores.BoundStore {
+	static async getCalendarForEvent (event) {
+		if (!event) { throw new Error('Must pass an event to getCalendarForEvent'); }
+
+		const service = await getService();
+		const calendar = await service.getObject(event.ContainerId);
+
+		return calendar;
+	}
+
+	static async getFirstAdminCalendar () {
+		try {
+			const service = await getService();
+			const collection = service.getCollection('AdminCalendars');
+
+			const batch = await service.getBatch(collection.href, {batchSize: 1, batchStart: 0});
+
+			return batch && batch.Items && batch.Items[0];
+		} catch (e) {
+			//swallow the error, if it throws assume you don't have any admin calendars
+			return false;
+		}
+	}
+
 	static async hasAdminCalendars () {
 		try {
 			const service = await getService();

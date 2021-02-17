@@ -10,6 +10,7 @@ import cx from 'classnames';
 import Store from '../../calendar/Store';
 
 import DateInput from './DateInput';
+import CalendarSelect from './CalendarSelect';
 
 const {SaveCancel} = Prompt;
 
@@ -174,31 +175,15 @@ class EventEditor extends React.Component {
 	}
 
 	renderCalendarSelect () {
-		const { event, availableCalendars } = this.props;
+		const { event } = this.props;
 		const { calendar } = this.state;
 
 		return (
 			<div className="input-section calendar">
 				<div className="section-title">{t('calendar')}</div>
-				<Input.Select onChange={this.onCalendarSelect} value={calendar} placeholder={t('searchCalendar')} disabled={!!event} searchable>
-					{(availableCalendars || []).map((choice, choiceIndex) => {
-						return (
-							<Input.Select.Option
-								value={choice}
-								key={choiceIndex}
-								matches={(targetOption, term) => {
-									const lowerTerm = term && term.toLowerCase();
-									const catalogEntryTitle = (choice.CatalogEntry && choice.CatalogEntry.Title && choice.CatalogEntry.Title.toLowerCase()) || '';
-
-									return choice.title && choice.title.toLowerCase().indexOf(lowerTerm) >= 0
-										|| catalogEntryTitle.indexOf(lowerTerm) >= 0;
-								}}>
-								{(choice.CatalogEntry && choice.CatalogEntry.Title) || choice.title}
-							</Input.Select.Option>
-						);
-					})}
-				</Input.Select>
+				<CalendarSelect onChange={this.onCalendarSelect} selected={calendar} event={event} />
 			</div>
+
 		);
 	}
 

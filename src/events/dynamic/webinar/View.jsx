@@ -10,7 +10,7 @@ import Registry from '../../Registry';
 export default class WebinarEvent extends React.Component {
 	static propTypes = {
 		item: PropTypes.shape({
-			CatalogEntry: PropTypes.func,
+			CatalogEntry: PropTypes.object,
 			title: PropTypes.string,
 			dueDate: PropTypes.string,
 			getStartTime: PropTypes.func,

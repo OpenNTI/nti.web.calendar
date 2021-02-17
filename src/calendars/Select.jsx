@@ -48,9 +48,11 @@ CalendarsFilter.propTypes = {
 
 	onChange: PropTypes.func,
 	unselected: PropTypes.array,
-	selected: PropTypes.array
+	selected: PropTypes.array,
+
+	autoFocus: PropTypes.bool
 };
-function CalendarsFilter ({className, onChange, unselected, selected}) {
+function CalendarsFilter ({className, onChange, unselected, selected, autoFocus}) {
 	const {
 		loading,
 		error,
@@ -74,7 +76,7 @@ function CalendarsFilter ({className, onChange, unselected, selected}) {
 
 	const scrollerRef = React.useRef();
 	const listRef = React.useCallback(() => {
-		if (!loading && hasMore && !scrollerRef.current.canScroll()) {
+		if (!loading && hasMore && !scrollerRef.current?.canScroll()) {
 			loadMore();
 		}
 	}, [loading, hasMore, loadMore]);
@@ -93,14 +95,14 @@ function CalendarsFilter ({className, onChange, unselected, selected}) {
 			set.delete(id);
 		}
 
-		onChange?.(Array.from(set));
+		onChange?.(Array.from(set), calendar);
 	}, [selected, unselected, onChange, isSelected]);
 
 	return (
 		<Scroll.BoundaryMonitor ref={scrollerRef} className={className} onBottom={hasMore ? loadMore : null} >
 			<Input.Icon icon={<Icons.Search />} side="left">
 				<Input.LabelPlaceholder variant="underlined">
-					<Input.Text placeholder={t('search')} onChange={updateSearchTerm} value={searchTerm} disabled={initialEmpty} />
+					<Input.Text placeholder={t('search')} onChange={updateSearchTerm} value={searchTerm} disabled={initialEmpty} autoFocus={autoFocus} />
 				</Input.LabelPlaceholder>
 			</Input.Icon>
 			<Loading.Placeholder loading={initialLoad} fallback={<Loading.Spinner />}>
@@ -136,6 +138,6 @@ function CalendarsFilter ({className, onChange, unselected, selected}) {
 export default Store.compose(
 	CalendarsFilter,
 	{
-		deriveBindingFromProps: ({admin}) => ({admin})
+		deriveBindingFromProps: ({admin, onInitialLoad}) => ({admin, onInitialLoad})
 	}
 );

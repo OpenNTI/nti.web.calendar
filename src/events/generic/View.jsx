@@ -18,7 +18,7 @@ const formatTime = x => DateTime.format(x, DateTime.TIME);
 export default class GenericEvent extends React.Component {
 	static propTypes = {
 		item: PropTypes.shape({
-			CatalogEntry: PropTypes.func,
+			CatalogEntry: PropTypes.object,
 			getStartTime: PropTypes.func.isRequired,
 			getEndTime: PropTypes.func.isRequired,
 			title: PropTypes.string.isRequired,
