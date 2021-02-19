@@ -6,9 +6,9 @@ import Registry from './Registry';
 
 const registry = Registry.getInstance();
 
-function makeContextFor (catalogEntry) {
+function makeContextFor (item) {
 	return {
-		courseNTIID: catalogEntry && catalogEntry.CourseNTIID
+		courseNTIID: item?.CatalogEntry?.CourseNTIID
 	};
 }
 
@@ -22,8 +22,7 @@ export default class EventItem extends React.Component {
 		bin: PropTypes.object,
 		context: PropTypes.object,
 		readOnly: PropTypes.bool,
-		onItemClick: PropTypes.func,
-		catalogEntry: PropTypes.object
+		onItemClick: PropTypes.func
 	}
 
 	state = {}
@@ -51,7 +50,7 @@ export default class EventItem extends React.Component {
 		const dayIndex = bins.indexOf(bin.name);
 
 		return (
-			<LinkTo.Object className="event-link" object={item} context={makeContextFor(props.catalogEntry)}>
+			<LinkTo.Object className="event-link" object={item} context={makeContextFor(item)}>
 				<Cmp
 					item={item}
 					day={dayIndex}
