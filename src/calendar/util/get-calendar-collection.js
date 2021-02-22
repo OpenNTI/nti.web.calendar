@@ -1,7 +1,7 @@
-import {getService} from '@nti/web-client';
+import { getService } from '@nti/web-client';
 
-export default async function getCalendarCollection (refresh) {
+export default async function getCalendarCollection(refresh) {
 	return getService()
 		.then(service => service.getCollection('Calendars'))
-		.then(collection => refresh ? collection.refresh() : collection);
+		.then(collection => (refresh ? collection.refresh() : collection));
 }

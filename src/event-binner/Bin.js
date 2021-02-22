@@ -4,52 +4,55 @@ const BINNER = Symbol('Binner');
 const TODAY = Symbol('Today');
 
 class Bin {
-	constructor (name, items = [], binner, today) {
+	constructor(name, items = [], binner, today) {
 		this[NAME] = name;
 		this[ITEMS] = items;
 		this[BINNER] = binner;
 		this[TODAY] = today;
 	}
 
-	get name () {
+	get name() {
 		return this[NAME];
 	}
 
-	get items () {
+	get items() {
 		return this[ITEMS];
 	}
 
-	get start () {
+	get start() {
 		const first = this.items[0];
 
 		return first ? first.getStartTime() : null;
 	}
 
-	get end () {
+	get end() {
 		const end = this.items[this.items.length - 1];
 
-		return end ? (end.getEndTime() || end.getStartTime()) : null;
+		return end ? end.getEndTime() || end.getStartTime() : null;
 	}
 
-	get phantom () {
-		const {items, name} = this;
+	get phantom() {
+		const { items, name } = this;
 		const binner = this[BINNER];
 		const bin = new Date(name);
 		const today = new Date(this[TODAY]);
 		const isPast = bin < today;
-		const getBinToCheck = (bins) => (isPast ? bins[bins.length - 1] : bins[0]);
+		const getBinToCheck = bins =>
+			isPast ? bins[bins.length - 1] : bins[0];
 
-		if (name === this[TODAY]) { return false; }
+		if (name === this[TODAY]) {
+			return false;
+		}
 
 		return !items.some(item => getBinToCheck(binner(item)) === name);
 	}
 
-	getBinsFor (item) {
+	getBinsFor(item) {
 		return this[BINNER](item);
 	}
 
-	getFirstRealEvent () {
-		const {items, name} = this;
+	getFirstRealEvent() {
+		const { items, name } = this;
 		const binner = this[BINNER];
 
 		for (let item of items) {
@@ -59,9 +62,8 @@ class Bin {
 		}
 	}
 
-
-	getLastRealEvent () {
-		const {items, name} = this;
+	getLastRealEvent() {
+		const { items, name } = this;
 		const binner = this[BINNER];
 
 		for (let i = items.length - 1; i >= 0; i--) {
@@ -73,16 +75,15 @@ class Bin {
 		}
 	}
 
-	async updateItem (item) {
-		if(!item) {
+	async updateItem(item) {
+		if (!item) {
 			return;
 		}
 
-		const requests = this[ITEMS].map(x=>{
-			if(x.getUniqueIdentifier() === item.getUniqueIdentifier()) {
+		const requests = this[ITEMS].map(x => {
+			if (x.getUniqueIdentifier() === item.getUniqueIdentifier()) {
 				return x.refresh();
-			}
-			else {
+			} else {
 				return Promise.resolve(x);
 			}
 		});
@@ -90,50 +91,61 @@ class Bin {
 		this[ITEMS] = await Promise.all(requests);
 	}
 
-	removeItem (item) {
-		if(!item) {
+	removeItem(item) {
+		if (!item) {
 			return;
 		}
 
-		this[ITEMS] = this[ITEMS].filter(x=>x.getUniqueIdentifier() !== item.getUniqueIdentifier());
+		this[ITEMS] = this[ITEMS].filter(
+			x => x.getUniqueIdentifier() !== item.getUniqueIdentifier()
+		);
 	}
 
-	[Symbol.iterator] () {
+	[Symbol.iterator]() {
 		const snapshot = (this.items || []).slice();
-		const {length} = snapshot;
+		const { length } = snapshot;
 		let index = 0;
 
 		return {
-			next () {
+			next() {
 				const done = index >= length;
 				const value = snapshot[index];
 
 				index += 1;
 
-				return {value, done};
-			}
+				return { value, done };
+			},
 		};
 	}
 
-
-	map (fn) {
+	map(fn) {
 		this.items.map(fn);
 	}
 }
 
-function getUniqueEvents (events) {
-	const {unique} = events.reduce((acc, event) => {
-		const id = (event.getUniqueIdentifier && event.getUniqueIdentifier()) || event.getID();
+function getUniqueEvents(events) {
+	const { unique } = events.reduce(
+		(acc, event) => {
+			const id =
+				(event.getUniqueIdentifier && event.getUniqueIdentifier()) ||
+				event.getID();
 
-		if (acc.seen[id]) { return acc; }
+			if (acc.seen[id]) {
+				return acc;
+			}
 
-		return {unique: [...acc.unique, event], seen: {...acc.seen, [id]: true}};
-	}, {unique: [], seen: {}});
+			return {
+				unique: [...acc.unique, event],
+				seen: { ...acc.seen, [id]: true },
+			};
+		},
+		{ unique: [], seen: {} }
+	);
 
 	return unique;
 }
 
-export function insertEvent (bin, event) {
+export function insertEvent(bin, event) {
 	const items = bin ? bin.items : [];
 
 	let inserted = false;
@@ -150,9 +162,13 @@ export function insertEvent (bin, event) {
 		if (eventStart < itemStart && !inserted) {
 			inserted = true;
 			newItems.push(event);
-		//if the new event starts at the exact same time, but it ends before the other one
-		//put it first
-		} else if (eventStart === itemStart && eventEnd < itemEnd && !inserted) {
+			//if the new event starts at the exact same time, but it ends before the other one
+			//put it first
+		} else if (
+			eventStart === itemStart &&
+			eventEnd < itemEnd &&
+			!inserted
+		) {
 			inserted = true;
 			newItems.push(event);
 		}
@@ -165,10 +181,14 @@ export function insertEvent (bin, event) {
 		newItems.push(event);
 	}
 
-	return new Bin(bin.name, getUniqueEvents(newItems), bin[BINNER], bin[TODAY]);
+	return new Bin(
+		bin.name,
+		getUniqueEvents(newItems),
+		bin[BINNER],
+		bin[TODAY]
+	);
 }
 
-
-export function createBin (name, event, binner, today) {
+export function createBin(name, event, binner, today) {
 	return new Bin(name, event ? [event] : [], binner, today);
 }

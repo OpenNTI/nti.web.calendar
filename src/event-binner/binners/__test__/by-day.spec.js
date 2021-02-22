@@ -1,10 +1,10 @@
 /* eslint-env jest */
-import {createEvent, DATES} from '../../__test__/utils';
+import { createEvent, DATES } from '../../__test__/utils';
 import byDay from '../by-day';
 
 describe('byDay binning tests', () => {
-	test('events with no end date return only the start date\'s bin', () => {
-		const getBins = (date) => byDay(createEvent('no end', date));
+	test("events with no end date return only the start date's bin", () => {
+		const getBins = date => byDay(createEvent('no end', date));
 
 		const dates = Object.values(DATES);
 
@@ -17,8 +17,9 @@ describe('byDay binning tests', () => {
 	});
 
 	describe('Events with an end date return the range of bins', () => {
-		const {TODAY, TOMORROW, TWO_DAYS, THREE_DAYS} = DATES;
-		const getBins = (start, end) => byDay(createEvent('start and end', start, end));
+		const { TODAY, TOMORROW, TWO_DAYS, THREE_DAYS } = DATES;
+		const getBins = (start, end) =>
+			byDay(createEvent('start and end', start, end));
 
 		test('Today > Today', () => {
 			const bins = getBins(TODAY.date, TODAY.date);
@@ -41,7 +42,12 @@ describe('byDay binning tests', () => {
 		test('TODAY > THREE DAYS', () => {
 			const bins = getBins(TODAY.date, THREE_DAYS.date);
 
-			expect(bins).toEqual([TODAY.key, TOMORROW.key, TWO_DAYS.key, THREE_DAYS.key]);
+			expect(bins).toEqual([
+				TODAY.key,
+				TOMORROW.key,
+				TWO_DAYS.key,
+				THREE_DAYS.key,
+			]);
 		});
 	});
 });

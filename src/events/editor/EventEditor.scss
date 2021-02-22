@@ -1,8 +1,14 @@
 @import '~@nti/style-common';
 
 $header-ranges: (
-	short: (null, 518px),
-	wide: (518px, null)
+	short: (
+		null,
+		518px,
+	),
+	wide: (
+		518px,
+		null,
+	),
 );
 
 .event-view-dialog {

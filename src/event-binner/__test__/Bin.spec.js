@@ -1,9 +1,9 @@
 /* eslint-env jest */
-import {createBin, insertEvent} from '../Bin';
+import { createBin, insertEvent } from '../Bin';
 
-import {createEvent, DATES} from './utils';
+import { createEvent, DATES } from './utils';
 
-const {TODAY, TOMORROW, TWO_DAYS, THREE_DAYS} = DATES;
+const { TODAY, TOMORROW, TWO_DAYS, THREE_DAYS } = DATES;
 
 describe('Event Bin Tests', () => {
 	test('createBin has correct name and items', () => {
@@ -18,10 +18,22 @@ describe('Event Bin Tests', () => {
 	test('insertEvent inserts in the correct position, and returns a new instance of the Bin', () => {
 		const name = 'test bin';
 		const todayEventSingleDay = createEvent('today', TODAY.date);
-		const todayEventMultiDayA = createEvent('today multi day a', TODAY.date, TOMORROW.date);
-		const todayEventMultiDayB = createEvent('today multi day b', TODAY.date, TWO_DAYS.date);
+		const todayEventMultiDayA = createEvent(
+			'today multi day a',
+			TODAY.date,
+			TOMORROW.date
+		);
+		const todayEventMultiDayB = createEvent(
+			'today multi day b',
+			TODAY.date,
+			TWO_DAYS.date
+		);
 		const tomorrowEvent = createEvent('tomorrow', TOMORROW.date);
-		const tomorrowEventMultiDay = createEvent('tomorrow multi day', TOMORROW.date, THREE_DAYS.date);
+		const tomorrowEventMultiDay = createEvent(
+			'tomorrow multi day',
+			TOMORROW.date,
+			THREE_DAYS.date
+		);
 
 		const bin = createBin(name, todayEventSingleDay);
 
@@ -30,7 +42,7 @@ describe('Event Bin Tests', () => {
 		expect(bin2.name).toBe(name);
 		expect(bin2.items).toEqual([
 			todayEventSingleDay,
-			tomorrowEventMultiDay
+			tomorrowEventMultiDay,
 		]);
 
 		const bin3 = insertEvent(bin2, todayEventMultiDayB);
@@ -39,7 +51,7 @@ describe('Event Bin Tests', () => {
 		expect(bin3.items).toEqual([
 			todayEventSingleDay,
 			todayEventMultiDayB,
-			tomorrowEventMultiDay
+			tomorrowEventMultiDay,
 		]);
 
 		const bin4 = insertEvent(bin3, tomorrowEvent);
@@ -49,7 +61,7 @@ describe('Event Bin Tests', () => {
 			todayEventSingleDay,
 			todayEventMultiDayB,
 			tomorrowEvent,
-			tomorrowEventMultiDay
+			tomorrowEventMultiDay,
 		]);
 
 		const bin5 = insertEvent(bin4, todayEventMultiDayA);
@@ -60,7 +72,7 @@ describe('Event Bin Tests', () => {
 			todayEventMultiDayA,
 			todayEventMultiDayB,
 			tomorrowEvent,
-			tomorrowEventMultiDay
+			tomorrowEventMultiDay,
 		]);
 	});
 
@@ -84,7 +96,10 @@ describe('Event Bin Tests', () => {
 		});
 
 		test('is the first events start', () => {
-			let bin = createBin('hasEvents', createEvent('tomorrow', TOMORROW.date));
+			let bin = createBin(
+				'hasEvents',
+				createEvent('tomorrow', TOMORROW.date)
+			);
 
 			bin = insertEvent(bin, createEvent('today', TODAY.date));
 
@@ -100,13 +115,19 @@ describe('Event Bin Tests', () => {
 		});
 
 		test('if the last event has an end date', () => {
-			const bin = createBin('has end date', createEvent('event', TODAY.date, TOMORROW.date));
+			const bin = createBin(
+				'has end date',
+				createEvent('event', TODAY.date, TOMORROW.date)
+			);
 
 			expect(bin.end).toEqual(TOMORROW.date);
 		});
 
 		test('if the last event does not have an end date', () => {
-			let bin = createBin('has start date', createEvent('event', TODAY.date, TOMORROW.date));
+			let bin = createBin(
+				'has start date',
+				createEvent('event', TODAY.date, TOMORROW.date)
+			);
 
 			bin = insertEvent(bin, createEvent('end', TWO_DAYS.date));
 
@@ -114,12 +135,11 @@ describe('Event Bin Tests', () => {
 		});
 	});
 
-
 	test('iterator goes through all items', () => {
 		const events = [
 			createEvent('today', TODAY.date),
 			createEvent('tomorrow', TOMORROW.date),
-			createEvent('two days', TWO_DAYS.date)
+			createEvent('two days', TWO_DAYS.date),
 		];
 
 		let bin = createBin('event');

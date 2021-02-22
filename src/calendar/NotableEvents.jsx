@@ -1,22 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {decorate} from '@nti/lib-commons';
+import { decorate } from '@nti/lib-commons';
 
 import EventList from './EventList';
 import Store from './NotableEventsStore';
 
 const bindings = {};
-function getBinding (limit) {
+function getBinding(limit) {
 	// reuse same object to avoid unneccessary store reloads
 	if (!bindings[limit]) {
-		bindings[limit] = {limit};
+		bindings[limit] = { limit };
 	}
 	return bindings[limit];
 }
 
 class NotableEvents extends React.Component {
-
-	static deriveBindingFromProps = ({limit = 5} = {}) => getBinding(limit);
+	static deriveBindingFromProps = ({ limit = 5 } = {}) => getBinding(limit);
 
 	static propTypes = {
 		bins: PropTypes.array,
@@ -24,16 +23,14 @@ class NotableEvents extends React.Component {
 		limit: PropTypes.number,
 		loading: PropTypes.bool,
 		error: PropTypes.object,
-		children: PropTypes.any
-	}
+		children: PropTypes.any,
+	};
 
-	render () {
-		return (
-			<EventList {...this.props} />
-		);
+	render() {
+		return <EventList {...this.props} />;
 	}
 }
 
 export default decorate(NotableEvents, [
-	Store.connect(['bins', 'loading', 'error', 'calendars'])
+	Store.connect(['bins', 'loading', 'error', 'calendars']),
 ]);

@@ -1,11 +1,13 @@
-import {Stores, Interfaces} from '@nti/lib-store';
-import {getService} from '@nti/web-client';
+import { Stores, Interfaces } from '@nti/lib-store';
+import { getService } from '@nti/web-client';
 
 const BatchSize = 20;
 
 class CalendarsStore extends Stores.BoundStore {
-	static async getCalendarForEvent (event) {
-		if (!event) { throw new Error('Must pass an event to getCalendarForEvent'); }
+	static async getCalendarForEvent(event) {
+		if (!event) {
+			throw new Error('Must pass an event to getCalendarForEvent');
+		}
 
 		const service = await getService();
 		const calendar = await service.getObject(event.ContainerId);
@@ -13,12 +15,15 @@ class CalendarsStore extends Stores.BoundStore {
 		return calendar;
 	}
 
-	static async getFirstAdminCalendar () {
+	static async getFirstAdminCalendar() {
 		try {
 			const service = await getService();
 			const collection = service.getCollection('AdminCalendars');
 
-			const batch = await service.getBatch(collection.href, {batchSize: 1, batchStart: 0});
+			const batch = await service.getBatch(collection.href, {
+				batchSize: 1,
+				batchStart: 0,
+			});
 
 			return batch && batch.Items && batch.Items[0];
 		} catch (e) {
@@ -27,12 +32,15 @@ class CalendarsStore extends Stores.BoundStore {
 		}
 	}
 
-	static async hasAdminCalendars () {
+	static async hasAdminCalendars() {
 		try {
 			const service = await getService();
 			const collection = service.getCollection('AdminCalendars');
 
-			const batch = await service.getBatch(collection.href, {batchSize: 1, batchStart: 0});
+			const batch = await service.getBatch(collection.href, {
+				batchSize: 1,
+				batchStart: 0,
+			});
 
 			return batch && batch.Items && batch.Items.length > 0;
 		} catch (e) {
@@ -41,15 +49,17 @@ class CalendarsStore extends Stores.BoundStore {
 		}
 	}
 
-	async loadInitialBatch () {
-		const collectionName = this.binding.admin ? 'AdminCalendars' : 'Calendars';
+	async loadInitialBatch() {
+		const collectionName = this.binding.admin
+			? 'AdminCalendars'
+			: 'Calendars';
 
 		const service = await getService();
 		const collection = service.getCollection(collectionName);
 
 		const params = {
 			batchSize: BatchSize,
-			batchStart: 0
+			batchStart: 0,
 		};
 
 		if (this.searchTerm) {
@@ -59,8 +69,10 @@ class CalendarsStore extends Stores.BoundStore {
 		return service.getBatch(collection.href, params);
 	}
 
-	async loadNextBatch (current) {
-		if (!current.hasLink('batch-next')) { return; }
+	async loadNextBatch(current) {
+		if (!current.hasLink('batch-next')) {
+			return;
+		}
 
 		const service = await getService();
 

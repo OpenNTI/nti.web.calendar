@@ -1,44 +1,48 @@
-import {Stores} from '@nti/lib-store';
+import { Stores } from '@nti/lib-store';
 
 const FEED_REL = 'GenerateFeedURL';
 const EXPORT_REL = 'export';
 
 export default class CalendarExportStore extends Stores.BoundStore {
-	constructor () {
+	constructor() {
 		super();
 
 		this.set({
-			loading: true
+			loading: true,
 		});
 	}
 
-	async load () {
+	async load() {
 		this.set({
 			loading: true,
 			exportLink: null,
 			feedLink: null,
-			error: null
+			error: null,
 		});
 
-		if (!this.binding) { return; }
+		if (!this.binding) {
+			return;
+		}
 
 		try {
-			const feedLink = this.binding.hasLink(FEED_REL) && await this.binding.fetchLink(FEED_REL);
+			const feedLink =
+				this.binding.hasLink(FEED_REL) &&
+				(await this.binding.fetchLink(FEED_REL));
 
 			this.set({
 				loading: false,
 				exportLink: this.binding.getLink(EXPORT_REL),
-				feedLink
+				feedLink,
 			});
 		} catch (e) {
 			this.set({
 				loading: false,
-				error: e
+				error: e,
 			});
 		}
 
 		this.set({
-			available: this.binding && this.binding.hasLink(FEED_REL)
+			available: this.binding && this.binding.hasLink(FEED_REL),
 		});
 	}
 }

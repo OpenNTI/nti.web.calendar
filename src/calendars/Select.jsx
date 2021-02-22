@@ -1,17 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {scoped} from '@nti/lib-locale';
-import {Loading, Scroll, Errors, Text, Input, Icons, List} from '@nti/web-commons';
+import { scoped } from '@nti/lib-locale';
+import {
+	Loading,
+	Scroll,
+	Errors,
+	Text,
+	Input,
+	Icons,
+	List,
+} from '@nti/web-commons';
 
 import Store from './Store';
 import ListItem from './ListItem';
 
-const getSelectedId = (calendar) => calendar.CatalogEntry?.NTIID ?? calendar.getID();
+const getSelectedId = calendar =>
+	calendar.CatalogEntry?.NTIID ?? calendar.getID();
 const buildIsSelected = (selected, unselected) => {
 	const blacklist = unselected != null;
 	const set = blacklist ? new Set(unselected ?? []) : new Set(selected ?? []);
 
-	return (calendar) => {
+	return calendar => {
 		const inSet = set.has(getSelectedId(calendar));
 
 		return (blacklist && !inSet) || (!blacklist && inSet);
@@ -23,16 +32,16 @@ const t = scoped('web-calendar.calendars.Filter', {
 	search: 'Search your Calendars',
 	empty: {
 		search: 'No Matching Calendars',
-		noSearch: 'No Calendars'
-	}
+		noSearch: 'No Calendars',
+	},
 });
 
-const Error = styled(Errors.Message).attrs({as: 'p'})`
+const Error = styled(Errors.Message).attrs({ as: 'p' })`
 	text-align: center;
 	margin: 0.5rem 0;
 `;
 
-const Empty = styled(Text.Base).attrs({as: 'p'})`
+const Empty = styled(Text.Base).attrs({ as: 'p' })`
 	font-style: italic;
 	color: var(--tertiary-grey);
 	text-align: center;
@@ -50,9 +59,15 @@ CalendarsFilter.propTypes = {
 	unselected: PropTypes.array,
 	selected: PropTypes.array,
 
-	autoFocus: PropTypes.bool
+	autoFocus: PropTypes.bool,
 };
-function CalendarsFilter ({className, onChange, unselected, selected, autoFocus}) {
+function CalendarsFilter({
+	className,
+	onChange,
+	unselected,
+	selected,
+	autoFocus,
+}) {
 	const {
 		loading,
 		error,
@@ -62,7 +77,7 @@ function CalendarsFilter ({className, onChange, unselected, selected, autoFocus}
 		loadMore,
 
 		searchTerm,
-		updateSearchTerm
+		updateSearchTerm,
 	} = Store.useValue();
 
 	const empty = (items ?? []).length === 0;
@@ -81,40 +96,61 @@ function CalendarsFilter ({className, onChange, unselected, selected, autoFocus}
 		}
 	}, [loading, hasMore, loadMore]);
 
-	const isSelected = React.useMemo(() => buildIsSelected(selected, unselected), [selected, unselected]);
-	const toggleSelected = React.useCallback((calendar) => {
-		const blacklist = unselected != null;
-		const wasSelected = isSelected(calendar);
-		const id = getSelectedId(calendar);
+	const isSelected = React.useMemo(
+		() => buildIsSelected(selected, unselected),
+		[selected, unselected]
+	);
+	const toggleSelected = React.useCallback(
+		calendar => {
+			const blacklist = unselected != null;
+			const wasSelected = isSelected(calendar);
+			const id = getSelectedId(calendar);
 
-		const set = blacklist ? new Set(unselected) : new Set(selected ?? []);
+			const set = blacklist
+				? new Set(unselected)
+				: new Set(selected ?? []);
 
-		if ((blacklist && wasSelected) || (!blacklist && !wasSelected)) {
-			set.add(id);
-		}  else {
-			set.delete(id);
-		}
+			if ((blacklist && wasSelected) || (!blacklist && !wasSelected)) {
+				set.add(id);
+			} else {
+				set.delete(id);
+			}
 
-		onChange?.(Array.from(set), calendar);
-	}, [selected, unselected, onChange, isSelected]);
+			onChange?.(Array.from(set), calendar);
+		},
+		[selected, unselected, onChange, isSelected]
+	);
 
 	return (
-		<Scroll.BoundaryMonitor ref={scrollerRef} className={className} onBottom={hasMore ? loadMore : null} >
+		<Scroll.BoundaryMonitor
+			ref={scrollerRef}
+			className={className}
+			onBottom={hasMore ? loadMore : null}
+		>
 			<Input.Icon icon={<Icons.Search />} side="left">
 				<Input.LabelPlaceholder variant="underlined">
-					<Input.Text placeholder={t('search')} onChange={updateSearchTerm} value={searchTerm} disabled={initialEmpty} autoFocus={autoFocus} />
+					<Input.Text
+						placeholder={t('search')}
+						onChange={updateSearchTerm}
+						value={searchTerm}
+						disabled={initialEmpty}
+						autoFocus={autoFocus}
+					/>
 				</Input.LabelPlaceholder>
 			</Input.Icon>
-			<Loading.Placeholder loading={initialLoad} fallback={<Loading.Spinner />}>
+			<Loading.Placeholder
+				loading={initialLoad}
+				fallback={<Loading.Spinner />}
+			>
 				{showEmpty && (
-					<Empty>{searchTerm ? t('empty.search') : t('empty.noSearch')}</Empty>
+					<Empty>
+						{searchTerm ? t('empty.search') : t('empty.noSearch')}
+					</Empty>
 				)}
-				{showCourses && (
-					<Label>{t('courses')}</Label>
-				)}
+				{showCourses && <Label>{t('courses')}</Label>}
 				{showCourses && (
 					<List.Unadorned ref={listRef}>
-						{(items || []).map((item) => {
+						{(items || []).map(item => {
 							const key = item.getID();
 
 							return (
@@ -129,15 +165,15 @@ function CalendarsFilter ({className, onChange, unselected, selected, autoFocus}
 						})}
 					</List.Unadorned>
 				)}
-				{error && (<Error error={error} />)}
+				{error && <Error error={error} />}
 			</Loading.Placeholder>
 		</Scroll.BoundaryMonitor>
 	);
 }
 
-export default Store.compose(
-	CalendarsFilter,
-	{
-		deriveBindingFromProps: ({admin, onInitialLoad}) => ({admin, onInitialLoad})
-	}
-);
+export default Store.compose(CalendarsFilter, {
+	deriveBindingFromProps: ({ admin, onInitialLoad }) => ({
+		admin,
+		onInitialLoad,
+	}),
+});

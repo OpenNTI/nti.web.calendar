@@ -1,12 +1,12 @@
 import { getService } from '@nti/web-client';
 import { Stores } from '@nti/lib-store';
 import AppDispatcher from '@nti/lib-dispatcher';
-import {Models} from '@nti/lib-interfaces';
+import { Models } from '@nti/lib-interfaces';
 
 import EventBinner from '../event-binner';
 
-import {EVENTS} from './Store';
-import {getToday} from './util';
+import { EVENTS } from './Store';
+import { getToday } from './util';
 
 const defaultParams = {
 	batchSize: 5,
@@ -15,40 +15,40 @@ const defaultParams = {
 	sortOrder: 'ascending',
 };
 
-const isModel = c => (c || {}).MimeType === Models.calendar.CourseCalendar.MimeType;
+const isModel = c =>
+	(c || {}).MimeType === Models.calendar.CourseCalendar.MimeType;
 
 export default class CalendarEventsStore extends Stores.BoundStore {
-
-	constructor () {
+	constructor() {
 		super();
 		AppDispatcher.register(this.handleDispatch);
 	}
 
-	handleDispatch = (payload) => {
-		const {action: {type} = {}} = (payload || {});
+	handleDispatch = payload => {
+		const { action: { type } = {} } = payload || {};
 
 		if (type && Object.values(EVENTS).find(v => v === type)) {
 			this.load();
 		}
-	}
+	};
 
-	async getCalendar () {
+	async getCalendar() {
 		let calendar = this.get('calendar');
 
 		if (!calendar) {
-			const {calendar: c} = this.binding || {};
+			const { calendar: c } = this.binding || {};
 
-			calendar = isModel(c) ? c : (
-				await getService().then(s => s.getObject(c))
-			);
+			calendar = isModel(c)
+				? c
+				: await getService().then(s => s.getObject(c));
 
-			this.set({calendar});
+			this.set({ calendar });
 		}
 
 		return calendar;
 	}
 
-	async load () {
+	async load() {
 		const calendar = await this.getCalendar();
 
 		if (!calendar) {
@@ -62,7 +62,7 @@ export default class CalendarEventsStore extends Stores.BoundStore {
 
 		this.set({
 			loading: true,
-			error
+			error,
 		});
 
 		try {
@@ -71,7 +71,7 @@ export default class CalendarEventsStore extends Stores.BoundStore {
 
 			const batch = await service.getBatch(link, {
 				...defaultParams,
-				notBefore
+				notBefore,
 			});
 
 			this.eventBinner.insertEvents(batch.Items);
@@ -80,11 +80,10 @@ export default class CalendarEventsStore extends Stores.BoundStore {
 				loading: false,
 				bins: this.eventBinner.getBins(),
 			});
-		}
-		catch (e) {
+		} catch (e) {
 			this.set({
 				loading: false,
-				error: e
+				error: e,
 			});
 		}
 	}

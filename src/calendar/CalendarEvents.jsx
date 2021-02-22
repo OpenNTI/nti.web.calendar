@@ -1,20 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {decorate} from '@nti/lib-commons';
+import { decorate } from '@nti/lib-commons';
 
 import EventList from './EventList';
 import Store from './CalendarEventsStore';
 
 class CalendarEvents extends React.Component {
-
-	static deriveBindingFromProps = ({calendar}) => ({calendar});
+	static deriveBindingFromProps = ({ calendar }) => ({ calendar });
 
 	static propTypes = {
 		calendar: PropTypes.oneOfType([
 			PropTypes.string,
 			PropTypes.shape({
-				getID: PropTypes.func.isRequired
-			}).isRequired
+				getID: PropTypes.func.isRequired,
+			}).isRequired,
 		]),
 
 		// store props
@@ -23,16 +22,14 @@ class CalendarEvents extends React.Component {
 		limit: PropTypes.number,
 		loading: PropTypes.bool,
 		error: PropTypes.object,
-		children: PropTypes.any
-	}
+		children: PropTypes.any,
+	};
 
-	render () {
-		return (
-			<EventList {...this.props} />
-		);
+	render() {
+		return <EventList {...this.props} />;
 	}
 }
 
 export default decorate(CalendarEvents, [
-	Store.connect(['bins', 'loading', 'error', 'calendars'])
+	Store.connect(['bins', 'loading', 'error', 'calendars']),
 ]);

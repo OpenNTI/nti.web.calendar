@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {scoped} from '@nti/lib-locale';
-import {Flyout, Text, Icons} from '@nti/web-commons';
+import { scoped } from '@nti/lib-locale';
+import { Flyout, Text, Icons } from '@nti/web-commons';
 
 import ListItem from '../../calendars/ListItem';
 import Select from '../../calendars/Select';
 import CalendarsStore from '../../calendars/Store';
 
 const t = scoped('calendar.events.editor.CalendarSelect', {
-	none: 'No Calendar Selected'
+	none: 'No Calendar Selected',
 });
 
 const Container = styled.div`
@@ -46,9 +46,11 @@ const StyledSelect = styled(Select)`
 	overflow: auto;
 `;
 
-export default function CalendarSelect ({selected, event, onChange}) {
+export default function CalendarSelect({ selected, event, onChange }) {
 	React.useEffect(() => {
-		if (selected) { return; }
+		if (selected) {
+			return;
+		}
 
 		let mounted = true;
 		const findCalendar = async () => {
@@ -60,32 +62,37 @@ export default function CalendarSelect ({selected, event, onChange}) {
 				calendar = await CalendarsStore.getFirstAdminCalendar();
 			}
 
-			if (!mounted) { return; }
+			if (!mounted) {
+				return;
+			}
 			onChange?.(calendar);
 		};
 
 		findCalendar();
-		return () => mounted = false;
+		return () => (mounted = false);
 	}, [event]);
 
 	const disabled = Boolean(event);
 
 	const flyoutRef = React.useRef();
 
-	const selectedCalendar = React.useMemo(() => selected ? ([selected.getID()]) : null, [selected]);
-	const doChange = React.useCallback((_, calendar) => (
-		onChange(calendar),
-		flyoutRef.current?.dismiss()
-	), []);
+	const selectedCalendar = React.useMemo(
+		() => (selected ? [selected.getID()] : null),
+		[selected]
+	);
+	const doChange = React.useCallback(
+		(_, calendar) => (onChange(calendar), flyoutRef.current?.dismiss()),
+		[]
+	);
 
 	const trigger = (
 		<Container disabled={disabled}>
-			{
-				selected ?
-					(<ListItem calendar={selected} />) :
-					(<Empty>{t('none')}</Empty>)
-			}
-			{!disabled && (<Icons.Chevron.Down large />)}
+			{selected ? (
+				<ListItem calendar={selected} />
+			) : (
+				<Empty>{t('none')}</Empty>
+			)}
+			{!disabled && <Icons.Chevron.Down large />}
 		</Container>
 	);
 
@@ -97,7 +104,12 @@ export default function CalendarSelect ({selected, event, onChange}) {
 			constrain
 			ref={flyoutRef}
 		>
-			<StyledSelect selected={selectedCalendar} admin onChange={doChange} autoFocus />
+			<StyledSelect
+				selected={selectedCalendar}
+				admin
+				onChange={doChange}
+				autoFocus
+			/>
 		</Flyout.Triggered>
 	);
 }
@@ -105,9 +117,7 @@ export default function CalendarSelect ({selected, event, onChange}) {
 CalendarSelect.propTypes = {
 	event: PropTypes.object,
 	selected: PropTypes.object,
-	onChange: PropTypes.func
+	onChange: PropTypes.func,
 };
 
-CalendarSelect.getInitialCalendar = (event) => {
-
-};
+CalendarSelect.getInitialCalendar = event => {};

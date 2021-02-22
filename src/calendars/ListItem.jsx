@@ -1,13 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Presentation, Icons, Text} from '@nti/web-commons';
+import { Presentation, Icons, Text } from '@nti/web-commons';
 
-const getTitle = (calendar) => calendar.title;
-const getSubtitle = (calendar) => calendar.CatalogEntry?.ProviderUniqueID;
-const getIcon = (calendar) => {
+const getTitle = calendar => calendar.title;
+const getSubtitle = calendar => calendar.CatalogEntry?.ProviderUniqueID;
+const getIcon = calendar => {
 	if (calendar.CatalogEntry) {
 		return (
-			<Presentation.Asset contentPackage={calendar.CatalogEntry} type="thumb">
+			<Presentation.Asset
+				contentPackage={calendar.CatalogEntry}
+				type="thumb"
+			>
 				<img />
 			</Presentation.Asset>
 		);
@@ -47,7 +50,6 @@ const IconContainer = styled.div`
 
 	&.selected {
 		background-color: black;
-
 	}
 `;
 
@@ -83,16 +85,19 @@ const SubTitle = styled(Text.Base)`
 CalendarListItem.propTypes = {
 	calendar: PropTypes.shape({
 		CatalogEntry: PropTypes.shape({
-			ProviderUniqueID: PropTypes.string
+			ProviderUniqueID: PropTypes.string,
 		}),
-		title: PropTypes.string
+		title: PropTypes.string,
 	}),
 
 	selected: PropTypes.bool,
-	onClick: PropTypes.func
+	onClick: PropTypes.func,
 };
-export default function CalendarListItem ({calendar, selected, onClick}) {
-	const doClick = React.useCallback(() => onClick?.(calendar), [calendar, onClick]);
+export default function CalendarListItem({ calendar, selected, onClick }) {
+	const doClick = React.useCallback(() => onClick?.(calendar), [
+		calendar,
+		onClick,
+	]);
 
 	return (
 		<Container onClick={doClick}>

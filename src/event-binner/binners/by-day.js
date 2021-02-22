@@ -1,14 +1,18 @@
-export function getNameForDate (date) {
-	return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()} 13:00`;
+export function getNameForDate(date) {
+	return `${date.getFullYear()}/${
+		date.getMonth() + 1
+	}/${date.getDate()} 13:00`;
 }
 
-export default function byDay (event) {
+export default function byDay(event) {
 	const start = event.getStartTime();
 	const end = event.getEndTime();
 
 	const days = [getNameForDate(start)];
 
-	if (!end) { return days; }
+	if (!end) {
+		return days;
+	}
 
 	const endName = getNameForDate(end);
 

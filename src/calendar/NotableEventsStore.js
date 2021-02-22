@@ -4,8 +4,8 @@ import AppDispatcher from '@nti/lib-dispatcher';
 
 import EventBinner from '../event-binner';
 
-import {EVENTS} from './Store';
-import {getCalendarCollection, getToday} from './util';
+import { EVENTS } from './Store';
+import { getCalendarCollection, getToday } from './util';
 
 const defaultParams = {
 	batchSize: 5,
@@ -15,23 +15,22 @@ const defaultParams = {
 };
 
 export default class NotableEventsStore extends Stores.BoundStore {
-
-	constructor () {
+	constructor() {
 		super();
 
 		AppDispatcher.register(this.handleDispatch);
 	}
 
-	handleDispatch = (payload) => {
-		const {action: {type} = {}} = (payload || {});
+	handleDispatch = payload => {
+		const { action: { type } = {} } = payload || {};
 
 		if (type && Object.values(EVENTS).find(v => v === type)) {
 			this.load();
 		}
-	}
+	};
 
-	async load () {
-		const {binding} = this;
+	async load() {
+		const { binding } = this;
 		const notBefore = getToday().getTime() / 1000;
 		let error;
 
@@ -39,21 +38,23 @@ export default class NotableEventsStore extends Stores.BoundStore {
 
 		this.set({
 			loading: true,
-			error
+			error,
 		});
 
 		try {
 			const service = await getService();
 			let collection = await getCalendarCollection(true);
 
-			if (!collection) { return; }
+			if (!collection) {
+				return;
+			}
 
 			const link = collection.getLink('events');
 
 			const batch = await service.getBatch(link, {
 				...defaultParams,
 				notBefore,
-				...(binding || {})
+				...(binding || {}),
 			});
 
 			this.eventBinner.insertEvents(batch.Items);
@@ -63,11 +64,10 @@ export default class NotableEventsStore extends Stores.BoundStore {
 				loading: false,
 				bins: this.eventBinner.getBins(),
 			});
-		}
-		catch (e) {
+		} catch (e) {
 			this.set({
 				loading: false,
-				error: e
+				error: e,
 			});
 		}
 	}

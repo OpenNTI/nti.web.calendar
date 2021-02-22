@@ -15,36 +15,40 @@ export default class AssignmentEvent extends React.Component {
 			title: PropTypes.string,
 			dueDate: PropTypes.oneOfType([
 				PropTypes.string,
-				PropTypes.instanceOf(Date)
+				PropTypes.instanceOf(Date),
 			]),
 			IsTimedAssignment: PropTypes.bool,
 			MaximumTimeAllowed: PropTypes.number,
-			totalPoints: PropTypes.number
-		})
-	}
+			totalPoints: PropTypes.number,
+		}),
+	};
 
-	renderTimedAssignment () {
+	renderTimedAssignment() {
 		const { item } = this.props;
 
 		return (
 			<div className="timed-assignment">
 				<div className="timed-assignment-length">
-					{DateTime.getShortNaturalDuration(item.MaximumTimeAllowed * 1000)}
+					{DateTime.getShortNaturalDuration(
+						item.MaximumTimeAllowed * 1000
+					)}
 				</div>
-				<div className="timed-assignment-label">
-					Time Limit
-				</div>
+				<div className="timed-assignment-label">Time Limit</div>
 			</div>
 		);
 	}
 
-	render () {
+	render() {
 		const { item } = this.props;
 		const { dueDate, totalPoints, title, IsTimedAssignment } = item;
 
 		return (
 			<Layout className={cx('assignment-event', { IsTimedAssignment })}>
-				<Presentation.Asset propName="url" contentPackage={item.CatalogEntry} type="thumb">
+				<Presentation.Asset
+					propName="url"
+					contentPackage={item.CatalogEntry}
+					type="thumb"
+				>
 					<Icon />
 				</Presentation.Asset>
 				<div className="assignment-main-container">
@@ -53,7 +57,11 @@ export default class AssignmentEvent extends React.Component {
 						<List.SeparatedInline className="assignment-subtitle">
 							{dueDate && (
 								<div className="assignment-due">
-									Due {DateTime.format(new Date(dueDate), DateTime.TIME_WITH_ZONE)}
+									Due{' '}
+									{DateTime.format(
+										new Date(dueDate),
+										DateTime.TIME_WITH_ZONE
+									)}
 								</div>
 							)}
 							{totalPoints && (
@@ -70,4 +78,6 @@ export default class AssignmentEvent extends React.Component {
 	}
 }
 
-Registry.register('application/vnd.nextthought.assessment.assignmentcalendarevent')(AssignmentEvent);
+Registry.register(
+	'application/vnd.nextthought.assessment.assignmentcalendarevent'
+)(AssignmentEvent);

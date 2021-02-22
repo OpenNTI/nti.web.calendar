@@ -1,12 +1,12 @@
 import { getService } from '@nti/web-client';
 import { Stores } from '@nti/lib-store';
 import AppDispatcher from '@nti/lib-dispatcher';
-import {Events} from '@nti/web-session';
+import { Events } from '@nti/web-session';
 
 import EventBinner from '../event-binner';
 import CalendarsStore from '../calendars/Store';
 
-import {getToday} from './util';
+import { getToday } from './util';
 
 const EVENT_HANDLERS = Symbol('EventHandlers');
 
@@ -16,18 +16,21 @@ export const EVENTS = {
 	CREATED: 'Calendar-Event-Created',
 	CHANGED: 'Calendar-Event-Changed',
 	DELETED: 'Calendar-Event-Deleted',
-	ENROLLMENT_CHANGED: 'Course-Enrollment-Changed'
+	ENROLLMENT_CHANGED: 'Course-Enrollment-Changed',
 };
 
-function getMimeTypeFor (calendar) {
-	if(calendar.MimeType === 'application/vnd.nextthought.courseware.coursecalendar') {
+function getMimeTypeFor(calendar) {
+	if (
+		calendar.MimeType ===
+		'application/vnd.nextthought.courseware.coursecalendar'
+	) {
 		return 'application/vnd.nextthought.courseware.coursecalendarevent';
 	}
 
 	return null;
 }
 
-function getFormDataForCreating (data) {
+function getFormDataForCreating(data) {
 	const formData = new FormData();
 	const keys = Object.keys(data);
 
@@ -42,11 +45,11 @@ function getFormDataForCreating (data) {
 	return formData;
 }
 
-function getFormDataForUpdating (newData, oldData) {
+function getFormDataForUpdating(newData, oldData) {
 	const formData = new FormData();
 	let didChange = false;
 
-	const maybeAdd = (key) => {
+	const maybeAdd = key => {
 		if (newData[key] !== oldData[key]) {
 			didChange = true;
 			formData.append(key, newData[key]);
@@ -68,16 +71,15 @@ function getFormDataForUpdating (newData, oldData) {
 	return didChange ? formData : null;
 }
 
-
 export default class CalendarStore extends Stores.BoundStore {
-	constructor () {
+	constructor() {
 		super();
 
 		this[EVENT_HANDLERS] = {
 			[EVENTS.CREATED]: this.handleCreated,
 			[EVENTS.CHANGED]: this.handleChanged,
 			[EVENTS.DELETED]: this.handleDeleted,
-			[EVENTS.ENROLLMENT_CHANGED]: this.handleEnrollmentChanged
+			[EVENTS.ENROLLMENT_CHANGED]: this.handleEnrollmentChanged,
 		};
 
 		this.clear();
@@ -85,7 +87,7 @@ export default class CalendarStore extends Stores.BoundStore {
 		AppDispatcher.register(this.handleCalendarChangeDispatch);
 	}
 
-	clear () {
+	clear() {
 		this.set({
 			batchSize: BATCH_SIZE,
 			filters: JSON.parse(localStorage.getItem('calendar-filters')) || [],
@@ -101,57 +103,57 @@ export default class CalendarStore extends Stores.BoundStore {
 		});
 	}
 
-	handleCalendarChangeDispatch = (payload) => {
+	handleCalendarChangeDispatch = payload => {
 		if (!payload) {
 			return;
 		} else {
-			const {action} = payload;
-			const {data, type} = action;
+			const { action } = payload;
+			const { data, type } = action;
 			const calendarEvent = data && data.calendarEvent;
 
 			const handler = this[EVENT_HANDLERS][type];
 
-			if(handler) {
+			if (handler) {
 				handler(calendarEvent);
 			}
 		}
-	}
+	};
 
-	handleCreated = (calendarEvent) => {
+	handleCreated = calendarEvent => {
 		this.eventBinner.insertEvents([calendarEvent]);
 
 		this.set({
-			bins: this.eventBinner.getBins(false)
+			bins: this.eventBinner.getBins(false),
 		});
-	}
+	};
 
-	handleChanged = async (calendarEvent) => {
+	handleChanged = async calendarEvent => {
 		await this.eventBinner.updateEvent(calendarEvent);
 
 		this.set({
-			bins: this.eventBinner.getBins(false)
+			bins: this.eventBinner.getBins(false),
 		});
-	}
+	};
 
-	handleDeleted = (calendarEvent) => {
+	handleDeleted = calendarEvent => {
 		this.eventBinner.removeEvent(calendarEvent);
 
 		this.set({
-			bins: this.eventBinner.getBins(false)
+			bins: this.eventBinner.getBins(false),
 		});
-	}
+	};
 
 	handleEnrollmentChanged = () => {
 		// reload available calendars and events
 		this.clear();
 		this.load();
+	};
+
+	set batchSize(batchSize) {
+		this.set({ batchSize });
 	}
 
-	set batchSize (batchSize) {
-		this.set({batchSize});
-	}
-
-	async load () {
+	async load() {
 		if (!this.binding) {
 			this.loadForCurrentUser();
 		} else {
@@ -159,14 +161,14 @@ export default class CalendarStore extends Stores.BoundStore {
 		}
 	}
 
-	async loadForEntity () {
+	async loadForEntity() {
 		//todo: fill this out later
 	}
 
-	async loadForCurrentUser () {
+	async loadForCurrentUser() {
 		this.set({
 			loading: true,
-			error: null
+			error: null,
 		});
 
 		try {
@@ -177,12 +179,12 @@ export default class CalendarStore extends Stores.BoundStore {
 		} catch (e) {
 			this.set({
 				loading: false,
-				error: e
+				error: e,
 			});
 		}
 	}
 
-	async loadBatch (link, params = {}) {
+	async loadBatch(link, params = {}) {
 		const service = await getService();
 		const batchSize = this.get('batchSize');
 		const filters = this.get('filters');
@@ -194,22 +196,28 @@ export default class CalendarStore extends Stores.BoundStore {
 			sortOrder: 'ascending',
 		};
 
-		return service.getPostBatch(link, {
-			...defaults,
-			...params
-		}, { 'excluded_context_ntiids': filters });
+		return service.getPostBatch(
+			link,
+			{
+				...defaults,
+				...params,
+			},
+			{ excluded_context_ntiids: filters }
+		);
 	}
 
-	async loadInitialBatch () {
+	async loadInitialBatch() {
 		const collection = this.collection;
 
 		this.eventBinner = new EventBinner(null, true);
 
-		if (!collection) { return; }
+		if (!collection) {
+			return;
+		}
 
 		this.set({
 			loading: true,
-			error: null
+			error: null,
 		});
 
 		try {
@@ -220,22 +228,24 @@ export default class CalendarStore extends Stores.BoundStore {
 			const canCreate = await CalendarsStore.hasAdminCalendars();
 
 			let batch = await this.loadBatch(link, {
-				notBefore: today.getTime() / 1000
+				notBefore: today.getTime() / 1000,
 			});
 
 			if (batch.Items.length === 0) {
 				batch = await this.loadBatch(link, {
 					notAfter: today.getTime() / 1000,
 					sortOrder: 'descending',
-					sortOn: 'end_time'
+					sortOn: 'end_time',
 				});
 
 				this.set({
-					batchStartPrev: this.get('batchStartPrev') + this.get('batchSize')
+					batchStartPrev:
+						this.get('batchStartPrev') + this.get('batchSize'),
 				});
 			} else {
 				this.set({
-					batchStartNext: this.get('batchStartNext') + this.get('batchSize')
+					batchStartNext:
+						this.get('batchStartNext') + this.get('batchSize'),
 				});
 			}
 
@@ -249,27 +259,33 @@ export default class CalendarStore extends Stores.BoundStore {
 				loading: false,
 				loaded: true,
 				bins: this.eventBinner.getBins(true, hasMore),
-				canCreate
+				canCreate,
 			});
 		} catch (e) {
 			this.set({
 				loading: false,
-				error: e
+				error: e,
 			});
 		}
 	}
 
-	async loadMoreBefore () {
-		const {collection} = this;
+	async loadMoreBefore() {
+		const { collection } = this;
 
-		if (!this.get('hasPrev') || !collection) { return; }
+		if (!this.get('hasPrev') || !collection) {
+			return;
+		}
 
 		this.set({
-			prevLoading: true
+			prevLoading: true,
 		});
 
 		const batchSize = this.get('batchSize');
-		const batch = await this.loadBatch(collection.getLink('events'), { batchStart: this.get('batchStartPrev'), sortOrder: 'descending', sortOn: 'end_time' });
+		const batch = await this.loadBatch(collection.getLink('events'), {
+			batchStart: this.get('batchStartPrev'),
+			sortOrder: 'descending',
+			sortOn: 'end_time',
+		});
 
 		const hasPrev = batch.FilteredTotalItemCount >= batchSize;
 
@@ -279,21 +295,25 @@ export default class CalendarStore extends Stores.BoundStore {
 			batchStartPrev: this.get('batchStartPrev') + this.get('batchSize'),
 			prevLoading: false,
 			bins: this.eventBinner.getBins(hasPrev, this.get('hasNext')),
-			hasPrev
+			hasPrev,
 		});
 	}
 
-	async loadMoreAfter () {
+	async loadMoreAfter() {
 		const collection = this.collection;
 
-		if (!this.get('hasNext') || !collection) { return; }
+		if (!this.get('hasNext') || !collection) {
+			return;
+		}
 
 		this.set({
-			nextLoading: true
+			nextLoading: true,
 		});
 
 		const batchSize = this.get('batchSize');
-		const batch = await this.loadBatch(collection.getLink('events'), { batchStart: this.get('batchStartNext') });
+		const batch = await this.loadBatch(collection.getLink('events'), {
+			batchStart: this.get('batchStartNext'),
+		});
 
 		const hasMore = batch.FilteredTotalItemCount >= batchSize;
 
@@ -307,32 +327,35 @@ export default class CalendarStore extends Stores.BoundStore {
 		});
 	}
 
-	setFilters (filters) {
+	setFilters(filters) {
 		this.set({
 			filters,
 			batchStartNext: 0,
-			batchStartPrev: 0
+			batchStartPrev: 0,
 		});
 
 		localStorage.setItem('calendar-filters', JSON.stringify([...filters]));
 		this.loadInitialBatch();
 	}
 
-	addFilter = (filter) => {
+	addFilter = filter => {
 		const filters = this.get('filters');
 
 		this.set({
-			filters: [...filters, filter ],
+			filters: [...filters, filter],
 			batchStartNext: 0,
-			batchStartPrev: 0
+			batchStartPrev: 0,
 		});
 
-		localStorage.setItem('calendar-filters', JSON.stringify([...filters, filter ]));
+		localStorage.setItem(
+			'calendar-filters',
+			JSON.stringify([...filters, filter])
+		);
 
 		this.loadInitialBatch();
-	}
+	};
 
-	removeFilter = (filter) => {
+	removeFilter = filter => {
 		const filters = this.get('filters');
 		const index = filters.findIndex(x => x === filter);
 
@@ -345,49 +368,66 @@ export default class CalendarStore extends Stores.BoundStore {
 		this.set({
 			filters: newFilters,
 			batchStartNext: 0,
-			batchStartPrev: 0
+			batchStartPrev: 0,
 		});
 
 		this.loadInitialBatch();
-	}
+	};
 
-	getAvailableCalendars () {
+	getAvailableCalendars() {
 		const items = (this.collection && this.collection.Items) || [];
 
 		return items.filter(x => x.hasLink('create_calendar_event'));
 	}
 
-	async createEvent (calendar, event, title, description, location, startDate, endDate, img) {
+	async createEvent(
+		calendar,
+		event,
+		title,
+		description,
+		location,
+		startDate,
+		endDate,
+		img
+	) {
 		this.set({
 			saving: true,
-			createError: null
+			createError: null,
 		});
 
 		try {
 			const service = await getService();
 			const newData = {
 				MimeType: getMimeTypeFor(calendar),
-				title, description, location,
-				'start_time': startDate && startDate.toISOString(),
-				'end_time': endDate && endDate.toISOString(),
-				icon: img
+				title,
+				description,
+				location,
+				start_time: startDate && startDate.toISOString(),
+				end_time: endDate && endDate.toISOString(),
+				icon: img,
 			};
-			const oldData = !event ? null :
-				{
-					MimeType: event.MimeType,
-					title: event.title,
-					description: event.description,
-					location: event.location,
-					icon: event.icon,
-					'start_time': event.getStartTime() && event.getStartTime().toISOString(),
-					'end_time': event.getEndTime() && event.getEndTime().toISOString()
-
-				};
-			const formData = event ? getFormDataForUpdating(newData, oldData) : getFormDataForCreating(newData);
+			const oldData = !event
+				? null
+				: {
+						MimeType: event.MimeType,
+						title: event.title,
+						description: event.description,
+						location: event.location,
+						icon: event.icon,
+						start_time:
+							event.getStartTime() &&
+							event.getStartTime().toISOString(),
+						end_time:
+							event.getEndTime() &&
+							event.getEndTime().toISOString(),
+				  };
+			const formData = event
+				? getFormDataForUpdating(newData, oldData)
+				: getFormDataForCreating(newData);
 
 			if (!formData && event) {
 				this.set({
-					saving: false
+					saving: false,
 				});
 				return event;
 			}
@@ -401,36 +441,37 @@ export default class CalendarStore extends Stores.BoundStore {
 				calendarEvent = event;
 				type = EVENTS.CHANGED;
 				Events.emit(Events.EVENT_UPDATED, raw);
-			}
-			else {
-				calendarEvent = await service.postParseResponse(calendar.getLink('create_calendar_event'), formData);
+			} else {
+				calendarEvent = await service.postParseResponse(
+					calendar.getLink('create_calendar_event'),
+					formData
+				);
 			}
 
 			this.set({
-				saving: false
+				saving: false,
 			});
 
 			// dispatch here so that any instance of this store gets the memo
 			AppDispatcher.handleRequestAction({
 				type,
 				data: {
-					calendarEvent
-				}
+					calendarEvent,
+				},
 			});
 
 			return calendarEvent;
-		}
-		catch (e) {
+		} catch (e) {
 			let createError = e.message || e;
 
-			if(e.code === 'RequiredMissing') {
+			if (e.code === 'RequiredMissing') {
 				createError = 'Missing required field: ' + e.field;
 			}
 
 			this.set({
 				loading: false,
 				saving: false,
-				createError
+				createError,
 			});
 
 			return null;

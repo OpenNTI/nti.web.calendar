@@ -1,10 +1,9 @@
 /* eslint-env jest */
 import EventBinner from '../index';
 
-import {createEvent, DATES} from './utils';
+import { createEvent, DATES } from './utils';
 
-const {TODAY, TOMORROW, TWO_DAYS, THREE_DAYS} = DATES;
-
+const { TODAY, TOMORROW, TWO_DAYS, THREE_DAYS } = DATES;
 
 describe('EventBinner', () => {
 	describe('by day', () => {

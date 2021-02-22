@@ -41,7 +41,7 @@
 }
 
 .separator::after {
-	content: "·";
+	content: '·';
 	margin-right: 2px;
 	font-size: 20px;
 	line-height: 0;

@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {DateTime} from '@nti/web-commons';
-import {CircularProgress} from '@nti/web-charts';
-import {scoped} from '@nti/lib-locale';
+import { DateTime } from '@nti/web-commons';
+import { CircularProgress } from '@nti/web-charts';
+import { scoped } from '@nti/lib-locale';
 import classnames from 'classnames/bind';
 
 import styles from './Availability.css';
@@ -19,22 +19,34 @@ const t = scoped('calendar.events.Availability', {
 	startsToday: 'Starts Today at %(time)s',
 });
 
-function isToday (date) {
+function isToday(date) {
 	if (!(date || {}).getDate) {
 		return false;
 	}
 
 	const now = new Date();
-	return now.getDate() === date.getDate() && now.getMonth() === date.getMonth() && now.getFullYear() === date.getFullYear();
+	return (
+		now.getDate() === date.getDate() &&
+		now.getMonth() === date.getMonth() &&
+		now.getFullYear() === date.getFullYear()
+	);
 }
 
 // const availableToday = f => t('availableToday', {time: f(DateTime.TIME_PADDED_WITH_ZONE)});
-const expiredAt = f => t('expiredAt', {weekday: f(DateTime.WEEKDAY), time: f(DateTime.TIME_PADDED_WITH_ZONE)});
+const expiredAt = f =>
+	t('expiredAt', {
+		weekday: f(DateTime.WEEKDAY),
+		time: f(DateTime.TIME_PADDED_WITH_ZONE),
+	});
 // const expiresToday = f => t('expiresToday', {time: f(DateTime.TIME_PADDED_WITH_ZONE)});
-const startsFrom = f => t('startsFrom', {weekday: f(DateTime.WEEKDAY), time: f(DateTime.TIME_PADDED)});
-const startsToday = f => t('startsToday', {time: f(DateTime.TIME_PADDED)});
+const startsFrom = f =>
+	t('startsFrom', {
+		weekday: f(DateTime.WEEKDAY),
+		time: f(DateTime.TIME_PADDED),
+	});
+const startsToday = f => t('startsToday', { time: f(DateTime.TIME_PADDED) });
 
-export default function EventAvailability (props) {
+export default function EventAvailability(props) {
 	const {
 		className,
 		eventType,
@@ -43,18 +55,21 @@ export default function EventAvailability (props) {
 		icon,
 		completed,
 		expired,
-		minimal
+		minimal,
 	} = props;
 
 	// default case, render 'Starts [day] from [startTime] - [endTime]'
-	let timeDisplay = startTime && endTime && DateTime.format(startTime, startsFrom)
-		+ ' - ' + DateTime.format(endTime, DateTime.TIME_PADDED_WITH_ZONE);
+	let timeDisplay =
+		startTime &&
+		endTime &&
+		DateTime.format(startTime, startsFrom) +
+			' - ' +
+			DateTime.format(endTime, DateTime.TIME_PADDED_WITH_ZONE);
 
 	if (expired) {
 		// render 'Expired [day] at [time]'
 		timeDisplay = endTime && DateTime.format(endTime, expiredAt);
-	}
-	else {
+	} else {
 		// determine if it's today
 		if (isToday(startTime)) {
 			timeDisplay = DateTime.format(startTime, startsToday);
@@ -77,11 +92,28 @@ export default function EventAvailability (props) {
 
 	return (
 		<div className={cx('availability-info', className)}>
-			{completed && !minimal && <CircularProgress width={20} height={20} isComplete />}
-			{eventType && <div className={cx('event-type', 'separator')}>{eventType}</div>}
-			{completed && <div className={cx('completion-label', 'separator')}>{t('completed')}</div>}
-			{!completed && expired && <div className={cx('incomplete-label', 'separator')}>{t('absent')}</div>}
-			{(!icon || minimal) && !expired && <DateTime.Duration className={cx('duration', 'separator')} {...{startTime, endTime}} />}
+			{completed && !minimal && (
+				<CircularProgress width={20} height={20} isComplete />
+			)}
+			{eventType && (
+				<div className={cx('event-type', 'separator')}>{eventType}</div>
+			)}
+			{completed && (
+				<div className={cx('completion-label', 'separator')}>
+					{t('completed')}
+				</div>
+			)}
+			{!completed && expired && (
+				<div className={cx('incomplete-label', 'separator')}>
+					{t('absent')}
+				</div>
+			)}
+			{(!icon || minimal) && !expired && (
+				<DateTime.Duration
+					className={cx('duration', 'separator')}
+					{...{ startTime, endTime }}
+				/>
+			)}
 			<div className={cx('time-display')}>{timeDisplay}</div>
 		</div>
 	);
@@ -94,5 +126,5 @@ EventAvailability.propTypes = {
 	expired: PropTypes.bool,
 	icon: PropTypes.any,
 	completed: PropTypes.bool,
-	minimal: PropTypes.bool
+	minimal: PropTypes.bool,
 };

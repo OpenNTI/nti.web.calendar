@@ -2,7 +2,7 @@ import './View.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import {decorate} from '@nti/lib-commons';
+import { decorate } from '@nti/lib-commons';
 
 import Editor from '../events/editor';
 
@@ -11,7 +11,7 @@ import Header from './Header';
 import Store from './Store';
 
 class Calendar extends React.Component {
-	static deriveBindingFromProps (props) {
+	static deriveBindingFromProps(props) {
 		return props.entity || null;
 	}
 
@@ -21,37 +21,44 @@ class Calendar extends React.Component {
 		className: PropTypes.string,
 		onClose: PropTypes.func,
 		readOnly: PropTypes.bool,
-		additionalControls: PropTypes.any // component to be rendered in the header
-	}
+		additionalControls: PropTypes.any, // component to be rendered in the header
+	};
 
-	state = {}
+	state = {};
 
-	render () {
+	render() {
 		const {
 			additionalControls,
 			canCreate,
 			className,
 			onClose,
-			readOnly
+			readOnly,
 		} = this.props;
 		const { showEventEditor } = this.state;
 
 		return (
 			<div className={cx('calendar-main', className)}>
-				<Header onClose={onClose} additionalControls={additionalControls} />
+				<Header
+					onClose={onClose}
+					additionalControls={additionalControls}
+				/>
 				<Body />
 				{!readOnly && canCreate && (
 					<div
 						className="add-event"
-						onClick={() => this.setState({showEventEditor: true})}
+						onClick={() => this.setState({ showEventEditor: true })}
 					>
-						<i className="icon-add"/>
+						<i className="icon-add" />
 					</div>
 				)}
 				{showEventEditor && (
 					<Editor
-						onCancel={() => this.setState({showEventEditor: false})}
-						onSuccess={() => this.setState({showEventEditor: false})}
+						onCancel={() =>
+							this.setState({ showEventEditor: false })
+						}
+						onSuccess={() =>
+							this.setState({ showEventEditor: false })
+						}
 						create={!readOnly && canCreate}
 					/>
 				)}
@@ -60,6 +67,4 @@ class Calendar extends React.Component {
 	}
 }
 
-export default decorate(Calendar, [
-	Store.connect(['canCreate'])
-]);
+export default decorate(Calendar, [Store.connect(['canCreate'])]);

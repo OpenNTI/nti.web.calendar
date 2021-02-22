@@ -6,11 +6,14 @@ import { Icon } from '../components';
 export default class CommunityItem extends React.Component {
 	static propTypes = {
 		item: PropTypes.object,
-		selected: PropTypes.bool
-	}
+		selected: PropTypes.bool,
+	};
 
-	render () {
-		const { item: { title }, selected } = this.props;
+	render() {
+		const {
+			item: { title },
+			selected,
+		} = this.props;
 
 		return (
 			<div className="community-item">

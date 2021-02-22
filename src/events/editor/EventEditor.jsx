@@ -1,10 +1,10 @@
 import './EventEditor.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
-import {decorate} from '@nti/lib-commons';
-import {DateTime, Input, Prompt, Text} from '@nti/web-commons';
-import {scoped} from '@nti/lib-locale';
-import {ImageUpload} from '@nti/web-whiteboard';
+import { decorate } from '@nti/lib-commons';
+import { DateTime, Input, Prompt, Text } from '@nti/web-commons';
+import { scoped } from '@nti/lib-locale';
+import { ImageUpload } from '@nti/web-whiteboard';
 import cx from 'classnames';
 
 import Store from '../../calendar/Store';
@@ -12,7 +12,7 @@ import Store from '../../calendar/Store';
 import DateInput from './DateInput';
 import CalendarSelect from './CalendarSelect';
 
-const {SaveCancel} = Prompt;
+const { SaveCancel } = Prompt;
 
 const t = scoped('calendar.editor.Editor', {
 	eventTitle: 'Event Title',
@@ -30,27 +30,26 @@ const t = scoped('calendar.editor.Editor', {
 	start: 'Start',
 	end: 'End',
 	title: 'View Event',
-	searchCalendar: 'Search Calendars'
+	searchCalendar: 'Search Calendars',
 });
-
 
 const createScope = scoped('calendar.editor.Editor.create', {
 	title: 'Create Event',
 	save: 'Create',
-	cancel: 'Cancel'
+	cancel: 'Cancel',
 });
 const editScope = scoped('calendar.editor.Editor.edit', {
 	title: 'Edit Event',
 	save: 'Save',
-	cancel: 'Cancel'
+	cancel: 'Cancel',
 });
 const editableScope = scoped('calendar.editor.Editor.editable', {
 	title: 'View Event',
 	save: 'Edit',
-	cancel: 'Cancel'
+	cancel: 'Cancel',
 });
 
-function getStateFromEvent (event) {
+function getStateFromEvent(event) {
 	let defaultStartDate = new Date();
 
 	defaultStartDate.setSeconds(0);
@@ -59,12 +58,16 @@ function getStateFromEvent (event) {
 
 	return {
 		startDate: event ? event.getStartTime() : defaultStartDate,
-		endDate: event ? event.getEndTime() : new Date(defaultStartDate.getTime() + (60 * 60 * 1000)),
+		endDate: event
+			? event.getEndTime()
+			: new Date(defaultStartDate.getTime() + 60 * 60 * 1000),
 		title: event && event.title,
 		description: event && event.description,
 		location: event && event.location,
 		// check icon for null string.  if we remove an icon and PUT to the record, it won't be null, but "null"
-		img: event && event.icon && event.icon !== 'null' && {src: event.icon},
+		img: event &&
+			event.icon &&
+			event.icon !== 'null' && { src: event.icon },
 	};
 }
 
@@ -81,37 +84,41 @@ class EventEditor extends React.Component {
 		create: PropTypes.bool,
 		nonDialog: PropTypes.bool,
 		noControls: PropTypes.bool,
-		availableCalendars: PropTypes.array
-	}
+		availableCalendars: PropTypes.array,
+	};
 
-	state = {}
+	state = {};
 
-	constructor (props) {
+	constructor(props) {
 		super(props);
 
-		const {event, availableCalendars, create} = props;
+		const { event, availableCalendars, create } = props;
 
-		const calendarFromEvent = event && this.getMatchingCalendar(event, availableCalendars);
+		const calendarFromEvent =
+			event && this.getMatchingCalendar(event, availableCalendars);
 
 		this.state = {
 			viewMode: !create,
-			calendar: calendarFromEvent || (availableCalendars && availableCalendars[0]),
+			calendar:
+				calendarFromEvent ||
+				(availableCalendars && availableCalendars[0]),
 			event: props.event,
 			availableCalendars,
-			...getStateFromEvent(event)
+			...getStateFromEvent(event),
 		};
 	}
 
-	componentDidUpdate ({availableCalendars: prevCals, event: prevEvent}) {
-		const {availableCalendars, event} = this.props;
+	componentDidUpdate({ availableCalendars: prevCals, event: prevEvent }) {
+		const { availableCalendars, event } = this.props;
 		let state = null;
 
 		if (event !== prevEvent) {
-			state = {...getStateFromEvent(event)};
+			state = { ...getStateFromEvent(event) };
 		}
 
 		if (prevCals !== availableCalendars) {
-			const calendarFromEvent = event && this.getMatchingCalendar(event, availableCalendars);
+			const calendarFromEvent =
+				event && this.getMatchingCalendar(event, availableCalendars);
 
 			state = state || {};
 			state.calendar = calendarFromEvent || availableCalendars[0];
@@ -122,114 +129,163 @@ class EventEditor extends React.Component {
 		}
 	}
 
-	getMatchingCalendar (event, availableCalendars) {
+	getMatchingCalendar(event, availableCalendars) {
 		return (availableCalendars || []).filter(c => {
 			return c.getID() === event.ContainerId;
 		})[0];
 	}
 
-	renderDateInfo () {
-		const {startDate} = this.state;
+	renderDateInfo() {
+		const { startDate } = this.state;
 
 		return (
 			<div className="date">
-				<div className="month">{DateTime.format(startDate, DateTime.MONTH_ABBR)}</div>
-				<div className="day">{DateTime.format(startDate, DateTime.DAY_OF_THE_MONTH)}</div>
+				<div className="month">
+					{DateTime.format(startDate, DateTime.MONTH_ABBR)}
+				</div>
+				<div className="day">
+					{DateTime.format(startDate, DateTime.DAY_OF_THE_MONTH)}
+				</div>
 			</div>
 		);
 	}
 
-	renderEventInfo () {
-		const {startDate, title, description, img, viewMode} = this.state;
+	renderEventInfo() {
+		const { startDate, title, description, img, viewMode } = this.state;
 
 		return (
 			<div className="event-info">
 				<div className="title">
-					{
-						viewMode
-							? <Text.Base linkify>{title}</Text.Base>
-							: <Input.Text placeholder={t('eventTitle')} value={title} onChange={(val) => this.setState({title: val})} maxLength="140"/>
-					}
+					{viewMode ? (
+						<Text.Base linkify>{title}</Text.Base>
+					) : (
+						<Input.Text
+							placeholder={t('eventTitle')}
+							value={title}
+							onChange={val => this.setState({ title: val })}
+							maxLength="140"
+						/>
+					)}
 				</div>
 				<div className="time-info">
-					<span className="date">{DateTime.format(startDate, DateTime.WEEKDAY_AT_TIME_PADDED_WITH_ZONE)}</span>
+					<span className="date">
+						{DateTime.format(
+							startDate,
+							DateTime.WEEKDAY_AT_TIME_PADDED_WITH_ZONE
+						)}
+					</span>
 				</div>
 				<div className="image-and-description">
-					{
-						viewMode
-							? img && <img className="preview" src={img.src}/>
-							: <ImageUpload img={img} onChange={imgBlob => this.setState({imgBlob})}/>
-					}
-					{
-						viewMode
-							? <Text.Base className="desc" linkify >{description}</Text.Base>
-							: <Input.TextArea value={description} onChange={(val) => this.setState({description: val})} placeholder={t('eventDescription')}/>
-					}
+					{viewMode ? (
+						img && <img className="preview" src={img.src} />
+					) : (
+						<ImageUpload
+							img={img}
+							onChange={imgBlob => this.setState({ imgBlob })}
+						/>
+					)}
+					{viewMode ? (
+						<Text.Base className="desc" linkify>
+							{description}
+						</Text.Base>
+					) : (
+						<Input.TextArea
+							value={description}
+							onChange={val =>
+								this.setState({ description: val })
+							}
+							placeholder={t('eventDescription')}
+						/>
+					)}
 				</div>
 			</div>
 		);
 	}
 
-	onCalendarSelect = (calendar) => {
-		this.setState({calendar});
-	}
+	onCalendarSelect = calendar => {
+		this.setState({ calendar });
+	};
 
-	renderCalendarSelect () {
+	renderCalendarSelect() {
 		const { event } = this.props;
 		const { calendar } = this.state;
 
 		return (
 			<div className="input-section calendar">
 				<div className="section-title">{t('calendar')}</div>
-				<CalendarSelect onChange={this.onCalendarSelect} selected={calendar} event={event} />
+				<CalendarSelect
+					onChange={this.onCalendarSelect}
+					selected={calendar}
+					event={event}
+				/>
 			</div>
-
 		);
 	}
 
-	renderLocation () {
-		const {location, viewMode} = this.state;
+	renderLocation() {
+		const { location, viewMode } = this.state;
 
-		if(viewMode && !location) {
+		if (viewMode && !location) {
 			return null;
 		}
 
 		return (
 			<div className="input-section location">
 				<div className="section-title">{t('location')}</div>
-				{
-					viewMode
-						? <Text.Base className="name" linkify>{location}</Text.Base>
-						: <Input.Text placeholder={t('eventLocation')} value={location} onChange={(val) => this.setState({location: val})} maxLength="140"/>
-				}
+				{viewMode ? (
+					<Text.Base className="name" linkify>
+						{location}
+					</Text.Base>
+				) : (
+					<Input.Text
+						placeholder={t('eventLocation')}
+						value={location}
+						onChange={val => this.setState({ location: val })}
+						maxLength="140"
+					/>
+				)}
 			</div>
 		);
 	}
 
-	renderDate (value, label, field) {
-		const {viewMode} = this.state;
+	renderDate(value, label, field) {
+		const { viewMode } = this.state;
 
-		if(viewMode) {
-			return <div className="date-display">{DateTime.format(value, DateTime.MONTH_NAME_DAY_YEAR_TIME)}</div>;
+		if (viewMode) {
+			return (
+				<div className="date-display">
+					{DateTime.format(value, DateTime.MONTH_NAME_DAY_YEAR_TIME)}
+				</div>
+			);
 		}
 
-		return <DateInput date={value} label={label} onChange={(val) => this.setState({[field]: val})}/>;
+		return (
+			<DateInput
+				date={value}
+				label={label}
+				onChange={val => this.setState({ [field]: val })}
+			/>
+		);
 	}
 
-	renderDateInputs () {
+	renderDateInputs() {
 		return (
 			<div className="input-section times">
 				<div className="section-title">{t('datesTimes')}</div>
 				<div className="dates">
-					{this.renderDate(this.state.startDate, t('start'), 'startDate')}
+					{this.renderDate(
+						this.state.startDate,
+						t('start'),
+						'startDate'
+					)}
 					{this.renderDate(this.state.endDate, t('end'), 'endDate')}
 				</div>
 			</div>
 		);
 	}
 
-	renderOtherInfo () {
-		const {viewMode} = this.state;
+	renderOtherInfo() {
+		const { viewMode } = this.state;
 
 		return (
 			<div className="other-info">
@@ -241,32 +297,41 @@ class EventEditor extends React.Component {
 	}
 
 	onCancel = () => {
-		const {onCancel, onDismiss, create} = this.props;
-		const {viewMode} = this.state;
+		const { onCancel, onDismiss, create } = this.props;
+		const { viewMode } = this.state;
 
-		if(!viewMode && !create) {
-			this.setState({viewMode: true});
+		if (!viewMode && !create) {
+			this.setState({ viewMode: true });
 
 			return;
 		}
 
-		if(onCancel) {
+		if (onCancel) {
 			onCancel();
 		}
 
-		if(onDismiss) {
+		if (onDismiss) {
 			onDismiss();
 		}
-	}
+	};
 
 	onSave = async () => {
-		const {event, createEvent, onSuccess, editable, create} = this.props;
-		const {viewMode, calendar, title, description, location, startDate, endDate, imgBlob} = this.state;
+		const { event, createEvent, onSuccess, editable, create } = this.props;
+		const {
+			viewMode,
+			calendar,
+			title,
+			description,
+			location,
+			startDate,
+			endDate,
+			imgBlob,
+		} = this.state;
 
-		if(viewMode) {
-			if(editable) {
+		if (viewMode) {
+			if (editable) {
 				this.setState({
-					viewMode: false
+					viewMode: false,
 				});
 
 				return;
@@ -275,57 +340,66 @@ class EventEditor extends React.Component {
 			return this.onCancel();
 		}
 
-		const calendarEvent = await createEvent(calendar, event, title, description, location, startDate, endDate, imgBlob);
+		const calendarEvent = await createEvent(
+			calendar,
+			event,
+			title,
+			description,
+			location,
+			startDate,
+			endDate,
+			imgBlob
+		);
 
-		if(create && onSuccess && calendarEvent) {
+		if (create && onSuccess && calendarEvent) {
 			onSuccess(calendarEvent);
 		}
 
-		if(!create && calendarEvent) {
+		if (!create && calendarEvent) {
 			this.setState({
 				viewMode: true,
-				...getStateFromEvent(calendarEvent)
+				...getStateFromEvent(calendarEvent),
 			});
 		}
-	}
+	};
 
+	renderError() {
+		const { createError } = this.props;
 
-	renderError () {
-		const {createError} = this.props;
-
-		if(createError) {
+		if (createError) {
 			return <div className="error">{createError}</div>;
 		}
 	}
 
-	getScope () {
-		const {editable, create} = this.props;
-		const {viewMode} = this.state;
+	getScope() {
+		const { editable, create } = this.props;
+		const { viewMode } = this.state;
 
-		if(viewMode) {
-			if(editable) {
+		if (viewMode) {
+			if (editable) {
 				return editableScope;
 			}
 
 			return t;
-		}
-		else {
-			if(create) {
+		} else {
+			if (create) {
 				return createScope;
-			}
-			else {
+			} else {
 				return editScope;
 			}
 		}
 	}
 
-	renderEvent () {
+	renderEvent() {
 		const {
-			props: {saving},
-			state: {viewMode}
+			props: { saving },
+			state: { viewMode },
 		} = this;
 
-		const cls = cx('calendar-event-editor', {saving, 'view-only': viewMode});
+		const cls = cx('calendar-event-editor', {
+			saving,
+			'view-only': viewMode,
+		});
 
 		return (
 			<div className={cls}>
@@ -341,29 +415,32 @@ class EventEditor extends React.Component {
 		);
 	}
 
-	render () {
-		const {saving, nonDialog, noControls, className: css} = this.props;
-		const {viewMode, calendar} = this.state;
+	render() {
+		const { saving, nonDialog, noControls, className: css } = this.props;
+		const { viewMode, calendar } = this.state;
 		const className = cx('event-view-dialog', css);
 
 		const Cmp = noControls ? 'div' : SaveCancel;
-		const props = noControls ? {className} : {
-			className,
-			getString: this.getScope(),
-			onCancel: this.onCancel,
-			onSave: this.onSave,
-			disableSave: saving || (!calendar && !viewMode),
-			nonDialog
-		};
+		const props = noControls
+			? { className }
+			: {
+					className,
+					getString: this.getScope(),
+					onCancel: this.onCancel,
+					onSave: this.onSave,
+					disableSave: saving || (!calendar && !viewMode),
+					nonDialog,
+			  };
 
-		return (
-			<Cmp {...props}>
-				{this.renderEvent()}
-			</Cmp>
-		);
+		return <Cmp {...props}>{this.renderEvent()}</Cmp>;
 	}
 }
 
 export default decorate(EventEditor, [
-	Store.connect(['createEvent', 'createError', 'saving', 'availableCalendars'])
+	Store.connect([
+		'createEvent',
+		'createError',
+		'saving',
+		'availableCalendars',
+	]),
 ]);

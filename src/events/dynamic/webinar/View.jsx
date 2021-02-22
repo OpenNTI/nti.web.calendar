@@ -16,25 +16,37 @@ export default class WebinarEvent extends React.Component {
 			getStartTime: PropTypes.func,
 			getEndTime: PropTypes.func,
 		}),
-		catalogEntry: PropTypes.object
-	}
+		catalogEntry: PropTypes.object,
+	};
 
-	render () {
-		const { item, item: { title, CatalogEntry }} = this.props;
+	render() {
+		const {
+			item,
+			item: { title, CatalogEntry },
+		} = this.props;
 
-		const start = DateTime.format(item.getStartTime(), DateTime.TIME_START_RANGE);
+		const start = DateTime.format(
+			item.getStartTime(),
+			DateTime.TIME_START_RANGE
+		);
 		const end = DateTime.format(item.getEndTime(), DateTime.TIME);
 
 		return (
 			<Layout className={cx('webinar-event')}>
-				<Presentation.Asset propName="url" contentPackage={CatalogEntry} type="thumb">
+				<Presentation.Asset
+					propName="url"
+					contentPackage={CatalogEntry}
+					type="thumb"
+				>
 					<Icon />
 				</Presentation.Asset>
 				<div className="webinar-content">
 					<div className="webinar-meta">
 						<div className="webinar-title">{title}</div>
 						<List.SeparatedInline className="webinar-subtitle">
-							<div className="times">{start}-{end}</div>
+							<div className="times">
+								{start}-{end}
+							</div>
 						</List.SeparatedInline>
 					</div>
 				</div>
@@ -43,4 +55,6 @@ export default class WebinarEvent extends React.Component {
 	}
 }
 
-Registry.register('application/vnd.nextthought.webinar.webinarcalendarevent')(WebinarEvent);
+Registry.register('application/vnd.nextthought.webinar.webinarcalendarevent')(
+	WebinarEvent
+);

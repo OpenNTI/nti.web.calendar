@@ -6,20 +6,21 @@ import CalendarSelect from '../../calendars/Select';
 
 CalendarList.propTypes = {
 	filters: PropTypes.array,
-	setFilters: PropTypes.func
+	setFilters: PropTypes.func,
 };
-export default function CalendarList ({filters, setFilters}) {
-	const onChange = React.useCallback(
-		(unselected) => setFilters(unselected),
-		[setFilters]
-	);
+export default function CalendarList({ filters, setFilters }) {
+	const onChange = React.useCallback(unselected => setFilters(unselected), [
+		setFilters,
+	]);
 
 	return (
-		<CalendarSelect className="calendar-list-select" unselected={filters} onChange={onChange} />
+		<CalendarSelect
+			className="calendar-list-select"
+			unselected={filters}
+			onChange={onChange}
+		/>
 	);
 }
-
-
 
 // const CourseCalendar = 'application/vnd.nextthought.courseware.coursecalendar';
 
