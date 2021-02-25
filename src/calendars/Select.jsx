@@ -30,10 +30,8 @@ const buildIsSelected = (selected, unselected) => {
 const t = scoped('web-calendar.calendars.Filter', {
 	courses: 'courses',
 	search: 'Search your Calendars',
-	empty: {
-		search: 'No Matching Calendars',
-		noSearch: 'No Calendars',
-	},
+	empty: 'No Calendars',
+	'empty-with-search': 'No Matching Calendars',
 });
 
 const Error = styled(Errors.Message).attrs({ as: 'p' })`
@@ -144,7 +142,7 @@ function CalendarsFilter({
 			>
 				{showEmpty && (
 					<Empty>
-						{searchTerm ? t('empty.search') : t('empty.noSearch')}
+						{searchTerm ? t('empty-with-search') : t('empty')}
 					</Empty>
 				)}
 				{showCourses && <Label>{t('courses')}</Label>}
