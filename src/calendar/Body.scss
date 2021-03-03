@@ -9,7 +9,7 @@
 	min-height: 200px;
 
 	.is-ie & {
-		overflow-y: scroll;
+		overflow-y: auto;
 	}
 
 	.calendar-empty {

@@ -17,7 +17,7 @@
 
 	100% {
 		opacity: 1;
-		overflow-y: scroll;
+		overflow-y: auto;
 		max-height: 100%;
 	}
 }
@@ -34,7 +34,7 @@
 	right: 0;
 	bottom: 0;
 	top: 40px;
-	overflow-y: scroll;
+	overflow-y: auto;
 
 	.calendar-list-header {
 		color: var(--tertiary-grey);
