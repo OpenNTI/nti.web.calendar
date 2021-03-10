@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import { Presentation, Icons, Text } from '@nti/web-commons';
 
 const getTitle = calendar => calendar.title;

@@ -1,11 +1,12 @@
 import './EventEditor.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
+
 import { decorate } from '@nti/lib-commons';
 import { DateTime, Input, Prompt, Text } from '@nti/web-commons';
 import { scoped } from '@nti/lib-locale';
 import { ImageUpload } from '@nti/web-whiteboard';
-import cx from 'classnames';
 
 import Store from '../../calendar/Store';
 

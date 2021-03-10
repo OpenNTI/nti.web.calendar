@@ -2,6 +2,7 @@ import './View.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+
 import { decorate } from '@nti/lib-commons';
 import { EmptyState, Loading, Input, Button } from '@nti/web-commons';
 import { scoped } from '@nti/lib-locale';

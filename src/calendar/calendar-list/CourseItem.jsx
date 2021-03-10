@@ -1,6 +1,7 @@
 import './CourseItem.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import { Presentation } from '@nti/web-commons';
 
 import { Icon } from '../components';

@@ -1,8 +1,9 @@
 import './View.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { DateTime, List, Presentation } from '@nti/web-commons';
 import cx from 'classnames';
+
+import { DateTime, List, Presentation } from '@nti/web-commons';
 
 import { Icon } from '../../../calendar/components';
 import { Layout } from '../../components';

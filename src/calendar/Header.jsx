@@ -1,9 +1,10 @@
 import './Header.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
+
 import { decorate } from '@nti/lib-commons';
 import { scoped } from '@nti/lib-locale';
-import cx from 'classnames';
 import { Connectors } from '@nti/lib-store';
 
 import CalendarList from './calendar-list';

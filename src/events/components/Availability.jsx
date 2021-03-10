@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames/bind';
+
 import { DateTime } from '@nti/web-commons';
 import { CircularProgress } from '@nti/web-charts';
 import { scoped } from '@nti/lib-locale';
-import classnames from 'classnames/bind';
 
 import styles from './Availability.css';
 
