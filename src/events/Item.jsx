@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { reportError } from '@nti/web-client';
+import { Error } from '@nti/web-commons';
 import { LinkTo } from '@nti/web-routing';
 
 import Registry from './Registry';
@@ -29,6 +31,7 @@ export default class EventItem extends React.Component {
 	state = {};
 
 	componentDidCatch(error) {
+		reportError(error);
 		this.setState({ error });
 	}
 
@@ -41,10 +44,10 @@ export default class EventItem extends React.Component {
 
 		if (error) {
 			return (
-				<div>
+				<Error error={error} inline>
 					There was an error attempting to render:{' '}
 					{(item || {}).MimeType || 'Unknown Item'}
-				</div>
+				</Error>
 			);
 		}
 
