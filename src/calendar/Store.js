@@ -196,13 +196,13 @@ export default class CalendarStore extends Stores.BoundStore {
 			sortOrder: 'ascending',
 		};
 
-		return service.getPostBatch(
+		return service.getBatch(
 			link,
 			{
 				...defaults,
 				...params,
 			},
-			{ excluded_context_ntiids: filters }
+			{ method: 'post', data: { excluded_context_ntiids: filters } }
 		);
 	}
 
