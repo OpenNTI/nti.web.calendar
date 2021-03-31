@@ -1,14 +1,15 @@
-import './View.scss';
+import './WebinarView.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 
 import { DateTime, List, Presentation } from '@nti/web-commons';
 
-import { Icon } from '../../../calendar/components';
-import { Layout } from '../../components';
-import Registry from '../../Registry';
-export default class WebinarEvent extends React.Component {
+import { Icon } from '../../calendar/components';
+import { Layout } from '../components';
+import Registry from '../Registry';
+
+export class WebinarEvent extends React.Component {
 	static propTypes = {
 		item: PropTypes.shape({
 			CatalogEntry: PropTypes.object,

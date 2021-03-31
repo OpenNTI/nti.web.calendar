@@ -1,2 +1,2 @@
-export * from './assignment';
-export * from './webinar';
+import './AssignmentView.jsx';
+import './WebinarView.jsx';
