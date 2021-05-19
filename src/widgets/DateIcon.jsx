@@ -1,41 +1,32 @@
-import './DateIcon.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { decorate } from '@nti/lib-commons';
 import { DateTime } from '@nti/web-commons';
 
 import Store from './DateIconStore';
 
-class DateIcon extends React.PureComponent {
-	static propTypes = {
-		className: PropTypes.string,
-		date: PropTypes.object,
-		todaysCount: PropTypes.number,
-		markSeen: PropTypes.func,
-		hasSeen: PropTypes.bool,
-	};
+const Wrapper = styled.div`
+	cursor: pointer;
+`;
 
-	render() {
-		const { hasSeen, todaysCount, markSeen, ...otherProps } = this.props;
+DateIcon.propTypes = {
+	date: PropTypes.object,
+};
+export default function DateIcon(props) {
+	const { todaysCount, markSeen, hasSeen } = Store.useValue();
 
-		return (
-			<div
-				className="nti-calendar-date-icon-container"
-				onClick={() => {
-					markSeen();
-				}}
-			>
-				<DateTime.DateIcon
-					{...otherProps}
-					viewed={hasSeen}
-					badge={todaysCount || 0}
-				/>
-			</div>
-		);
-	}
+	return (
+		<Wrapper
+			className="nti-calendar-date-icon-container"
+			onClick={() => {
+				markSeen();
+			}}
+		>
+			<DateTime.DateIcon
+				{...props}
+				viewed={hasSeen}
+				badge={todaysCount || 0}
+			/>
+		</Wrapper>
+	);
 }
-
-export default decorate(DateIcon, [
-	Store.connect(['todaysCount', 'markSeen', 'hasSeen']),
-]);
