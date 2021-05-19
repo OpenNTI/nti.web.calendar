@@ -83,7 +83,7 @@ class EventEditor extends React.Component {
 		saving: PropTypes.bool,
 		editable: PropTypes.bool,
 		create: PropTypes.bool,
-		nonDialog: PropTypes.bool,
+		dialog: PropTypes.bool,
 		noControls: PropTypes.bool,
 		availableCalendars: PropTypes.array,
 	};
@@ -417,7 +417,12 @@ class EventEditor extends React.Component {
 	}
 
 	render() {
-		const { saving, nonDialog, noControls, className: css } = this.props;
+		const {
+			saving,
+			dialog = true,
+			noControls,
+			className: css,
+		} = this.props;
 		const { viewMode, calendar } = this.state;
 		const className = cx('event-view-dialog', css);
 
@@ -430,7 +435,7 @@ class EventEditor extends React.Component {
 					onCancel: this.onCancel,
 					onSave: this.onSave,
 					disableSave: saving || (!calendar && !viewMode),
-					nonDialog,
+					dialog,
 			  };
 
 		return <Cmp {...props}>{this.renderEvent()}</Cmp>;
