@@ -84,7 +84,7 @@ class EventEditor extends React.Component {
 		editable: PropTypes.bool,
 		create: PropTypes.bool,
 		dialog: PropTypes.bool,
-		noControls: PropTypes.bool,
+		controls: PropTypes.bool,
 		availableCalendars: PropTypes.array,
 	};
 
@@ -420,14 +420,14 @@ class EventEditor extends React.Component {
 		const {
 			saving,
 			dialog = true,
-			noControls,
+			controls = true,
 			className: css,
 		} = this.props;
 		const { viewMode, calendar } = this.state;
 		const className = cx('event-view-dialog', css);
 
-		const Cmp = noControls ? 'div' : SaveCancel;
-		const props = noControls
+		const Cmp = !controls ? 'div' : SaveCancel;
+		const props = !controls
 			? { className }
 			: {
 					className,
