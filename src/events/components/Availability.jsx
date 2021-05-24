@@ -47,7 +47,7 @@ const startsFrom = f =>
 	});
 const startsToday = f => t('startsToday', { time: f(DateTime.TIME_PADDED) });
 
-export default function EventAvailability(props) {
+export function Availability(props) {
 	const {
 		className,
 		eventType,
@@ -120,7 +120,7 @@ export default function EventAvailability(props) {
 	);
 }
 
-EventAvailability.propTypes = {
+Availability.propTypes = {
 	eventType: PropTypes.string,
 	startTime: PropTypes.any,
 	endTime: PropTypes.any,
