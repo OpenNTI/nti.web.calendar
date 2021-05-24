@@ -1,12 +1,33 @@
-import './View.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 
 import { scoped } from '@nti/lib-locale';
 import { DateTime } from '@nti/web-commons';
 
-import Item from '../../events';
-import Editor from '../../events/editor/EventEditor';
+import { Item } from '../events/Item';
+import Editor from '../events/editor/EventEditor';
+
+//#region paint
+const Padded = styled.div`
+	padding: 10px;
+`;
+
+const Header = styled.div`
+	background-color: #2d2d2d;
+	padding: 10px;
+	color: white;
+	font-weight: bold;
+	text-transform: uppercase;
+	font-size: 10px;
+`;
+
+const Empty = styled.div`
+	color: var(--tertiary-grey);
+	font-style: italic;
+	padding: 15px 45px;
+	font-size: 14px;
+`;
+//#endregion
 
 const t = scoped('nti.web.calendar.day', {
 	empty: 'No events yet...',
@@ -74,12 +95,12 @@ export default class Day extends React.Component {
 
 		return (
 			<div ref={this.setToday} className="calendar-day">
-				<div className="day-header">
+				<Header className="day-header">
 					<time>{formatDate(date)}</time>
-				</div>
-				<div className="day-events">
+				</Header>
+				<Padded className="day-events">
 					{items.length === 0 && (
-						<div className="empty-day">{t('empty')}</div>
+						<Empty className="empty-day">{t('empty')}</Empty>
 					)}
 					{items.length > 0 &&
 						items.map(item => (
@@ -90,7 +111,7 @@ export default class Day extends React.Component {
 								onItemClick={this.onItemClick}
 							/>
 						))}
-				</div>
+				</Padded>
 				{showEditor && (
 					<Editor
 						event={event}

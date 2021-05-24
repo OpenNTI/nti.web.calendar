@@ -1,71 +1,52 @@
 import './View.scss';
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 
-import { decorate } from '@nti/lib-commons';
-
-import Editor from '../events/editor';
+import Editor from '../events/editor/EventEditor';
 
 import Body from './Body';
 import Header from './Header';
 import Store from './Store';
 
-class Calendar extends React.Component {
-	static deriveBindingFromProps(props) {
-		return props.entity || null;
-	}
+const Calendar = React.forwardRef(function CalendarRenderer(
+	{ additionalControls, className, onClose, readOnly },
+	ref
+) {
+	const { canCreate } = Store.useValue();
 
-	static propTypes = {
-		entity: PropTypes.object,
-		canCreate: PropTypes.bool,
-		className: PropTypes.string,
-		onClose: PropTypes.func,
-		readOnly: PropTypes.bool,
-		additionalControls: PropTypes.any, // component to be rendered in the header
-	};
+	const [show, showEditor] = useState();
 
-	state = {};
-
-	render() {
-		const {
-			additionalControls,
-			canCreate,
-			className,
-			onClose,
-			readOnly,
-		} = this.props;
-		const { showEventEditor } = this.state;
-
-		return (
-			<div className={cx('calendar-main', className)}>
-				<Header
-					onClose={onClose}
-					additionalControls={additionalControls}
+	return (
+		<div className={cx('calendar-main', className)} ref={ref}>
+			<Header onClose={onClose} additionalControls={additionalControls} />
+			<Body />
+			{!readOnly && canCreate && (
+				<div className="add-event" onClick={() => showEditor(true)}>
+					<i className="icon-add" />
+				</div>
+			)}
+			{show && (
+				<Editor
+					onCancel={() => showEditor(false)}
+					onSuccess={() => showEditor(false)}
+					create={!readOnly && canCreate}
 				/>
-				<Body />
-				{!readOnly && canCreate && (
-					<div
-						className="add-event"
-						onClick={() => this.setState({ showEventEditor: true })}
-					>
-						<i className="icon-add" />
-					</div>
-				)}
-				{showEventEditor && (
-					<Editor
-						onCancel={() =>
-							this.setState({ showEventEditor: false })
-						}
-						onSuccess={() =>
-							this.setState({ showEventEditor: false })
-						}
-						create={!readOnly && canCreate}
-					/>
-				)}
-			</div>
-		);
-	}
-}
+			)}
+		</div>
+	);
+});
 
-export default decorate(Calendar, [Store.connect(['canCreate'])]);
+Calendar.propTypes = {
+	entity: PropTypes.object,
+	className: PropTypes.string,
+	onClose: PropTypes.func,
+	readOnly: PropTypes.bool,
+	additionalControls: PropTypes.any, // component to be rendered in the header
+};
+
+export default Store.compose(Calendar, {
+	deriveBindingFromProps(props) {
+		return props.entity || null;
+	},
+});

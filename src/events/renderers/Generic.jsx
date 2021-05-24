@@ -1,13 +1,42 @@
-import './View.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { List, DateTime, Presentation } from '@nti/web-commons';
+import { List, DateTime, Presentation, Text } from '@nti/web-commons';
 import { scoped } from '@nti/lib-locale';
 
-import { Icon } from '../../calendar/components';
+import { Icon } from '../../calendar/Icon';
 import { Layout } from '../components';
-import Registry from '../Registry';
+
+import Registry from './Registry';
+
+//#region 🎨 paint
+const Meta = styled.div`
+	background-color: #fff;
+	border-radius: 5px;
+	padding: 5px 10px;
+	min-height: 40px;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	flex: 1 1 auto;
+`;
+
+const Title = styled(Text)`
+	color: var(--primary-grey);
+	font-size: 14px;
+	font-weight: 600;
+	hyphens: auto;
+	word-break: break-word;
+`;
+
+const SubTitle = styled(List.SeparatedInline)`
+	color: var(--tertiary-grey);
+	font-size: 10px;
+	font-weight: bold;
+	letter-spacing: -0.21px;
+	line-height: 14px;
+`;
+//#endregion
 
 const t = scoped('calendar.events.generic.View', {
 	dayIndex: 'Day %(count)s / %(total)s',
@@ -71,9 +100,11 @@ export default class GenericEvent extends React.Component {
 				>
 					<Icon />
 				</Presentation.Asset>
-				<div className="event-generic-meta">
-					<div className="event-generic-title">{title}</div>
-					<List.SeparatedInline className="event-generic-subtitle">
+				<Meta className="event-generic-meta">
+					<Title limitLines={2} className="event-generic-title">
+						{title}
+					</Title>
+					<SubTitle className="event-generic-subtitle">
 						{numberOfDays > 1 && (
 							<div className="event-day-index">
 								{t('dayIndex', {
@@ -84,8 +115,8 @@ export default class GenericEvent extends React.Component {
 						)}
 						{!showTime && t('allDay')}
 						{showTime && this.renderTime()}
-					</List.SeparatedInline>
-				</div>
+					</SubTitle>
+				</Meta>
 			</Layout>
 		);
 	}

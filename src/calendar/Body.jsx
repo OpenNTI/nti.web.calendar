@@ -7,7 +7,7 @@ import { Scroll, Loading } from '@nti/web-commons';
 import { Connectors } from '@nti/lib-store';
 import { scoped } from '@nti/lib-locale';
 
-import Day from './day';
+import Day from './Day';
 import BodyEdge from './BodyEdge';
 const { BoundaryMonitor } = Scroll;
 

@@ -5,9 +5,10 @@ import cx from 'classnames';
 
 import { DateTime, List, Presentation } from '@nti/web-commons';
 
-import { Icon } from '../../calendar/components';
+import { Icon } from '../../calendar/Icon';
 import { Layout } from '../components';
-import Registry from '../Registry';
+
+import Registry from './Registry';
 
 export class AssignmentEvent extends React.Component {
 	static propTypes = {

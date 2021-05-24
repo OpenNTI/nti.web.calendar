@@ -6,7 +6,7 @@ import cx from 'classnames';
 import { scoped } from '@nti/lib-locale';
 import { Loading } from '@nti/web-commons';
 
-import Day from './day';
+import Day from './Day';
 
 const t = scoped('nti-web-calendar.NotableEvents', {
 	emptyMessage: 'There are no upcoming events',

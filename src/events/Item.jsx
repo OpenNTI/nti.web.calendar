@@ -5,19 +5,19 @@ import { reportError } from '@nti/web-client';
 import { Error } from '@nti/web-commons';
 import { LinkTo } from '@nti/web-routing';
 
-import Registry from './Registry';
+import Registry from './renderers/Registry';
 
-const registry = Registry.getInstance();
-
-function makeContextFor(item) {
+function makeContext(item) {
 	return {
 		courseNTIID: item?.CatalogEntry?.CourseNTIID,
 	};
 }
 
-export default class EventItem extends React.Component {
+export class Item extends React.Component {
+	static displayName = 'EventItem';
+
 	static canRender(item) {
-		return !!registry.getItemFor(item.MimeType);
+		return !!Registry.hasHandler(item);
 	}
 
 	static propTypes = {
@@ -51,7 +51,7 @@ export default class EventItem extends React.Component {
 			);
 		}
 
-		const Cmp = registry.getItemFor(item.MimeType);
+		const Cmp = Registry.lookup(item);
 
 		const bins = bin.getBinsFor(item);
 		const dayIndex = bins.indexOf(bin.name);
@@ -60,7 +60,7 @@ export default class EventItem extends React.Component {
 			<LinkTo.Object
 				className="event-link"
 				object={item}
-				context={makeContextFor(item)}
+				context={makeContext(item)}
 			>
 				<Cmp
 					item={item}
