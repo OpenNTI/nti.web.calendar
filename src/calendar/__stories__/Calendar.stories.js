@@ -5,7 +5,18 @@ import { setupTestClient } from '@nti/web-client/test-utils';
 import { Calendar } from '../index.js';
 
 setupTestClient({
-	getCollection() {},
+	getBatch() {
+		return {
+			Items: [],
+		};
+	},
+	getCollection(name) {
+		// 'Calendars'
+		// 'AdminCalendars'
+		return {
+			getLink() {},
+		};
+	},
 });
 
 export default {
