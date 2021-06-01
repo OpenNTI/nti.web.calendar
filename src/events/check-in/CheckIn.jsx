@@ -184,7 +184,7 @@ NameColumn.cssClassName = TableCell;
 function NameColumn({ item }) {
 	return (
 		<TableCellText>
-			<DisplayName as={TableCellText} entity={item.User} />
+			<DisplayName entity={item.User} />
 			<br />
 			1234567890
 		</TableCellText>
