@@ -1,13 +1,13 @@
 const NAME = Symbol('Name');
 const ITEMS = Symbol('Items');
-const BINNER = Symbol('Binner');
+const GROUPER = Symbol('Grouper');
 const TODAY = Symbol('Today');
 
 class Bin {
-	constructor(name, items = [], binner, today) {
+	constructor(name, items = [], grouper, today) {
 		this[NAME] = name;
 		this[ITEMS] = items;
-		this[BINNER] = binner;
+		this[GROUPER] = grouper;
 		this[TODAY] = today;
 	}
 
@@ -33,7 +33,7 @@ class Bin {
 
 	get phantom() {
 		const { items, name } = this;
-		const binner = this[BINNER];
+		const grouper = this[GROUPER];
 		const bin = new Date(name);
 		const today = new Date(this[TODAY]);
 		const isPast = bin < today;
@@ -44,19 +44,19 @@ class Bin {
 			return false;
 		}
 
-		return !items.some(item => getBinToCheck(binner(item)) === name);
+		return !items.some(item => getBinToCheck(grouper(item)) === name);
 	}
 
-	getBinsFor(item) {
-		return this[BINNER](item);
+	getBins(item) {
+		return this[GROUPER](item);
 	}
 
 	getFirstRealEvent() {
 		const { items, name } = this;
-		const binner = this[BINNER];
+		const grouper = this[GROUPER];
 
 		for (let item of items) {
-			if (binner(item)[0] === name) {
+			if (grouper(item)[0] === name) {
 				return item;
 			}
 		}
@@ -64,12 +64,12 @@ class Bin {
 
 	getLastRealEvent() {
 		const { items, name } = this;
-		const binner = this[BINNER];
+		const grouper = this[GROUPER];
 
 		for (let i = items.length - 1; i >= 0; i--) {
 			const item = items[i];
 
-			if (binner(item)[0] === name) {
+			if (grouper(item)[0] === name) {
 				return item;
 			}
 		}
@@ -184,11 +184,11 @@ export function insertEvent(bin, event) {
 	return new Bin(
 		bin.name,
 		getUniqueEvents(newItems),
-		bin[BINNER],
+		bin[GROUPER],
 		bin[TODAY]
 	);
 }
 
-export function createBin(name, event, binner, today) {
-	return new Bin(name, event ? [event] : [], binner, today);
+export function createBin(name, event, grouper, today) {
+	return new Bin(name, event ? [event] : [], grouper, today);
 }

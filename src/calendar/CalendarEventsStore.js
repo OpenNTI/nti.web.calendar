@@ -3,7 +3,7 @@ import { Stores } from '@nti/lib-store';
 import AppDispatcher from '@nti/lib-dispatcher';
 import { Models } from '@nti/lib-interfaces';
 
-import EventBinner from '../event-binner';
+import EventGrouper from '../event-grouper';
 
 import { EVENTS } from './Store';
 import { getToday } from './util';
@@ -58,7 +58,7 @@ export default class CalendarEventsStore extends Stores.BoundStore {
 		const notBefore = getToday().getTime() / 1000;
 		let error;
 
-		this.eventBinner = this.eventBinner || new EventBinner();
+		this.eventGrouper = this.eventGrouper || new EventGrouper();
 
 		this.set({
 			loading: true,
@@ -74,11 +74,11 @@ export default class CalendarEventsStore extends Stores.BoundStore {
 				notBefore,
 			});
 
-			this.eventBinner.insertEvents(batch.Items);
+			this.eventGrouper.insertEvents(batch.Items);
 
 			this.set({
 				loading: false,
-				bins: this.eventBinner.getBins(),
+				bins: this.eventGrouper.getBins(),
 			});
 		} catch (e) {
 			this.set({

@@ -1,26 +1,26 @@
 /* eslint-env jest */
-import EventBinner from '../index';
+import EventGrouper from '../index';
 
 import { createEvent, DATES } from './utils';
 
 const { TODAY, TOMORROW, TWO_DAYS, THREE_DAYS } = DATES;
 
-describe('EventBinner', () => {
+describe('EventGrouper', () => {
 	describe('by day', () => {
-		const binner = new EventBinner();
+		const grouper = new EventGrouper();
 
 		const today = createEvent('today', TODAY.date);
 		const tomorrow = createEvent('tomorrow', TOMORROW.date);
 		const twoDays = createEvent('two days', TWO_DAYS.date);
 		const threeDays = createEvent('three days', THREE_DAYS.date);
 
-		binner.insertEvent(threeDays);
-		binner.insertEvent(tomorrow);
+		grouper.insertEvent(threeDays);
+		grouper.insertEvent(tomorrow);
 
-		binner.insertEvents([twoDays, today]);
+		grouper.insertEvents([twoDays, today]);
 
 		test('Returns the correct bins', () => {
-			const bins = binner.getBins();
+			const bins = grouper.getBins();
 
 			expect(bins.length).toEqual(4);
 
@@ -31,11 +31,11 @@ describe('EventBinner', () => {
 		});
 
 		test('getFirstEvent', () => {
-			expect(binner.getFirstEvent()).toBe(today);
+			expect(grouper.getFirstEvent()).toBe(today);
 		});
 
 		test('getLastEvent', () => {
-			expect(binner.getLastEvent()).toBe(threeDays);
+			expect(grouper.getLastEvent()).toBe(threeDays);
 		});
 	});
 });

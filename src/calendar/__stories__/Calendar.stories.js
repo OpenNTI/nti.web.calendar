@@ -5,17 +5,11 @@ import { setupTestClient } from '@nti/web-client/test-utils';
 import { Calendar } from '../index.js';
 
 setupTestClient({
-	capabilities: { canChat: true },
-	getUserPreferences() {
-		return {
-			addListener() {},
-			get() {},
-		};
-	},
+	getCollection() {},
 });
 
 export default {
-	title: 'Calendar',
+	title: 'Panels/Calendar',
 	component: Calendar,
 };
 

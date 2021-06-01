@@ -3,7 +3,7 @@ import { Stores } from '@nti/lib-store';
 import AppDispatcher from '@nti/lib-dispatcher';
 import { Events } from '@nti/web-session';
 
-import EventBinner from '../event-binner';
+import EventGrouper from '../event-grouper';
 import CalendarsStore from '../calendars/Store';
 
 import { getToday } from './util';
@@ -19,7 +19,7 @@ export const EVENTS = {
 	ENROLLMENT_CHANGED: 'Course-Enrollment-Changed',
 };
 
-function getMimeTypeFor(calendar) {
+function getMimeType(calendar) {
 	if (
 		calendar.MimeType ===
 		'application/vnd.nextthought.courseware.coursecalendar'
@@ -120,26 +120,26 @@ export default class CalendarStore extends Stores.BoundStore {
 	};
 
 	handleCreated = calendarEvent => {
-		this.eventBinner.insertEvents([calendarEvent]);
+		this.eventGrouper.insertEvents([calendarEvent]);
 
 		this.set({
-			bins: this.eventBinner.getBins(false),
+			bins: this.eventGrouper.getBins(false),
 		});
 	};
 
 	handleChanged = async calendarEvent => {
-		await this.eventBinner.updateEvent(calendarEvent);
+		await this.eventGrouper.updateEvent(calendarEvent);
 
 		this.set({
-			bins: this.eventBinner.getBins(false),
+			bins: this.eventGrouper.getBins(false),
 		});
 	};
 
 	handleDeleted = calendarEvent => {
-		this.eventBinner.removeEvent(calendarEvent);
+		this.eventGrouper.removeEvent(calendarEvent);
 
 		this.set({
-			bins: this.eventBinner.getBins(false),
+			bins: this.eventGrouper.getBins(false),
 		});
 	};
 
@@ -209,7 +209,7 @@ export default class CalendarStore extends Stores.BoundStore {
 	async loadInitialBatch() {
 		const collection = this.collection;
 
-		this.eventBinner = new EventBinner(null, true);
+		this.eventGrouper = new EventGrouper(null, true);
 
 		if (!collection) {
 			return;
@@ -251,14 +251,14 @@ export default class CalendarStore extends Stores.BoundStore {
 
 			const hasMore = batch.FilteredTotalItemCount >= batchSize;
 
-			this.eventBinner.insertEvents(batch.Items, hasMore);
+			this.eventGrouper.insertEvents(batch.Items, hasMore);
 
 			this.set({
 				hasNext: hasMore,
 				hasPrev: true,
 				loading: false,
 				loaded: true,
-				bins: this.eventBinner.getBins(true, hasMore),
+				bins: this.eventGrouper.getBins(true, hasMore),
 				canCreate,
 			});
 		} catch (e) {
@@ -289,12 +289,12 @@ export default class CalendarStore extends Stores.BoundStore {
 
 		const hasPrev = batch.FilteredTotalItemCount >= batchSize;
 
-		this.eventBinner.insertEvents(batch.Items);
+		this.eventGrouper.insertEvents(batch.Items);
 
 		this.set({
 			batchStartPrev: this.get('batchStartPrev') + this.get('batchSize'),
 			prevLoading: false,
-			bins: this.eventBinner.getBins(hasPrev, this.get('hasNext')),
+			bins: this.eventGrouper.getBins(hasPrev, this.get('hasNext')),
 			hasPrev,
 		});
 	}
@@ -317,12 +317,12 @@ export default class CalendarStore extends Stores.BoundStore {
 
 		const hasMore = batch.FilteredTotalItemCount >= batchSize;
 
-		this.eventBinner.insertEvents(batch.Items);
+		this.eventGrouper.insertEvents(batch.Items);
 
 		this.set({
 			batchStartNext: this.get('batchStartNext') + batchSize,
 			nextLoading: false,
-			bins: this.eventBinner.getBins(this.get('hasPrev'), hasMore),
+			bins: this.eventGrouper.getBins(this.get('hasPrev'), hasMore),
 			hasNext: hasMore,
 		});
 	}
@@ -398,7 +398,7 @@ export default class CalendarStore extends Stores.BoundStore {
 		try {
 			const service = await getService();
 			const newData = {
-				MimeType: getMimeTypeFor(calendar),
+				MimeType: getMimeType(calendar),
 				title,
 				description,
 				location,

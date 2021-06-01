@@ -1,9 +1,9 @@
 import { day } from './Constants';
-import { getBinner } from './binners';
+import { getGrouper } from './groupers';
 import { createBin, insertEvent } from './Bin';
 
 const BY = Symbol('By');
-const BINNER = Symbol('Binner');
+const GROUPER = Symbol('Grouper');
 const BINS = Symbol('Bins');
 const TODAY_BIN = Symbol('Today Bin');
 
@@ -20,14 +20,14 @@ function trimTrailingPhantoms(bins) {
 	return reversed.slice(firstNonPhantomIndex).reverse();
 }
 
-export default class EventBinner {
+export default class EventGrouper {
 	static day = day;
 
 	constructor(by, insertToday) {
 		this[BY] = by;
-		this[BINNER] = getBinner(by);
 		this[BINS] = {};
-		this[TODAY_BIN] = this[BINNER]({
+		this[GROUPER] = getGrouper(by);
+		this[TODAY_BIN] = this[GROUPER]({
 			getStartTime: () => new Date(),
 			getEndTime: () => {},
 		})[0];
@@ -37,7 +37,7 @@ export default class EventBinner {
 			this[BINS][this[TODAY_BIN]] = createBin(
 				this[TODAY_BIN],
 				null,
-				this[BINNER],
+				this[GROUPER],
 				this[TODAY_BIN]
 			);
 		}
@@ -102,7 +102,7 @@ export default class EventBinner {
 			throw new Error('Invalid Event Inserted');
 		}
 
-		const bins = this[BINNER](event);
+		const bins = this[GROUPER](event);
 
 		for (let bin of bins) {
 			const existing = this[BINS][bin];
@@ -113,7 +113,7 @@ export default class EventBinner {
 				this[BINS][bin] = createBin(
 					bin,
 					event,
-					this[BINNER],
+					this[GROUPER],
 					this[TODAY_BIN]
 				);
 			}

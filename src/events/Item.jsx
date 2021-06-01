@@ -53,7 +53,7 @@ export class Item extends React.Component {
 
 		const Cmp = Registry.lookup(item);
 
-		const bins = bin.getBinsFor(item);
+		const bins = bin.getBins(item);
 		const dayIndex = bins.indexOf(bin.name);
 
 		return (
