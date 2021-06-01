@@ -1,16 +1,22 @@
 import React from 'react';
 
-import { Table, Text, Search } from '@nti/web-commons';
+import {
+	Table,
+	Text,
+	Search,
+	DateTime,
+	DisplayName,
+	Button,
+} from '@nti/web-commons';
+
+import { Title } from './parts';
 
 //#region 🎨 paint
 
-const defaultAs = tag => props => ({
-	...props,
-	as: props.as || tag,
-});
-
 const Box = styled.div`
+	background: white;
 	padding: 0 35px;
+	text-align: center;
 `;
 
 const ActionPrompt = styled.div`
@@ -21,19 +27,6 @@ const ActionPrompt = styled.div`
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-`;
-
-const Title = styled(Text.Base).attrs(defaultAs('h1'))`
-	color: var(--primary-grey);
-	font-size: 22px;
-	font-weight: 300;
-	line-height: 30px;
-	margin: 0;
-	padding: 0;
-	&.invert {
-		letter-spacing: -0.4px;
-		color: #fff;
-	}
 `;
 
 const Actions = styled.div`
@@ -53,6 +46,7 @@ const Action = styled(Text.Base).attrs({ as: 'button' })`
 	border-radius: 3.75px;
 	background: #fff;
 	box-shadow: 0 2px 24px 0 #30397c;
+	cursor: pointer;
 `;
 
 const TitleBar = styled.div`
@@ -61,6 +55,83 @@ const TitleBar = styled.div`
 	align-items: baseline;
 	justify-content: space-between;
 	margin: 18px 21px 18px 0;
+`;
+
+const Attendance = styled(Table.Panel)`
+	margin: 0 0 18px;
+
+	& tr:hover td {
+		background: var(--table-row-highlight);
+	}
+`;
+
+const TableCell = css`
+	padding: 4px;
+	text-align: left;
+
+	td& {
+		cursor: pointer;
+		font-size: 0;
+		line-height: 0;
+		height: 44px;
+		border-top: 1px solid var(--border-grey-light);
+	}
+`;
+
+const TableCellText = styled(Text.Base)`
+	color: var(--primary-grey);
+	font-size: 10px;
+	line-height: 1.4;
+`;
+
+const MoreChildrenPropMap = ({ children, ...props }) => ({
+	...props,
+	plain: true,
+	children: <span>{children}</span>,
+});
+
+const More = styled(Button).attrs(MoreChildrenPropMap)`
+	display: inline-flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	min-height: 35px;
+	min-width: 110px;
+	border: 1px solid var(--button-border);
+	border-radius: 17.5px;
+	background-color: #fff;
+	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.07);
+	font-size: 10px;
+	color: var(--primary-grey);
+	cursor: pointer;
+	margin: 0 auto 15px;
+
+	& > span {
+		position: relative;
+
+		&::before,
+		&::after {
+			content: '';
+			position: absolute;
+			opacity: 0.33;
+			width: 0;
+			height: 0;
+			border-left: 3px solid transparent;
+			border-right: 3px solid transparent;
+			border-top: 4px solid #000;
+			top: 0;
+		}
+
+		&::before {
+			left: 0;
+			transform: translate(-15px, 5px);
+		}
+
+		&::after {
+			right: 0;
+			transform: translate(15px, 5px);
+		}
+	}
 `;
 
 //#endregion
@@ -96,22 +167,53 @@ export function CheckIn(props) {
 				/>
 			</TitleBar>
 
-			<Table.Panel
-				items={[1, 2, 3]}
+			<Attendance
+				items={Array.from({ length: 5 }).map(fakeEventAttendance)}
 				columns={[NameColumn, CheckInTimeColumn]}
+				onRowClick={item => console.log(item)}
 			/>
+
+			<More>View All</More>
 		</Box>
 	);
 }
 
 NameColumn.Name = 'Name';
 NameColumn.SortKey = 'Name';
+NameColumn.cssClassName = TableCell;
 function NameColumn({ item }) {
-	return <>{item}</>;
+	return (
+		<TableCellText>
+			<DisplayName as={TableCellText} entity={item.User} />
+			<br />
+			1234567890
+		</TableCellText>
+	);
 }
 
 CheckInTimeColumn.Name = 'Check-in Time';
-CheckInTimeColumn.SortKey = 'CheckInTime';
+CheckInTimeColumn.SortKey = 'registrationTime';
+CheckInTimeColumn.cssClassName = TableCell;
 function CheckInTimeColumn({ item }) {
-	return <>{item}</>;
+	return (
+		<>
+			<DateTime
+				as={TableCellText}
+				date={item.getRegistrationTime()}
+				format={DateTime.TIME}
+			/>
+		</>
+	);
+}
+
+function fakeEventAttendance(_, n) {
+	const date = new Date();
+	return {
+		User: {
+			displayName: 'User ' + (n + 1),
+		},
+		getRegistrationTime() {
+			return date;
+		},
+	};
 }

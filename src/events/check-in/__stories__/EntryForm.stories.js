@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 
 import { setupTestClient } from '@nti/web-client/test-utils';
 
-import { CheckIn } from '../CheckIn';
+import { EntryForm } from '../EntryForm';
 
 const Container = styled.div`
 	width: 689px;
@@ -12,15 +12,15 @@ const Container = styled.div`
 setupTestClient({});
 
 export default {
-	title: 'Check-in',
-	component: CheckIn,
+	title: 'Check-in/Entry Form',
+	component: EntryForm,
 };
 
 export function Main() {
 	return (
 		<Container>
 			<Suspense fallback={<div />}>
-				<CheckIn />
+				<EntryForm />
 			</Suspense>
 		</Container>
 	);
