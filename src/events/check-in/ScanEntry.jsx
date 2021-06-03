@@ -2,6 +2,8 @@ import React from 'react';
 
 import { Text } from '@nti/web-commons';
 
+import icon from './assets/qr_icon.svg';
+
 //#region 🎨 paint
 
 const Box = styled.div`
@@ -42,7 +44,7 @@ const Input = styled('input').attrs({})`
 export function ScanEntry(props) {
 	return (
 		<Box>
-			<img width="84" height="84" />
+			<img width="83" height="84" src={icon} />
 			<Instruction>Scan your QR code using your reader…</Instruction>
 			<Input placeholder="Or click to manually enter" />
 		</Box>
