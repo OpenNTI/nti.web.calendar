@@ -170,7 +170,9 @@ export function CheckIn(props) {
 			<Attendance
 				items={Array.from({ length: 5 }).map(fakeEventAttendance)}
 				columns={[NameColumn, CheckInTimeColumn]}
-				onRowClick={item => console.log(item)}
+				onRowClick={item => {
+					/* fill in */
+				}}
 			/>
 
 			<More>View All</More>
