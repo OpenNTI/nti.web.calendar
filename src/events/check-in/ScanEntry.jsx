@@ -1,28 +1,9 @@
 import React from 'react';
 
-import { Text } from '@nti/web-commons';
-
 import icon from './assets/qr_icon.svg';
+import { Box, SubTitle } from './parts.jsx';
 
 //#region 🎨 paint
-
-const Box = styled.div`
-	background: white;
-	padding: 21.74% 0 0;
-	text-align: center;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-`;
-
-const Instruction = styled(Text.Base)`
-	color: var(--primary-grey);
-	font-size: 14px;
-	font-weight: bold;
-	letter-spacing: 0;
-	line-height: 19px;
-	margin: 37px 0;
-`;
 
 const Input = styled('input').attrs({})`
 	border: 0;
@@ -45,7 +26,7 @@ export function ScanEntry(props) {
 	return (
 		<Box>
 			<img width="83" height="84" src={icon} />
-			<Instruction>Scan your QR code using your reader…</Instruction>
+			<SubTitle>Scan your QR code using your reader…</SubTitle>
 			<Input placeholder="Or click to manually enter" />
 		</Box>
 	);

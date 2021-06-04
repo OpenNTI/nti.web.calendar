@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { Button as ButtonBase, Text } from '@nti/web-commons';
+import { Text } from '@nti/web-commons';
 
-import { Title } from './parts';
+import { Button, Title } from './parts';
 
 //#region 🎨 paint
 
@@ -56,24 +56,19 @@ function DecoratedInput({ className, required, label, ...props }) {
 	);
 }
 
-const Button = styled(ButtonBase)`
-	padding: 17px 42px;
-
-	&&&.text {
-		padding: 17px 21px;
-		border: 0;
-		background: none;
-		box-shadow: none;
-	}
-`;
-
 const Spacer = styled.span`
 	flex: 1 1 auto;
 `;
+
 const Controls = styled.div`
 	margin-top: 100px;
 	display: flex;
 	flex-direction: row-reverse;
+	align-items: baseline;
+
+	${Button} {
+		font-size: 14px;
+	}
 
 	& > :not(${Spacer}) {
 		flex: 0 0 auto;
