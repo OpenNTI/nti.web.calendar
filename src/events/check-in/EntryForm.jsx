@@ -8,6 +8,7 @@ import { Button, Title } from './parts';
 
 const Box = styled.div`
 	background: white;
+	padding: 34px 30px;
 `;
 
 const TitleArea = styled.div`
