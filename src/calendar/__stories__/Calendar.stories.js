@@ -1,23 +1,8 @@
 import { Suspense } from 'react';
 
-import { setupTestClient } from '@nti/web-client/test-utils';
+import { useRealService } from '@nti/web-client/storybook-utils';
 
 import { Calendar } from '../index.js';
-
-setupTestClient({
-	getBatch() {
-		return {
-			Items: [],
-		};
-	},
-	getCollection(name) {
-		// 'Calendars'
-		// 'AdminCalendars'
-		return {
-			getLink() {},
-		};
-	},
-});
 
 export default {
 	title: 'Panels/Calendar',
@@ -25,6 +10,7 @@ export default {
 };
 
 export function Test() {
+	useRealService();
 	return (
 		<Suspense fallback={<div />}>
 			<Calendar />

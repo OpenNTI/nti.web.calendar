@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 
-import { setupTestClient } from '@nti/web-client/test-utils';
+import { useMockService } from '@nti/web-client/storybook-utils';
 
 import { Success } from '../Success';
 
@@ -9,14 +9,13 @@ const Container = styled.div`
 	margin: 10px auto;
 `;
 
-setupTestClient({});
-
 export default {
 	title: 'Check-in/Success',
 	component: Success,
 };
 
 export function Main() {
+	useMockService();
 	return (
 		<Container>
 			<Suspense fallback={<div />}>
