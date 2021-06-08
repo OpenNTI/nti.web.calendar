@@ -1,0 +1,60 @@
+{
+	"CatalogEntryNTIID": "tag:nextthought.com,2011-10:NTI-CourseInfo-3264538382811988401_4744546692157623729",
+	"Class": "CourseCalendarEvent",
+	"ContainerId": "tag:nextthought.com,2011-10:system-OID-0x0922eb:5573657273",
+	"CreatedTime": 1621439360.285318,
+	"Creator": "jonathan",
+	"ID": "Foobar",
+	"Last Modified": 1621439426.363378,
+	"Links": [
+		{
+			"Class": "Link",
+			"href": "/dataserver2/LibraryPath?objectId=tag%3Anextthought.com%2C2011-10%3Ajonathan-OID-0x0a43d4%3A5573657273%3Ab81qKjze9Yj",
+			"method": "GET",
+			"rel": "LibraryPath"
+		},
+		{
+			"Class": "Link",
+			"href": "/dataserver2/users/jonathan/Objects/tag%3Anextthought.com%2C2011-10%3Ajonathan-OID-0x0a43d4%3A5573657273%3Ab81qKjze9Yj",
+			"ntiid": "tag:nextthought.com,2011-10:jonathan-OID-0x0a43d4:5573657273:b81qKjze9Yj",
+			"rel": "edit"
+		},
+		{
+			"Class": "Link",
+			"href": "/dataserver2/++etc++hostsites/s00000000000000000000000000000000/++etc++site/Courses/DefaultAPICreated/1243/CourseCalendar/Foobar/EventAttendance",
+			"method": "POST",
+			"rel": "record-attendance"
+		},
+		{
+			"Class": "Link",
+			"href": "/dataserver2/users/jonathan/Objects/tag%3Anextthought.com%2C2011-10%3Ajonathan-OID-0x0a43d4%3A5573657273%3Ab81qKjze9Yj/UserSearch",
+			"ntiid": "tag:nextthought.com,2011-10:jonathan-OID-0x0a43d4:5573657273:b81qKjze9Yj",
+			"rel": "search-possible-attendees"
+		},
+		{
+			"Class": "Link",
+			"href": "mock:/dataserver2/++etc++hostsites/s00000000000000000000000000000000/++etc++site/Courses/DefaultAPICreated/1243/CourseCalendar/Foobar/EventAttendance2",
+			"method": "GET",
+			"rel": "list-attendance",
+			"result": {
+				"BatchPage": 1,
+				"Class": "CalendarEventAttendance",
+				"ItemCount": 0,
+				"Items": [],
+				"MimeType": "application/vnd.nextthought.calendar.calendareventattendance",
+				"href": "/dataserver2/++etc++hostsites/s00000000000000000000000000000000/++etc++site/Courses/DefaultAPICreated/1243/CourseCalendar/Foobar/EventAttendance?batchSize=50&batchStart=0"
+			}
+		}
+	],
+	"MimeType": "application/vnd.nextthought.courseware.coursecalendarevent",
+	"NTIID": "tag:nextthought.com,2011-10:jonathan-OID-0x0a43d4:5573657273:b81qKjze9Yj",
+	"OID": "tag:nextthought.com,2011-10:jonathan-OID-0x0a43d4:5573657273:b81qKjze9Yj",
+	"containerId": "tag:nextthought.com,2011-10:system-OID-0x0922eb:5573657273",
+	"description": null,
+	"end_time": "2021-05-19T17:00:00Z",
+	"href": "/dataserver2/users/jonathan/Objects/tag%3Anextthought.com%2C2011-10%3Ajonathan-OID-0x0a43d4%3A5573657273%3Ab81qKjze9Yj",
+	"icon": null,
+	"location": "Nowhere",
+	"start_time": "2021-05-19T16:00:00Z",
+	"title": "Foobar"
+}
