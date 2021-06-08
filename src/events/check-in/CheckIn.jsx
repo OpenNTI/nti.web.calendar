@@ -130,7 +130,11 @@ export function CheckIn({ onViewEntry, onViewLookup, event }) {
 					Select an option to check in an attendee.
 				</Title>
 				<Actions>
-					<Action onClick={onViewEntry}>Check With Code</Action>
+					<Action onClick={onViewEntry}>
+						Check-in
+						<br />
+						With Code
+					</Action>
 					<Action onClick={onViewLookup}>Lookup by Name</Action>
 					<Action>
 						Create a<br />
