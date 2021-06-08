@@ -1,13 +1,11 @@
-import React, { useCallback, useReducer } from 'react';
+import React, { useState } from 'react';
 
-import { Table, Text, Search, Button } from '@nti/web-commons';
+import { Table, Text, Search, Button, useLink } from '@nti/web-commons';
 
-import { Title } from './parts';
+import { SubTitle, Title } from './parts';
 import { NameColumn, CheckInTimeColumn } from './columns';
-import { ScanEntry } from './ScanEntry';
-import { Search as UserLookup } from './Search';
 
-const BASIC_STATE = (state, action) => ({ ...state, ...action });
+/** @typedef {import('@nti/lib-interfaces/src/models/calendar').EventAttendance} EventAttendance */
 
 //#region 🎨 paint
 
@@ -113,28 +111,18 @@ const More = styled(Button).attrs(MoreChildrenPropMap)`
 	}
 `;
 
+const Empty = styled(SubTitle)`
+	&& {
+		color: var(--tertiary-grey);
+	}
+`;
+
 //#endregion
 
-export function CheckIn(props) {
-	const [{ state }, dispatch] = useReducer(BASIC_STATE, { state: 'main' });
-	const viewMain = useCallback(() => dispatch({ state: 'main' }), []);
-	const viewEntry = useCallback(() => dispatch({ state: 'entry' }), []);
-	const viewLookup = useCallback(() => dispatch({ state: 'lookup' }), []);
-
-	switch (state) {
-		default:
-		case 'main':
-			return <Main onViewEntry={viewEntry} onViewLookup={viewLookup} />;
-
-		case 'entry':
-			return <ScanEntry onClose={viewMain} />;
-
-		case 'lookup':
-			return <UserLookup onClose={viewMain} />;
-	}
-}
-
-function Main({ onViewEntry, onViewLookup }) {
+export function CheckIn({ onViewEntry, onViewLookup, event }) {
+	/** @type {EventAttendance} (attendance) */
+	const [search, setSearch] = useState();
+	const attendance = useLink(event, 'list-attendance', { search });
 	return (
 		<Box>
 			<ActionPrompt>
@@ -152,23 +140,30 @@ function Main({ onViewEntry, onViewLookup }) {
 			</ActionPrompt>
 
 			<TitleBar>
-				<Title>Checked-In Attendees (27)</Title>
+				<Title>Checked-In Attendees ({attendance.ItemCount})</Title>
 				<Search
 					className={css`
 						max-width: 200px;
 					`}
+					delay={500}
+					value={search}
+					onChange={setSearch}
 				/>
 			</TitleBar>
 
-			<Attendance
-				items={Array.from({ length: 5 }).map(fakeEventAttendance)}
-				columns={[NameColumn, CheckInTimeColumn]}
-				onRowClick={item => {
-					/* fill in */
-				}}
-			/>
+			{!attendance.empty ? (
+				<Attendance
+					items={attendance.Items.map(fakeEventAttendance)}
+					columns={[NameColumn, CheckInTimeColumn]}
+					onRowClick={item => {
+						/* fill in */
+					}}
+				/>
+			) : (
+				<Empty>No Check-ins yet</Empty>
+			)}
 
-			<More>View All</More>
+			{attendance.hasMore && <More>View All</More>}
 		</Box>
 	);
 }
