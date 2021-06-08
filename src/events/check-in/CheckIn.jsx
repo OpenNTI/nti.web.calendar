@@ -1,15 +1,13 @@
-import React from 'react';
+import React, { useCallback, useReducer } from 'react';
 
-import {
-	Table,
-	Text,
-	Search,
-	DateTime,
-	DisplayName,
-	Button,
-} from '@nti/web-commons';
+import { Table, Text, Search, Button } from '@nti/web-commons';
 
 import { Title } from './parts';
+import { NameColumn, CheckInTimeColumn } from './columns';
+import { ScanEntry } from './ScanEntry';
+import { Search as UserLookup } from './Search';
+
+const BASIC_STATE = (state, action) => ({ ...state, ...action });
 
 //#region 🎨 paint
 
@@ -65,25 +63,6 @@ const Attendance = styled(Table.Panel)`
 	}
 `;
 
-const TableCell = css`
-	padding: 4px;
-	text-align: left;
-
-	td& {
-		cursor: pointer;
-		font-size: 0;
-		line-height: 0;
-		height: 44px;
-		border-top: 1px solid var(--border-grey-light);
-	}
-`;
-
-const TableCellText = styled(Text.Base)`
-	color: var(--primary-grey);
-	font-size: 10px;
-	line-height: 1.4;
-`;
-
 const MoreChildrenPropMap = ({ children, ...props }) => ({
 	...props,
 	plain: true,
@@ -137,6 +116,25 @@ const More = styled(Button).attrs(MoreChildrenPropMap)`
 //#endregion
 
 export function CheckIn(props) {
+	const [{ state }, dispatch] = useReducer(BASIC_STATE, { state: 'main' });
+	const viewMain = useCallback(() => dispatch({ state: 'main' }), []);
+	const viewEntry = useCallback(() => dispatch({ state: 'entry' }), []);
+	const viewLookup = useCallback(() => dispatch({ state: 'lookup' }), []);
+
+	switch (state) {
+		default:
+		case 'main':
+			return <Main onViewEntry={viewEntry} onViewLookup={viewLookup} />;
+
+		case 'entry':
+			return <ScanEntry onClose={viewMain} />;
+
+		case 'lookup':
+			return <UserLookup onClose={viewMain} />;
+	}
+}
+
+function Main({ onViewEntry, onViewLookup }) {
 	return (
 		<Box>
 			<ActionPrompt>
@@ -144,13 +142,8 @@ export function CheckIn(props) {
 					Select an option to check in an attendee.
 				</Title>
 				<Actions>
-					<Action>Scan a QR code</Action>
-					<Action>
-						Manually Enter
-						<br />
-						Licence Number
-					</Action>
-					<Action>Lookup by Name</Action>
+					<Action onClick={onViewEntry}>Check With Code</Action>
+					<Action onClick={onViewLookup}>Lookup by Name</Action>
 					<Action>
 						Create a<br />
 						New Account
@@ -177,34 +170,6 @@ export function CheckIn(props) {
 
 			<More>View All</More>
 		</Box>
-	);
-}
-
-NameColumn.Name = 'Name';
-NameColumn.SortKey = 'Name';
-NameColumn.cssClassName = TableCell;
-function NameColumn({ item }) {
-	return (
-		<TableCellText>
-			<DisplayName entity={item.User} />
-			<br />
-			1234567890
-		</TableCellText>
-	);
-}
-
-CheckInTimeColumn.Name = 'Check-in Time';
-CheckInTimeColumn.SortKey = 'registrationTime';
-CheckInTimeColumn.cssClassName = TableCell;
-function CheckInTimeColumn({ item }) {
-	return (
-		<>
-			<DateTime
-				as={TableCellText}
-				date={item.getRegistrationTime()}
-				format={DateTime.TIME}
-			/>
-		</>
 	);
 }
 

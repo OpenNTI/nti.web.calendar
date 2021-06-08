@@ -28,6 +28,7 @@ export const SubTitle = styled(Text.Base)`
 `;
 
 export const Box = styled.div`
+	position: relative;
 	background: white;
 	padding: 21.74% 0 0;
 	text-align: center;
