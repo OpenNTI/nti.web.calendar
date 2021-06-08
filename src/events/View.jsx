@@ -5,7 +5,7 @@ import { isFlag } from '@nti/web-client';
 
 import Editor from './editor/EventEditor';
 
-const CheckIn = React.lazy(async () => import('./check-in/View'));
+const CheckIn = React.lazy(() => import('./check-in/View'));
 
 View.propTypes = {
 	event: PropTypes.object,

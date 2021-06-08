@@ -5,9 +5,7 @@ import { NavigationStackContext } from '@nti/web-routing';
 import { CheckIn } from './CheckIn';
 import { Search as UserLookup } from './Search';
 // Lazy load
-const ScanEntry = React.lazy(
-	async () => (await import('./ScanEntry')).ScanEntry
-);
+const ScanEntry = React.lazy(() => import('./ScanEntry'));
 
 const BASIC_STATE = (state, action) => ({ ...state, ...action });
 

@@ -32,6 +32,9 @@ const Video = styled.video`
 
 //#endregion
 
+//react.lazy only supports default exports...so make one
+export default ScanEntry;
+
 export function ScanEntry(props) {
 	const videoRef = useRef();
 	const inputRef = useRef();
