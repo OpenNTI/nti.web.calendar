@@ -11,7 +11,7 @@ import { NameColumn, CheckInTimeColumn } from './columns';
 
 const Box = styled.div`
 	background: white;
-	padding: 0 35px;
+	padding: 0 35px 35px;
 	text-align: center;
 `;
 
