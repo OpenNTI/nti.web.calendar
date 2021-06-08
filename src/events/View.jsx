@@ -11,12 +11,15 @@ View.propTypes = {
 	event: PropTypes.object,
 	dialog: PropTypes.bool,
 	controls: PropTypes.bool,
+	editable: PropTypes.bool,
 };
 export function View(props) {
-	const { event, controls } = props;
+	const { event, controls, dialog, editable } = props;
 	const showCheckIn =
 		event.hasLink('list-attendance') &&
 		!controls &&
+		!dialog &&
+		!editable &&
 		isFlag('event-check-ins');
 	const Viewer = showCheckIn ? CheckIn : Editor;
 	return (
