@@ -10,11 +10,11 @@ const Container = styled.div`
 `;
 
 export default {
-	title: 'Check-in/Entry Form',
+	title: 'Check-in/Screens/Form',
 	component: EntryForm,
 };
 
-export function Main() {
+export function Form() {
 	useMockService();
 	return (
 		<Container>

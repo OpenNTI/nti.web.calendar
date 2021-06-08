@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 
 import { useMockService } from '@nti/web-client/storybook-utils';
 
-import { Success } from '../Success';
+import { Success as Screen } from '../Success';
 
 const Container = styled.div`
 	width: 689px;
@@ -10,16 +10,16 @@ const Container = styled.div`
 `;
 
 export default {
-	title: 'Check-in/Success',
-	component: Success,
+	title: 'Check-in/Screens/Success',
+	component: Screen,
 };
 
-export function Main() {
+export function Success() {
 	useMockService();
 	return (
 		<Container>
 			<Suspense fallback={<div />}>
-				<Success />
+				<Screen />
 			</Suspense>
 		</Container>
 	);

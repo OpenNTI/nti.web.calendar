@@ -10,11 +10,11 @@ const Container = styled.div`
 `;
 
 export default {
-	title: 'Check-in/Scan Entry',
+	title: 'Check-in/Screens/Scanning',
 	component: ScanEntry,
 };
 
-export function Main() {
+export function Scanning() {
 	useMockService();
 	return (
 		<Container>

@@ -10,7 +10,7 @@ const Container = styled.div`
 `;
 
 export default {
-	title: 'Check-in',
+	title: 'Check-in/Screens/Main',
 	component: CheckIn,
 };
 
