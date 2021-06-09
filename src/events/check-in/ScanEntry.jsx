@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import QrcodeDecoder from 'qrcode-decoder';
 
 import icon from './assets/qr_icon.svg';
-import { Box, SubTitle } from './parts.jsx';
+import { CenteredBox as Box, SubTitle } from './parts.jsx';
 
 //#region 🎨 paint
 
@@ -10,7 +10,7 @@ const Input = styled('input').attrs({})`
 	border: 0;
 	padding: 4px 0;
 	text-align: center;
-	color: var(--primary-grey);
+	color: currentColor;
 	border-bottom: 1px solid var(--primary-blue);
 	font-size: 14px;
 	line-height: 19px;
@@ -22,10 +22,8 @@ const Input = styled('input').attrs({})`
 `;
 
 const Video = styled.video`
+	inset: 0;
 	position: absolute;
-	left: 0;
-	right: 0;
-	top: 0;
 	opacity: 0.5;
 	width: 100%;
 `;

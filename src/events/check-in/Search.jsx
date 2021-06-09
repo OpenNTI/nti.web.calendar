@@ -2,12 +2,9 @@ import React from 'react';
 
 import { Search as SearchInput } from '@nti/web-commons';
 
-//#region 🎨 paint
+import { Box } from './parts';
 
-const Box = styled.div`
-	background: white;
-	padding: 34px 30px;
-`;
+//#region 🎨 paint
 
 const SearchBox = styled(SearchInput.Inverted)`
 	margin: 0;

@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { Box as BoxBase, Button, SubTitle } from './parts';
+import { CenteredBox as BoxBase, Button, SubTitle } from './parts';
 import icon from './assets/check.svg';
 
 const Box = styled(BoxBase)`
-	padding: 14.515% 0 0;
+	padding-top: 14.515%;
 `;
 
 export function Success(props) {

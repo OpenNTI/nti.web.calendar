@@ -2,19 +2,13 @@ import React from 'react';
 
 import { Text } from '@nti/web-commons';
 
-import { Button, Title } from './parts';
+import { Button, Box, Title, TitleBar } from './parts';
 
 //#region 🎨 paint
 
-const Box = styled.div`
-	background: white;
-	padding: 34px 30px;
-`;
-
-const TitleArea = styled.div`
-	display: flex;
+const TitleArea = styled(TitleBar)`
 	align-items: flex-start;
-	justify-content: space-between;
+	padding: 0;
 `;
 
 const Required = styled('span').attrs({ children: '*' })`
