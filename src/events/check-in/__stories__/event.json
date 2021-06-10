@@ -39,8 +39,25 @@
 			"result": {
 				"BatchPage": 1,
 				"Class": "CalendarEventAttendance",
-				"ItemCount": 0,
-				"Items": [],
+				"ItemCount": 2,
+				"Items": [
+					{
+						"MimeType": "application/vnd.nextthought.calendar.usercalendareventattendance",
+						"User": {
+							"MimeType": "application/vnd.nextthought.user",
+							"alias": "User 1"
+						},
+						"registrationTime": "2021-05-19T16:00:00Z"
+					},
+					{
+						"MimeType": "application/vnd.nextthought.calendar.usercalendareventattendance",
+						"User": {
+							"MimeType": "application/vnd.nextthought.user",
+							"alias": "User 2"
+						},
+						"registrationTime": 1621439426.363378
+					}
+				],
 				"MimeType": "application/vnd.nextthought.calendar.calendareventattendance",
 				"href": "/dataserver2/++etc++hostsites/s00000000000000000000000000000000/++etc++site/Courses/DefaultAPICreated/1243/CourseCalendar/Foobar/EventAttendance?batchSize=50&batchStart=0"
 			}
