@@ -11,7 +11,6 @@ export const TableCell = css`
 		font-size: 0;
 		line-height: 0;
 		height: 44px;
-		border-top: 1px solid var(--border-grey-light);
 	}
 `;
 

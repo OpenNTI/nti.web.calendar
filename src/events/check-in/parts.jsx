@@ -63,7 +63,7 @@ export const SubTitle = styled(Text.Base)`
 	font-weight: bold;
 	letter-spacing: 0;
 	line-height: 19px;
-	margin: 37px 0;
+	margin: 35px 0;
 `;
 
 //#endregion
@@ -140,7 +140,25 @@ export const More = styled(Button).attrs(MoreChildrenPropMap)`
 //#region Table
 
 export const Table = styled(TableSpec.Panel)`
-	margin: 0 0 18px;
+	margin: 25px 0 18px;
+
+	th:global(.nti-table-simple-header) div {
+		color: inherit;
+	}
+
+	thead > tr > th {
+		color: var(--primary-grey);
+	}
+
+	tbody > tr > td {
+		border-top: 1px solid var(--border-grey-light);
+	}
+
+	&.capped {
+		tbody > tr:last-child > td {
+			border-bottom: 1px solid var(--border-grey-light);
+		}
+	}
 
 	& tr:hover td {
 		background: var(--table-row-highlight);
@@ -149,6 +167,8 @@ export const Table = styled(TableSpec.Panel)`
 
 export const Empty = styled(SubTitle)`
 	color: var(--tertiary-grey);
+	display: block;
+	text-align: center;
 `;
 
 //#endregion
