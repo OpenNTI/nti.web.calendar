@@ -36,9 +36,9 @@ export default function View(props) {
 			);
 
 		case 'entry':
-			return <ScanEntry onClose={viewMain} {...props} />;
+			return <ScanEntry {...props} />;
 
 		case 'lookup':
-			return <UserLookup onClose={viewMain} {...props} />;
+			return <UserLookup {...props} />;
 	}
 }
