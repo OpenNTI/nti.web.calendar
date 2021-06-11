@@ -2,8 +2,6 @@ import React, { useContext } from 'react';
 
 import { Avatar, DateTime, DisplayName, Text } from '@nti/web-commons';
 
-import { Button } from './parts.jsx';
-
 /** @typedef {import('@nti/lib-interfaces').Models.entities.User} User */
 /** @typedef {import('@nti/lib-interfaces').Models.calendar.EventAttendanceRecord} EventAttendanceRecord */
 
@@ -27,6 +25,12 @@ export const TableCell = css`
 	}
 `;
 
+const Flex = styled.div`
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+`;
+
 export const TableCellText = styled(Text.Base)`
 	color: var(--primary-grey);
 	font-size: 10px;
@@ -34,20 +38,59 @@ export const TableCellText = styled(Text.Base)`
 `;
 //#endregion
 
-//#region Name Column
+//#region Avatar Column
 /**
  * @param {Object} props
  * @param {User} props.item
  * @returns {JSX.Element}
  */
-export function NameColumn({ item }) {
+export const AvatarColumn = styled(Flex).attrs(AvatarColumnMapper)`
+	width: 48px;
+	justify-content: center;
+
+	> * {
+		max-width: 28px;
+	}
+`;
+
+/**
+ * @param {Object} props
+ * @param {User} props.item
+ * @returns {typeof props}
+ */
+function AvatarColumnMapper({ item, ...props }) {
+	return {
+		...props,
+		children: <Avatar entity={item} rounded />,
+	};
+}
+//#endregion
+
+//#region Name Column
+/**
+ * @param {Object} props
+ * @param {boolean} [props.avatar=true]
+ * @param {User} props.item
+ * @returns {JSX.Element}
+ */
+export function NameColumn({ item, avatar = true }) {
 	const term = useContext(SearchContext);
 	return (
-		<TableCellText>
-			<DisplayName entity={item} mark={term} />
-			<br />
-			1234567890
-		</TableCellText>
+		<Flex
+			className={
+				avatar &&
+				css`
+					margin-left: -4px;
+				`
+			}
+		>
+			{avatar && <AvatarColumn item={item} />}
+			<TableCellText>
+				<DisplayName entity={item} mark={term} />
+				<br />
+				1234567890
+			</TableCellText>
+		</Flex>
 	);
 }
 NameColumn.Name = 'Name';
@@ -63,7 +106,7 @@ NameColumn.cssClassName = TableCell;
  */
 export function AttendanceRecordNameColumn({ item, ...props }) {
 	/** @type {EventAttendanceRecord} (item) */
-	return NameColumn({ item: item.User, ...props });
+	return NameColumn({ avatar: false, item: item.User, ...props });
 }
 AttendanceRecordNameColumn.Name = 'Name';
 AttendanceRecordNameColumn.SortKey = 'Name';
@@ -91,41 +134,4 @@ export function AttendanceRecordCheckInTimeColumn({ item }) {
 AttendanceRecordCheckInTimeColumn.Name = 'Check-in Time';
 AttendanceRecordCheckInTimeColumn.SortKey = 'registrationTime';
 AttendanceRecordCheckInTimeColumn.cssClassName = TableCell;
-//#endregion
-
-//#region Avatar Column
-/**
- * @param {Object} props
- * @param {User} props.item
- * @returns {JSX.Element}
- */
-export const AvatarColumn = styled('div').attrs(AvatarColumnMapper)`
-	width: 48px;
-	height: 36px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-
-	> * {
-		max-width: 28px;
-	}
-`;
-
-/**
- * @param {Object} props
- * @param {User} props.item
- * @returns {typeof props}
- */
-function AvatarColumnMapper({ item, ...props }) {
-	return {
-		...props,
-		children: <Avatar entity={item} rounded />,
-	};
-}
-//#endregion
-
-//#region Check-In Button Column
-export function CheckInColumn({ item }) {
-	return <Button>Check In</Button>;
-}
 //#endregion

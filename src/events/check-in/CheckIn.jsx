@@ -1,6 +1,6 @@
 import React, { Suspense, useEffect, useState } from 'react';
 
-import { Loading, Search, useLink, useChanges } from '@nti/web-commons';
+import { Search, useLink, useChanges } from '@nti/web-commons';
 
 import {
 	ActionPrompt,
@@ -8,6 +8,7 @@ import {
 	Action,
 	Box,
 	Empty,
+	Loading,
 	More,
 	Table,
 	Title,
@@ -27,7 +28,7 @@ export function CheckIn({ onViewEntry, onViewLookup, event }) {
 	const [count, setCount] = useState(0);
 
 	return (
-		<Box flushTop>
+		<Box centered flushTop>
 			<ActionPrompt>
 				<Title invert as="h2">
 					Select an option to check in an attendee.
@@ -58,7 +59,7 @@ export function CheckIn({ onViewEntry, onViewLookup, event }) {
 				/>
 			</TitleBar>
 
-			<Suspense fallback={<Loading.Spinner />}>
+			<Suspense fallback={<Loading />}>
 				<Attendance
 					event={event}
 					search={search}

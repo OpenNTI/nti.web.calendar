@@ -1,16 +1,14 @@
-import React, { Suspense, useState } from 'react';
+import React, { Suspense, useCallback, useContext, useState } from 'react';
 
-import { Loading, Search as SearchInput, useLink } from '@nti/web-commons';
+import { Search as SearchInput, useLink } from '@nti/web-commons';
 
-import { Box, Table } from './parts';
-import {
-	AvatarColumn,
-	NameColumn,
-	CheckInColumn,
-	SearchContext,
-} from './columns';
+import { ActionButton, Box, Empty, Loading, Table } from './parts';
+import { NameColumn, SearchContext } from './columns';
 
+/** @typedef {import('@nti/lib-interfaces/src/models/calendar').BaseEvent} CalendarEvent */
 /** @typedef {import('@nti/lib-interfaces/src/models/entities').User} User */
+
+const CheckInAction = React.createContext();
 
 //#region 🎨 paint
 
@@ -20,15 +18,38 @@ const SearchBox = styled(SearchInput.Inverted)`
 
 //#endregion
 
-export function Search(props) {
+/**
+ *
+ * @param {object} props
+ * @param {CalendarEvent} props.event
+ * @returns {JSX.Element}
+ */
+export function Search({ event }) {
 	const [search, setSearch] = useState();
+
+	const action = useCallback(
+		async user => {
+			await event.recordAttendance(user);
+		},
+		[event]
+	);
 
 	return (
 		<Box>
-			<SearchBox delay={500} value={search} onChange={setSearch} />
-			<Suspense fallback={<Loading.Spinner />}>
-				{search && <SearchResults {...props} term={search} />}
-			</Suspense>
+			<SearchBox
+				placeholder="Search..."
+				delay={500}
+				value={search}
+				onChange={setSearch}
+				autoFocus
+			/>
+			<CheckInAction.Provider value={action}>
+				<Suspense fallback={<Loading />}>
+					{search && search.length > 2 && (
+						<SearchResults event={event} term={search} />
+					)}
+				</Suspense>
+			</CheckInAction.Provider>
 		</Box>
 	);
 }
@@ -40,14 +61,35 @@ function SearchResults({ event, term }) {
 		`search-possible-attendees/${encodeURIComponent(term)}`
 	);
 
-	return (
+	const empty = !users?.length;
+
+	return !empty ? (
 		<SearchContext.Provider value={term}>
 			<Table
 				items={users}
-				columns={[AvatarColumn, NameColumn, CheckInColumn]}
+				columns={[NameColumn, CheckInColumn]}
 				capped
+				headless
 				term={term}
 			/>
 		</SearchContext.Provider>
+	) : (
+		<Empty>Not Found</Empty>
 	);
+}
+
+CheckInColumn.cssClassName = css`
+	width: 150px;
+	text-align: right;
+`;
+function CheckInColumn({ item }) {
+	const action = useContext(CheckInAction);
+	const callback = useCallback(
+		(_, finish) => {
+			finish?.hide();
+			return action(item);
+		},
+		[item, action]
+	);
+	return <ActionButton onClick={callback}>Check In</ActionButton>;
 }

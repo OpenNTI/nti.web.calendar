@@ -1,5 +1,7 @@
 import {
 	Button as ButtonBase,
+	Loading as LoadingSpecs,
+	PromiseButton,
 	Table as TableSpec,
 	Text,
 } from '@nti/web-commons';
@@ -17,6 +19,10 @@ export const Box = styled.div`
 
 	&.flush-top {
 		padding-top: 0;
+	}
+
+	&.centered {
+		text-align: center;
 	}
 `;
 
@@ -69,8 +75,8 @@ export const SubTitle = styled(Text.Base)`
 //#endregion
 
 //#region Buttons
-export const Button = styled(ButtonBase)`
-	padding: 14px 42px;
+export const Button = styled(ButtonBase, { allowAs: true })`
+	padding: 14px 42px 13px;
 	font-size: 12px;
 	line-height: 16px;
 
@@ -81,7 +87,15 @@ export const Button = styled(ButtonBase)`
 		background: none;
 		box-shadow: none;
 	}
+
+	td & {
+		padding: 10px 22px 9px;
+	}
 `;
+
+export function ActionButton(props) {
+	return <PromiseButton.IMPL {...props} as={Button} rounded />;
+}
 
 //#region More Button
 const MoreChildrenPropMap = ({ children, ...props }) => ({
@@ -146,6 +160,10 @@ export const Table = styled(TableSpec.Panel)`
 		color: inherit;
 	}
 
+	&.headless thead {
+		display: none;
+	}
+
 	thead > tr > th {
 		color: var(--primary-grey);
 	}
@@ -165,13 +183,19 @@ export const Table = styled(TableSpec.Panel)`
 	}
 `;
 
+//#endregion
+
 export const Empty = styled(SubTitle)`
 	color: var(--tertiary-grey);
 	display: block;
 	text-align: center;
 `;
 
-//#endregion
+export const Loading = () => (
+	<Empty>
+		<LoadingSpecs.Spinner />
+	</Empty>
+);
 
 //#region Hero Block
 
