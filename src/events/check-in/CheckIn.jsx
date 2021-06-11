@@ -13,7 +13,10 @@ import {
 	Title,
 	TitleBar,
 } from './parts';
-import { NameColumn, CheckInTimeColumn } from './columns';
+import {
+	AttendanceRecordNameColumn as NameColumn,
+	AttendanceRecordCheckInTimeColumn as CheckInTimeColumn,
+} from './columns';
 
 /** @typedef {import('@nti/lib-interfaces/src/models/calendar').EventAttendance} EventAttendance */
 
