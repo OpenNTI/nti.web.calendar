@@ -51,10 +51,15 @@ export function ScanEntry(props) {
 			qr.stop();
 		}
 
-		qr.decodeFromCamera(video).then(({ data }) => {
+		(async () => {
+			qr.videoConstraints.video = {
+				facingMode: 'environment',
+			};
+			const data = await qr.decodeFromCamera(video);
+
 			inputRef.current.value = data;
 			stop();
-		});
+		})();
 
 		return stop;
 	}, [videoRef.current]);
