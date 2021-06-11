@@ -12,7 +12,7 @@ const Wrapper = styled.div`
 DateIcon.propTypes = {
 	date: PropTypes.object,
 };
-export default function DateIcon(props) {
+function DateIcon(props) {
 	const { todaysCount, markSeen, hasSeen } = Store.useValue();
 
 	return (
@@ -30,3 +30,5 @@ export default function DateIcon(props) {
 		</Wrapper>
 	);
 }
+
+export default Store.compose(DateIcon);
