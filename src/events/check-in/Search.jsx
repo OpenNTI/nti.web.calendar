@@ -1,6 +1,6 @@
 import React, { Suspense, useCallback, useContext, useState } from 'react';
 
-import { Search as SearchInput, useLink } from '@nti/web-commons';
+import { Search as SearchInput, Text, useLink } from '@nti/web-commons';
 
 import { ActionButton, Box, Empty, Loading, Table } from './parts';
 import { NameColumn, SearchContext } from './columns';
@@ -26,13 +26,22 @@ const SearchBox = styled(SearchInput.Inverted)`
  */
 export function Search({ event }) {
 	const [search, setSearch] = useState();
+	const [error, setError] = useState();
 
 	const action = useCallback(
 		async user => {
-			await event.recordAttendance(user);
+			try {
+				setError(null);
+				await event.recordAttendance(user);
+			} catch (e) {
+				setError({ user, message: e.message });
+				throw e;
+			}
 		},
-		[event]
+		[event, setError]
 	);
+
+	action.error = error;
 
 	return (
 		<Box>
@@ -67,7 +76,7 @@ function SearchResults({ event, term }) {
 		<SearchContext.Provider value={term}>
 			<Table
 				items={users}
-				columns={[NameColumn, CheckInColumn]}
+				columns={[NameWithErrorColumn, CheckInColumn]}
 				capped
 				headless
 				term={term}
@@ -96,4 +105,26 @@ function CheckInColumn({ item }) {
 			Check In
 		</ActionButton>
 	);
+}
+
+const ErrorText = styled(Text.Base).attrs({ as: 'div' })`
+	color: var(--primary-red);
+	line-height: 1.1 !important;
+	font-size: 10px;
+	margin-left: 10px;
+`;
+
+NameWithErrorColumn.cssClassName = NameColumn.cssClassName;
+function NameWithErrorColumn({ item, ...props }) {
+	const { error } = useContext(CheckInAction);
+	return NameColumn({
+		...props,
+		item,
+		avatar: true,
+		additional: (
+			<>
+				{error?.user === item && <ErrorText>{error.message}</ErrorText>}
+			</>
+		),
+	});
 }

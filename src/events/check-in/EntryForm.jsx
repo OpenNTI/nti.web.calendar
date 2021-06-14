@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { Text } from '@nti/web-commons';
 
-import { Button, Box, Title, TitleBar } from './parts';
+import { ActionButton, Button, Box, Title, TitleBar } from './parts';
 
 //#region 🎨 paint
 
@@ -72,7 +72,10 @@ const Controls = styled.div`
 
 //#endregion
 
-export function EntryForm(props) {
+export function EntryForm({ item, returnView }) {
+	const readOnly = !!item;
+	const [busy, setBusy] = useState(false);
+
 	return (
 		<Box>
 			<TitleArea>
@@ -80,19 +83,55 @@ export function EntryForm(props) {
 				<img width="84" height="84" />
 			</TitleArea>
 
-			<DecoratedInput label="Full Name" required />
-			<DecoratedInput label="License Number" required />
-			<DecoratedInput label="UUID" />
-			<DecoratedInput label="Email Address" required />
+			<DecoratedInput
+				label="Full Name"
+				required
+				readOnly={readOnly}
+				value={item?.User?.realname}
+				disabled={busy}
+			/>
+			<DecoratedInput
+				label="License Number"
+				required
+				readOnly={readOnly}
+				disabled={busy}
+			/>
+			<DecoratedInput label="UUID" readOnly={readOnly} disabled={busy} />
+			<DecoratedInput
+				label="Email Address"
+				required
+				readOnly={readOnly}
+				value={item?.User?.email}
+				disabled={busy}
+			/>
+
 			<Controls>
-				<Button rounded>Save</Button>
-				<Button inverted text>
+				{!readOnly && (
+					<Button rounded disabled={busy}>
+						Save
+					</Button>
+				)}
+				<Button inverted text onClick={returnView} disabled={busy}>
 					Cancel
 				</Button>
 				<Spacer />
-				<Button inverted destructive text>
-					Delete Attendee
-				</Button>
+				{item.hasLink('delete') && (
+					<ActionButton
+						inverted
+						destructive
+						text
+						onClick={useCallback(
+							(_, finish) => {
+								setBusy(true);
+								finish?.call(returnView);
+								return item.delete();
+							},
+							[item, returnView]
+						)}
+					>
+						Delete Attendee
+					</ActionButton>
+				)}
 			</Controls>
 		</Box>
 	);

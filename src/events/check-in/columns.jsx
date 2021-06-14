@@ -50,6 +50,7 @@ export const TableCellText = styled(Text.Base)`
 export const AvatarColumn = styled(Flex).attrs(AvatarColumnMapper)`
 	width: 48px;
 	justify-content: center;
+	flex: 0 0 auto;
 
 	> * {
 		max-width: 28px;
@@ -74,9 +75,10 @@ function AvatarColumnMapper({ item, ...props }) {
  * @param {Object} props
  * @param {boolean} [props.avatar=true]
  * @param {User} props.item
+ * @param {JSX.Element} props.additional
  * @returns {JSX.Element}
  */
-export function NameColumn({ item, avatar = true }) {
+export function NameColumn({ item, avatar = true, additional }) {
 	const term = useContext(SearchContext);
 	return (
 		<Flex
@@ -93,6 +95,7 @@ export function NameColumn({ item, avatar = true }) {
 				<br />
 				1234567890
 			</TableCellText>
+			{additional}
 		</Flex>
 	);
 }

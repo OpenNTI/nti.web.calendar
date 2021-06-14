@@ -22,7 +22,7 @@ import {
 
 /** @typedef {import('@nti/lib-interfaces/src/models/calendar').EventAttendance} EventAttendance */
 
-export function CheckIn({ onViewEntry, onViewLookup, event }) {
+export function CheckIn({ onViewEntry, onViewEntryForm, onViewLookup, event }) {
 	const [search, setSearch] = useState();
 
 	// eww...
@@ -35,7 +35,7 @@ export function CheckIn({ onViewEntry, onViewLookup, event }) {
 					Select an option to check in an attendee.
 				</Title>
 				<Actions>
-					<Action onClick={onViewEntry}>
+					<Action onClick={onViewEntryForm}>
 						Check-in
 						<br />
 						With Code
@@ -69,9 +69,7 @@ export function CheckIn({ onViewEntry, onViewLookup, event }) {
 					I'm not 100% happy about this, but this seems like the cleanest
 					way to accomplish this without using a Store */
 					onCountUpdated={setCount}
-					onItemClick={item => {
-						/* fill in */
-					}}
+					onItemClick={onViewEntry}
 				/>
 			</Suspense>
 		</Box>
