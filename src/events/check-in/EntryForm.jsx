@@ -115,7 +115,7 @@ export function EntryForm({ item, returnView }) {
 					Cancel
 				</Button>
 				<Spacer />
-				{item.hasLink('delete') && (
+				{item?.hasLink('delete') && (
 					<ActionButton
 						inverted
 						destructive
