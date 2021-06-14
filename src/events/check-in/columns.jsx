@@ -1,7 +1,9 @@
-import React, { useContext } from 'react';
+import React, { useCallback, useContext } from 'react';
 import cx from 'classnames';
 
 import { Avatar, DateTime, DisplayName, Text } from '@nti/web-commons';
+
+import { ActionButton } from './parts.jsx';
 
 /** @typedef {import('@nti/lib-interfaces').Models.entities.User} User */
 /** @typedef {import('@nti/lib-interfaces').Models.calendar.EventAttendanceRecord} EventAttendanceRecord */
@@ -140,4 +142,33 @@ AttendanceRecordCheckInTimeColumn.cssClassName = cx(
 		width: 225px;
 	`
 );
+//#endregion
+
+//#region Delete Action column
+const DeleteButton = styled(ActionButton).attrs({ destructive: true })`
+	padding: 10px 15px !important;
+	line-height: 0 !important;
+`;
+
+DeleteAttendanceColumn.cssClassName = css`
+	width: 50px;
+	text-align: right;
+`;
+
+export function DeleteAttendanceColumn({ item }) {
+	return (
+		<DeleteButton
+			onClick={useCallback(
+				(_, finish) => {
+					finish?.hide();
+					return item.delete();
+				},
+				[item]
+			)}
+		>
+			<i className="icon-delete" />
+		</DeleteButton>
+	);
+}
+
 //#endregion

@@ -3,7 +3,6 @@ import React, { Suspense, useCallback, useEffect, useState } from 'react';
 import { Search, useLink, useChanges } from '@nti/web-commons';
 
 import {
-	ActionButton,
 	ActionPrompt,
 	Actions,
 	Action,
@@ -18,6 +17,7 @@ import {
 import {
 	AttendanceRecordNameColumn as NameColumn,
 	AttendanceRecordCheckInTimeColumn as CheckInTimeColumn,
+	DeleteAttendanceColumn,
 } from './columns';
 
 /** @typedef {import('@nti/lib-interfaces/src/models/calendar').EventAttendance} EventAttendance */
@@ -80,9 +80,23 @@ export function CheckIn({ onViewEntry, onViewLookup, event }) {
 
 function Attendance({ event, search, onCountUpdated, onItemClick }) {
 	const [batchSize, setPageSize] = useState();
+	const [reload, setReloadNonce] = useState();
+
 	/** @type {EventAttendance} (attendance) */
-	const attendance = useLink(event, 'list-attendance', { search, batchSize });
-	useChanges(attendance);
+	const attendance = useLink(event, 'list-attendance', {
+		reload,
+		search,
+		batchSize,
+	});
+
+	useChanges(
+		attendance,
+		useCallback((forceUpdate, ...whatChanged) => {
+			if (whatChanged.some(x => x === Symbol.for('DELETED'))) {
+				setReloadNonce({});
+			}
+		}, [])
+	);
 
 	// See above comment where we're passing the onCountUpdated in... not ideal,
 	// but better than Store boilerplate for just a COUNT
@@ -94,7 +108,7 @@ function Attendance({ event, search, onCountUpdated, onItemClick }) {
 
 	const columns = [NameColumn, CheckInTimeColumn];
 	if (attendance.Items?.some(x => x.hasLink('delete'))) {
-		columns.push(CheckOutColumn);
+		columns.push(DeleteAttendanceColumn);
 	}
 
 	return (
@@ -113,30 +127,5 @@ function Attendance({ event, search, onCountUpdated, onItemClick }) {
 				<More onClick={setMaxPageSize}>View All</More>
 			)}
 		</>
-	);
-}
-
-const DeleteButton = styled(ActionButton).attrs({ destructive: true })`
-	padding: 10px 15px !important;
-	line-height: 0 !important;
-`;
-
-CheckOutColumn.cssClassName = css`
-	width: 50px;
-	text-align: right;
-`;
-function CheckOutColumn({ item }) {
-	return (
-		<DeleteButton
-			onClick={useCallback(
-				(_, finish) => {
-					finish?.hide();
-					return item.delete();
-				},
-				[item]
-			)}
-		>
-			<i className="icon-delete" />
-		</DeleteButton>
 	);
 }
