@@ -91,5 +91,9 @@ function CheckInColumn({ item }) {
 		},
 		[item, action]
 	);
-	return <ActionButton onClick={callback}>Check In</ActionButton>;
+	return (
+		<ActionButton key={item.getID()} onClick={callback}>
+			Check In
+		</ActionButton>
+	);
 }

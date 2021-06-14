@@ -1,8 +1,9 @@
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { Suspense, useCallback, useEffect, useState } from 'react';
 
 import { Search, useLink, useChanges } from '@nti/web-commons';
 
 import {
+	ActionButton,
 	ActionPrompt,
 	Actions,
 	Action,
@@ -91,21 +92,51 @@ function Attendance({ event, search, onCountUpdated, onItemClick }) {
 
 	const setMaxPageSize = () => setPageSize(attendance.total);
 
+	const columns = [NameColumn, CheckInTimeColumn];
+	if (attendance.Items?.some(x => x.hasLink('delete'))) {
+		columns.push(CheckOutColumn);
+	}
+
 	return (
 		<>
 			{!attendance.empty ? (
 				<Table
 					items={attendance.Items}
-					columns={[NameColumn, CheckInTimeColumn]}
+					columns={columns}
 					onRowClick={onItemClick}
 				/>
 			) : (
-				<Empty>No Check-ins yet</Empty>
+				<Empty>{search ? 'Not found.' : 'No Check-ins yet'}</Empty>
 			)}
 
 			{attendance.hasMore && (
 				<More onClick={setMaxPageSize}>View All</More>
 			)}
 		</>
+	);
+}
+
+const DeleteButton = styled(ActionButton).attrs({ destructive: true })`
+	padding: 10px 15px !important;
+	line-height: 0 !important;
+`;
+
+CheckOutColumn.cssClassName = css`
+	width: 50px;
+	text-align: right;
+`;
+function CheckOutColumn({ item }) {
+	return (
+		<DeleteButton
+			onClick={useCallback(
+				(_, finish) => {
+					finish?.hide();
+					return item.delete();
+				},
+				[item]
+			)}
+		>
+			<i className="icon-delete" />
+		</DeleteButton>
 	);
 }

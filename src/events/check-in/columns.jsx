@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import cx from 'classnames';
 
 import { Avatar, DateTime, DisplayName, Text } from '@nti/web-commons';
 
@@ -133,5 +134,10 @@ export function AttendanceRecordCheckInTimeColumn({ item }) {
 }
 AttendanceRecordCheckInTimeColumn.Name = 'Check-in Time';
 AttendanceRecordCheckInTimeColumn.SortKey = 'registrationTime';
-AttendanceRecordCheckInTimeColumn.cssClassName = TableCell;
+AttendanceRecordCheckInTimeColumn.cssClassName = cx(
+	TableCell,
+	css`
+		width: 225px;
+	`
+);
 //#endregion
