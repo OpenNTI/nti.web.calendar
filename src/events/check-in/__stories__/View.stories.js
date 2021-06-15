@@ -5,8 +5,15 @@ import { NTObject } from '@nti/web-commons';
 
 import CheckIn from '../View';
 
+stylesheet`
+	body {
+		padding: 0 !important;
+	}
+`;
+
 const Container = styled.div`
 	width: 689px;
+	max-width: 90vw;
 	margin: 10px auto;
 `;
 

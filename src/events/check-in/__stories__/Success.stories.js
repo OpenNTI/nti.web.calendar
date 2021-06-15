@@ -6,6 +6,7 @@ import { Success as Screen } from '../Success';
 
 const Container = styled.div`
 	width: 689px;
+	max-width: 90vw;
 	margin: 10px auto;
 `;
 

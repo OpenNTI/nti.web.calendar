@@ -18,6 +18,7 @@ const Mock = {
 
 const Container = styled.div`
 	width: 689px;
+	max-width: 90vw;
 	margin: 10px auto;
 `;
 
