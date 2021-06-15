@@ -37,6 +37,7 @@ export const Action = styled(Text.Base).attrs({ as: 'button' })`
 	padding: initial;
 	margin: initial;
 	color: inherit;
+	min-height: 48px;
 
 	@media (--respond-to-handhelds) {
 		margin-bottom: 10px;

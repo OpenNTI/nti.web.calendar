@@ -11,6 +11,14 @@ import { Title } from './parts/Text';
 const TitleArea = styled(TitleBar)`
 	align-items: flex-start;
 	padding: 0;
+	flex-wrap: nowrap;
+`;
+
+const Image = styled.img`
+	float: right;
+	width: 84px;
+	height: 84px;
+	flex: 0 0 auto;
 `;
 
 const Required = styled('span').attrs({ children: '*' })`
@@ -82,7 +90,7 @@ export function EntryForm({ item, returnView }) {
 		<Box>
 			<TitleArea>
 				<Title>Review and Confirm Information</Title>
-				<img width="84" height="84" />
+				<Image />
 			</TitleArea>
 
 			<DecoratedInput
