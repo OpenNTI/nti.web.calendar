@@ -32,4 +32,10 @@ export const TitleBar = styled.div`
 	align-items: baseline;
 	justify-content: space-between;
 	margin: 18px 21px 18px 0;
+	@media (--respond-to-handhelds) {
+		margin-right: 0;
+		& > * {
+			flex: 1 1 auto;
+		}
+	}
 `;

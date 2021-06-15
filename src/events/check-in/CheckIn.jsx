@@ -45,6 +45,9 @@ export function CheckIn({ onViewEntry, onViewEntryForm, onViewLookup, event }) {
 				<Search
 					className={css`
 						max-width: 200px;
+						@media (--respond-to-handhelds) {
+							max-width: unset;
+						}
 					`}
 					delay={500}
 					value={search}

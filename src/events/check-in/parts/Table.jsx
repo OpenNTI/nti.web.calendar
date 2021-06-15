@@ -7,6 +7,10 @@ export const Table = styled(TableSpec.Panel)`
 		color: inherit;
 	}
 
+	thead {
+		background: none;
+	}
+
 	&.headless thead {
 		display: none;
 	}

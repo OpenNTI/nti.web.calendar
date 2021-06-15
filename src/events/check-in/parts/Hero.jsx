@@ -13,10 +13,16 @@ export const ActionPrompt = styled.div`
 export const Actions = styled.div`
 	display: flex;
 	flex-direction: row;
+	flex-wrap: wrap;
 	justify-content: space-between;
 	margin-top: 27px;
-	height: 48px;
+	min-height: 48px;
 	width: 75%;
+
+	@media (--respond-to-handhelds) {
+		justify-content: space-around;
+		margin-bottom: 10px;
+	}
 `;
 
 export const Action = styled(Text.Base).attrs({ as: 'button' })`
@@ -28,4 +34,11 @@ export const Action = styled(Text.Base).attrs({ as: 'button' })`
 	background: #fff;
 	box-shadow: 0 2px 24px 0 #30397c;
 	cursor: pointer;
+	padding: initial;
+	margin: initial;
+	color: inherit;
+
+	@media (--respond-to-handhelds) {
+		margin-bottom: 10px;
+	}
 `;
