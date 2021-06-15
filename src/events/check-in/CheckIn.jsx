@@ -28,9 +28,9 @@ export function CheckIn({ onViewEntry, onViewEntryForm, onViewLookup, event }) {
 				</Title>
 				<Actions>
 					<Action onClick={onViewEntryForm}>
-						Check-in
+						Scan or
 						<br />
-						With Code
+						Enter Code
 					</Action>
 					<Action onClick={onViewLookup}>Lookup by Name</Action>
 					<Action>

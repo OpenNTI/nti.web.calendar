@@ -29,7 +29,7 @@ export function NameColumn({ item, avatar = true, additional }) {
 			<TableCellText>
 				<DisplayName entity={item} mark={term} />
 				<br />
-				1234567890
+				{item.email}
 			</TableCellText>
 			{additional}
 		</Flex>
