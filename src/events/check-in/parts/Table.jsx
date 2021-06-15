@@ -48,7 +48,7 @@ export const Table = styled(TableSpec.Panel)`
 				width: auto;
 				height: auto;
 				display: block;
-				flex: 1 1 auto;
+				flex: 1 1 50%;
 
 				&::before {
 					display: block;

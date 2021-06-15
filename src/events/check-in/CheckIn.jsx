@@ -10,7 +10,7 @@ import { Table } from './parts/Table';
 import { Title } from './parts/Text';
 import { AttendanceRecordNameColumn as NameColumn } from './columns/AttendanceRecordNameColumn';
 import { AttendanceRecordCheckInTimeColumn as CheckInTimeColumn } from './columns/AttendanceRecordCheckInTimeColumn';
-import { AttendanceDeleteColumn } from './columns/AttendanceDeleteColumn';
+// import { AttendanceDeleteColumn } from './columns/AttendanceDeleteColumn';
 
 /** @typedef {import('@nti/lib-interfaces/src/models/calendar').EventAttendance} EventAttendance */
 
@@ -100,9 +100,9 @@ function Attendance({ event, search, onCountUpdated, onItemClick }) {
 	const setMaxPageSize = () => setPageSize(attendance.total);
 
 	const columns = [NameColumn, CheckInTimeColumn];
-	if (attendance.Items?.some(x => x.hasLink('delete'))) {
-		columns.push(AttendanceDeleteColumn);
-	}
+	// if (attendance.Items?.some(x => x.hasLink('delete'))) {
+	// 	columns.push(AttendanceDeleteColumn);
+	// }
 
 	return (
 		<>
