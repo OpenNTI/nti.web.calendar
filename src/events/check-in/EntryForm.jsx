@@ -2,7 +2,9 @@ import React, { useCallback, useState } from 'react';
 
 import { Text } from '@nti/web-commons';
 
-import { ActionButton, Button, Box, Title, TitleBar } from './parts';
+import { ActionButton, Button } from './parts/Buttons';
+import { Box, TitleBar } from './parts/Containers';
+import { Title } from './parts/Text';
 
 //#region 🎨 paint
 

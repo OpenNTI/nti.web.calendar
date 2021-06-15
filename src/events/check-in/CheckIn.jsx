@@ -2,23 +2,15 @@ import React, { Suspense, useCallback, useEffect, useState } from 'react';
 
 import { Search, useLink, useChanges } from '@nti/web-commons';
 
-import {
-	ActionPrompt,
-	Actions,
-	Action,
-	Box,
-	Empty,
-	Loading,
-	More,
-	Table,
-	Title,
-	TitleBar,
-} from './parts';
-import {
-	AttendanceRecordNameColumn as NameColumn,
-	AttendanceRecordCheckInTimeColumn as CheckInTimeColumn,
-	DeleteAttendanceColumn,
-} from './columns';
+import { ActionPrompt, Actions, Action } from './parts/Hero';
+import { Box, TitleBar } from './parts/Containers';
+import { Empty, Loading } from './parts/misc';
+import { More } from './parts/Buttons';
+import { Table } from './parts/Table';
+import { Title } from './parts/Text';
+import { AttendanceRecordNameColumn as NameColumn } from './columns/AttendanceRecordNameColumn';
+import { AttendanceRecordCheckInTimeColumn as CheckInTimeColumn } from './columns/AttendanceRecordCheckInTimeColumn';
+import { AttendanceDeleteColumn } from './columns/AttendanceDeleteColumn';
 
 /** @typedef {import('@nti/lib-interfaces/src/models/calendar').EventAttendance} EventAttendance */
 
@@ -106,7 +98,7 @@ function Attendance({ event, search, onCountUpdated, onItemClick }) {
 
 	const columns = [NameColumn, CheckInTimeColumn];
 	if (attendance.Items?.some(x => x.hasLink('delete'))) {
-		columns.push(DeleteAttendanceColumn);
+		columns.push(AttendanceDeleteColumn);
 	}
 
 	return (

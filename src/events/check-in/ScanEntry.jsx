@@ -2,7 +2,8 @@ import React, { useEffect, useRef } from 'react';
 import QrcodeDecoder from 'qrcode-decoder';
 
 import icon from './assets/qr_icon.svg';
-import { CenteredBox as Box, SubTitle } from './parts.jsx';
+import { CenteredBox as Box } from './parts/Containers';
+import { SubTitle } from './parts/Text';
 
 //#region 🎨 paint
 

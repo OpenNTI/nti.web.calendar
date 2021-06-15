@@ -1,6 +1,8 @@
 import React from 'react';
 
-import { CenteredBox as BoxBase, Button, SubTitle } from './parts';
+import { CenteredBox as BoxBase } from './parts/Containers';
+import { Button } from './parts/Buttons';
+import { SubTitle } from './parts/Text';
 import icon from './assets/check.svg';
 
 const Box = styled(BoxBase)`

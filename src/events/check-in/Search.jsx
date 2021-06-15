@@ -1,14 +1,16 @@
-import React, { Suspense, useCallback, useContext, useState } from 'react';
+import React, { Suspense, useCallback, useState } from 'react';
 
-import { Search as SearchInput, Text, useLink } from '@nti/web-commons';
+import { Search as SearchInput, useLink } from '@nti/web-commons';
 
-import { ActionButton, Box, Empty, Loading, Table } from './parts';
-import { NameColumn, SearchContext } from './columns';
+import { Box } from './parts/Containers';
+import { Empty, Loading } from './parts/misc';
+import { Table } from './parts/Table';
+import { CheckInNameColumn } from './columns/CheckInNameColumn';
+import { CheckInColumn, CheckInAction } from './columns/CheckInButtonColumn';
+import { SearchContext } from './columns/shared';
 
 /** @typedef {import('@nti/lib-interfaces/src/models/calendar').BaseEvent} CalendarEvent */
 /** @typedef {import('@nti/lib-interfaces/src/models/entities').User} User */
-
-const CheckInAction = React.createContext();
 
 //#region 🎨 paint
 
@@ -76,7 +78,7 @@ function SearchResults({ event, term }) {
 		<SearchContext.Provider value={term}>
 			<Table
 				items={users}
-				columns={[NameWithErrorColumn, CheckInColumn]}
+				columns={[CheckInNameColumn, CheckInColumn]}
 				capped
 				headless
 				term={term}
@@ -85,46 +87,4 @@ function SearchResults({ event, term }) {
 	) : (
 		<Empty>Not Found</Empty>
 	);
-}
-
-CheckInColumn.cssClassName = css`
-	width: 150px;
-	text-align: right;
-`;
-function CheckInColumn({ item }) {
-	const action = useContext(CheckInAction);
-	const callback = useCallback(
-		(_, finish) => {
-			finish?.hide();
-			return action(item);
-		},
-		[item, action]
-	);
-	return (
-		<ActionButton key={item.getID()} onClick={callback}>
-			Check In
-		</ActionButton>
-	);
-}
-
-const ErrorText = styled(Text.Base).attrs({ as: 'div' })`
-	color: var(--primary-red);
-	line-height: 1.1 !important;
-	font-size: 10px;
-	margin-left: 10px;
-`;
-
-NameWithErrorColumn.cssClassName = NameColumn.cssClassName;
-function NameWithErrorColumn({ item, ...props }) {
-	const { error } = useContext(CheckInAction);
-	return NameColumn({
-		...props,
-		item,
-		avatar: true,
-		additional: (
-			<>
-				{error?.user === item && <ErrorText>{error.message}</ErrorText>}
-			</>
-		),
-	});
 }
