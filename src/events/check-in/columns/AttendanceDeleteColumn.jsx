@@ -12,6 +12,7 @@ const DeleteButton = styled(ActionButton).attrs({ destructive: true })`
 AttendanceDeleteColumn.cssClassName = css`
 	width: 50px;
 	text-align: right;
+	flex: 0 0 100% !important;
 `;
 
 /**

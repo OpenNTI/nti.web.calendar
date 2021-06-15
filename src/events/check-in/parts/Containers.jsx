@@ -28,6 +28,7 @@ export const CenteredBox = styled(Box)`
 export const TitleBar = styled.div`
 	display: flex;
 	flex-direction: row;
+	flex-wrap: wrap;
 	align-items: baseline;
 	justify-content: space-between;
 	margin: 18px 21px 18px 0;

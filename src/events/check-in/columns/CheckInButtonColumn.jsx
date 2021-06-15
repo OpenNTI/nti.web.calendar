@@ -7,6 +7,7 @@ export const CheckInAction = React.createContext();
 CheckInColumn.cssClassName = css`
 	width: 150px;
 	text-align: right;
+	flex: 0 0 100% !important;
 `;
 export function CheckInColumn({ item }) {
 	const action = useContext(CheckInAction);
