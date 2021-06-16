@@ -30,7 +30,7 @@ export function useCodeScanner(onScan, enabled = true) {
 				facingMode: 'environment',
 			};
 			const data = await qr.decodeFromCamera(video);
-
+			if (video.hidden) return;
 			onScan(data);
 			stop();
 		})();

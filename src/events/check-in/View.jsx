@@ -69,9 +69,9 @@ export default function View(props) {
 			return <EntryForm item={item} returnView={viewMain} />;
 
 		case 'lookup-by-license':
-			return <LookupByLicense {...props} />;
+			return <LookupByLicense {...props} returnView={viewMain} />;
 
 		case 'lookup':
-			return <UserLookup {...props} />;
+			return <UserLookup {...props} returnView={viewMain} />;
 	}
 }

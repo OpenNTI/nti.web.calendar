@@ -1,6 +1,7 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useReducer, useRef } from 'react';
 
 import { Text } from '@nti/web-commons';
+import { Models } from '@nti/lib-interfaces';
 
 import { ActionButton, Button } from './parts/Buttons';
 import { Box, TitleBar } from './parts/Containers';
@@ -27,6 +28,13 @@ const Required = styled('span').attrs({ children: '*' })`
 
 const Legend = styled(Text.Label).attrs({ as: 'legend' })`
 	color: var(--tertiary-grey);
+`;
+
+const ErrorText = styled(Text.Base).attrs({ as: 'div' })`
+	color: var(--primary-red);
+	line-height: 1.1 !important;
+	font-size: 14px;
+	text-align: center;
 `;
 
 const FieldSet = styled.fieldset`
@@ -80,11 +88,17 @@ const Controls = styled.div`
 	}
 `;
 
+const stop = e => e.preventDefault();
+
 //#endregion
 
-export function EntryForm({ item, returnView }) {
+export function EntryForm({ item, returnView, onSave }) {
 	const readOnly = !!item;
-	const [busy, setBusy] = useState(false);
+	const form = useRef();
+	/** @type {Models.entities.User} */
+	const user = item instanceof Models.entities.User ? item : item?.User;
+
+	const { call, error, busy } = useFormFun();
 
 	return (
 		<Box>
@@ -92,34 +106,49 @@ export function EntryForm({ item, returnView }) {
 				<Title>Review and Confirm Information</Title>
 				<Image />
 			</TitleArea>
-
-			<DecoratedInput
-				label="Full Name"
-				required
-				readOnly={readOnly}
-				value={item?.User?.realname}
-				disabled={busy}
-			/>
-			<DecoratedInput
-				label="License Number"
-				required
-				readOnly={readOnly}
-				disabled={busy}
-			/>
-			<DecoratedInput label="UUID" readOnly={readOnly} disabled={busy} />
-			<DecoratedInput
-				label="Email Address"
-				required
-				readOnly={readOnly}
-				value={item?.User?.email}
-				disabled={busy}
-			/>
-
+			<ErrorText>{error}</ErrorText>
+			<form onSubmit={stop} ref={form}>
+				<DecoratedInput
+					name="realname"
+					label="Full Name"
+					required
+					value={user?.realname}
+					disabled={busy || readOnly}
+				/>
+				<input
+					type="hidden"
+					name="external_type"
+					value="license_number"
+				/>
+				<DecoratedInput
+					name="external_id"
+					label="License Number"
+					required
+					value={user?.LicenseNumber}
+					disabled={busy || readOnly}
+				/>
+				<DecoratedInput
+					name="uuid"
+					label="UUID"
+					disabled={busy || readOnly}
+				/>
+				<DecoratedInput
+					name="email"
+					label="Email Address"
+					required
+					value={user?.email}
+					disabled={busy || readOnly}
+				/>
+			</form>
 			<Controls>
-				{!readOnly && (
-					<Button rounded disabled={busy}>
+				{onSave && (
+					<ActionButton
+						rounded
+						disabled={busy}
+						onClick={call(() => onSave(form.current))}
+					>
 						Save
-					</Button>
+					</ActionButton>
 				)}
 				<Button inverted text onClick={returnView} disabled={busy}>
 					Cancel
@@ -130,13 +159,9 @@ export function EntryForm({ item, returnView }) {
 						inverted
 						destructive
 						text
-						onClick={useCallback(
-							(_, finish) => {
-								setBusy(true);
-								finish?.call(returnView);
-								return item.delete();
-							},
-							[item, returnView]
+						onClick={call(
+							() => item.delete(),
+							err => !err && returnView()
 						)}
 					>
 						Delete Attendee
@@ -145,4 +170,31 @@ export function EntryForm({ item, returnView }) {
 			</Controls>
 		</Box>
 	);
+}
+
+function useFormFun() {
+	const [{ error, busy }, dispatch] = useReducer(
+		(s, a) => ({ ...s, ...a }),
+		{}
+	);
+
+	const call = useCallback(
+		(f, fin) => async (_, finish) => {
+			try {
+				dispatch({ busy: true });
+				finish?.call(fin);
+				await f();
+			} catch (e) {
+				dispatch({ busy: false, error: e.message });
+				throw e;
+			}
+		},
+		[]
+	);
+
+	return {
+		call,
+		error,
+		busy,
+	};
 }

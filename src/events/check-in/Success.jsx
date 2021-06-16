@@ -9,13 +9,24 @@ const Box = styled(BoxBase)`
 	padding-top: 14.515%;
 `;
 
-export function Success(props) {
+/** @typedef {import('@nti/lib-interfaces').Models.entities.User} User */
+
+/**
+ * @param {Object} props
+ * @param {User} props.user
+ * @param {()=> void} props.reset
+ * @param {()=> void} props.returnView
+ * @returns {JSX.Element}
+ */
+export function Success({ user, reset, returnView }) {
 	return (
 		<Box>
 			<img src={icon} />
-			<SubTitle>Reginia Mccrimmon has been checked in.</SubTitle>
-			<Button rounded>Scan another QR code</Button>
-			<Button inverted text>
+			<SubTitle>{user?.realname} has been checked in.</SubTitle>
+			<Button rounded onClick={reset}>
+				Scan another QR code
+			</Button>
+			<Button inverted text onClick={returnView}>
 				Return to Event Page
 			</Button>
 		</Box>
