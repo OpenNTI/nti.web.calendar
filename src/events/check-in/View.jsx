@@ -3,13 +3,25 @@ import React, { useCallback, useContext, useReducer } from 'react';
 import { NavigationStackContext } from '@nti/web-routing';
 
 import { CheckIn } from './CheckIn';
-import { Search as UserLookup } from './Search';
+import { Lookup as UserLookup } from './Lookup';
 import { EntryForm } from './EntryForm';
 // Lazy load
-const ScanEntry = React.lazy(() => import('./ScanEntry'));
+const LookupByLicense = React.lazy(() => import('./LookupByLicense'));
 
 const BASIC_STATE = (state, action) => ({ ...state, ...action });
 
+/** @typedef {import('@nti/lib-interfaces/src/models/calendar').BaseEvent} Event */
+/** @typedef {() => void} Handler */
+/**
+ * @typedef {{
+ * 	event: Event
+ * }} ViewProps
+ */
+
+/**
+ * @param {ViewProps} props
+ * @returns {JSX.Element}
+ */
 export default function View(props) {
 	const { push, reset } = useContext(NavigationStackContext);
 	const [{ state, item }, dispatch] = useReducer(BASIC_STATE, {
@@ -34,8 +46,8 @@ export default function View(props) {
 		[transition]
 	);
 
-	const viewEntryForm = useCallback(
-		() => transition('entry-form'),
+	const viewLookupByLicense = useCallback(
+		() => transition('lookup-by-license'),
 		[transition]
 	);
 
@@ -47,8 +59,8 @@ export default function View(props) {
 			return (
 				<CheckIn
 					onViewEntry={viewEntry}
-					onViewEntryForm={viewEntryForm}
 					onViewLookup={viewLookup}
+					onViewLookupByLicense={viewLookupByLicense}
 					{...props}
 				/>
 			);
@@ -56,8 +68,8 @@ export default function View(props) {
 		case 'entry-review':
 			return <EntryForm item={item} returnView={viewMain} />;
 
-		case 'entry-form':
-			return <ScanEntry {...props} />;
+		case 'lookup-by-license':
+			return <LookupByLicense {...props} />;
 
 		case 'lookup':
 			return <UserLookup {...props} />;

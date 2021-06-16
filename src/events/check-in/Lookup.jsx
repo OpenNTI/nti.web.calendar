@@ -26,7 +26,7 @@ const SearchBox = styled(SearchInput.Inverted)`
  * @param {CalendarEvent} props.event
  * @returns {JSX.Element}
  */
-export function Search({ event }) {
+export function Lookup({ event }) {
 	const [search, setSearch] = useState();
 	const [error, setError] = useState();
 

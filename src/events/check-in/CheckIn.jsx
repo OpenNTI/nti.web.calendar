@@ -13,8 +13,24 @@ import { AttendanceRecordCheckInTimeColumn as CheckInTimeColumn } from './column
 // import { AttendanceDeleteColumn } from './columns/AttendanceDeleteColumn';
 
 /** @typedef {import('@nti/lib-interfaces/src/models/calendar').EventAttendance} EventAttendance */
+/** @typedef {import('@nti/lib-interfaces/src/models/calendar').BaseEvent} Event */
+/** @typedef {() => void} Handler */
+/** @typedef {(x: number) => void} NumberHandler */
+/** @typedef {(item: EventAttendance) => void} ItemHandler */
+/**
+ * @typedef {{
+ * 	onViewEntry: ItemHandler,
+ * 	onViewLookup: Handler,
+ * 	onViewLookupByLicense: Handler,
+ * 	event: Event
+ * }} CheckInProps
+ */
 
-export function CheckIn({ onViewEntry, onViewEntryForm, onViewLookup, event }) {
+/**
+ * @param {CheckInProps} props
+ * @returns {JSX.Element}
+ */
+export function CheckIn({ onViewEntry, event, ...handlers }) {
 	const [search, setSearch] = useState();
 
 	// eww...
@@ -22,23 +38,7 @@ export function CheckIn({ onViewEntry, onViewEntryForm, onViewLookup, event }) {
 
 	return (
 		<Box centered flushTop>
-			<ActionPrompt>
-				<Title invert as="h2">
-					Select an option to check in an attendee.
-				</Title>
-				<Actions>
-					<Action onClick={onViewEntryForm}>
-						Scan or
-						<br />
-						Enter Code
-					</Action>
-					<Action onClick={onViewLookup}>Lookup by Name</Action>
-					<Action>
-						Create a<br />
-						New Account
-					</Action>
-				</Actions>
-			</ActionPrompt>
+			<Heading {...handlers} event={event} />
 
 			<TitleBar>
 				<Title>Checked-In Attendees ({count})</Title>
@@ -71,6 +71,15 @@ export function CheckIn({ onViewEntry, onViewEntryForm, onViewLookup, event }) {
 	);
 }
 
+/**
+ *
+ * @param {Object} props
+ * @param {Event} props.event
+ * @param {NumberHandler} props.onCountUpdated
+ * @param {ItemHandler} props.onItemClick
+ * @param {string} props.search
+ * @returns {JSX.Element}
+ */
 function Attendance({ event, search, onCountUpdated, onItemClick }) {
 	const [batchSize, setPageSize] = useState();
 	const [reload, setReloadNonce] = useState();
@@ -120,5 +129,37 @@ function Attendance({ event, search, onCountUpdated, onItemClick }) {
 				<More onClick={setMaxPageSize}>View All</More>
 			)}
 		</>
+	);
+}
+
+/**
+ * @param {CheckInProps} props
+ * @returns {JSX.Element}
+ */
+function Heading({ event, onViewLookup, onViewLookupByLicense }) {
+	const showLookupByLicense = event?.hasLink('lookup-by-license-number');
+
+	return (
+		<ActionPrompt>
+			<Title invert as="h2">
+				Select an option to check in an attendee.
+			</Title>
+			<Actions>
+				{showLookupByLicense && (
+					<Action onClick={onViewLookupByLicense}>
+						Scan or
+						<br />
+						Enter Code
+					</Action>
+				)}
+				<Action onClick={onViewLookup}>Lookup by Name</Action>
+				{showLookupByLicense && (
+					<Action>
+						Create a<br />
+						New Account
+					</Action>
+				)}
+			</Actions>
+		</ActionPrompt>
 	);
 }

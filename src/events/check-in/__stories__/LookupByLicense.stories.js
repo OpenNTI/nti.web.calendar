@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 
 import { useMockService } from '@nti/web-client/storybook-utils';
 
-import { Search as Screen } from '../Search';
+import { Lookup } from '../LookupByLicense';
 
 const Container = styled.div`
 	width: 689px;
@@ -11,16 +11,16 @@ const Container = styled.div`
 `;
 
 export default {
-	title: 'Check-in/Screens/Search',
-	component: Screen,
+	title: 'Check-in/Screens/Lookup By License',
+	component: Lookup,
 };
 
-export function Search() {
+export function LookupByLicense() {
 	useMockService();
 	return (
 		<Container>
 			<Suspense fallback={<div />}>
-				<Screen />
+				<Lookup />
 			</Suspense>
 		</Container>
 	);
