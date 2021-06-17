@@ -1,6 +1,6 @@
-import React, { useCallback, useContext, useReducer } from 'react';
+import React, { useCallback, useReducer } from 'react';
 
-import { NavigationStackContext } from '@nti/web-routing';
+import { useNavigationStackContext } from '@nti/web-routing';
 
 import { CheckIn } from './CheckIn';
 import { Lookup as UserLookup } from './Lookup';
@@ -23,7 +23,7 @@ const BASIC_STATE = (state, action) => ({ ...state, ...action });
  * @returns {JSX.Element}
  */
 export default function View(props) {
-	const { push, reset } = useContext(NavigationStackContext);
+	const { push, reset } = useNavigationStackContext();
 	const [{ state, item }, dispatch] = useReducer(BASIC_STATE, {
 		state: 'main',
 	});
