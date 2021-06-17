@@ -1,15 +1,14 @@
-import React, { useReducer } from 'react';
+import React from 'react';
 
 import { useNavigationStackContext } from '@nti/web-routing';
 
+import { useReducerState } from './parts/use-reducer-state';
 import { CheckIn } from './CheckIn';
 import { Lookup as UserLookup } from './Lookup';
 import { EntryForm } from './EntryForm';
 // Lazy load
 const LookupByLicense = React.lazy(() => import('./LookupByLicense'));
 const CheckInNewUser = React.lazy(() => import('./CheckInNewUser'));
-
-const BASIC_STATE = (state, action) => ({ ...state, ...action });
 
 /** @typedef {import('@nti/lib-interfaces/src/models/calendar').BaseEvent} Event */
 /** @typedef {() => void} Handler */
@@ -25,7 +24,7 @@ const BASIC_STATE = (state, action) => ({ ...state, ...action });
  */
 export default function View(props) {
 	const { push, reset } = useNavigationStackContext();
-	const [{ state, item }, dispatch] = useReducer(BASIC_STATE, {
+	const [{ state, item }, dispatch] = useReducerState({
 		state: 'main',
 	});
 

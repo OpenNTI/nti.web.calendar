@@ -16,6 +16,7 @@ import { SearchContext } from './columns/shared';
 
 const SearchBox = styled(SearchInput.Inverted)`
 	margin: 0;
+	max-width: 90%;
 `;
 
 //#endregion

@@ -1,8 +1,9 @@
-import React, { useCallback, useReducer, useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
 
 import { Text } from '@nti/web-commons';
 import { Models } from '@nti/lib-interfaces';
 
+import { useReducerState } from './parts/use-reducer-state';
 import { ActionButton, Button } from './parts/Buttons';
 import { Box, TitleBar } from './parts/Containers';
 import { Title } from './parts/Text';
@@ -134,6 +135,7 @@ export function EntryForm({ item, returnView, onSave }) {
 					disabled
 				/>
 				<DecoratedInput
+					type="email"
 					name="email"
 					label="Email Address"
 					required
@@ -174,10 +176,10 @@ export function EntryForm({ item, returnView, onSave }) {
 }
 
 function useFormFun() {
-	const [{ error, busy }, dispatch] = useReducer(
-		(s, a) => ({ ...s, ...a }),
-		{}
-	);
+	const [{ error, busy }, dispatch] = useReducerState({
+		error: null,
+		busy: false,
+	});
 
 	const call = useCallback(
 		(f, fin) => async (_, finish) => {

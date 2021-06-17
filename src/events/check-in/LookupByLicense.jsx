@@ -1,10 +1,11 @@
-import React, { Suspense, useReducer } from 'react';
+import React, { Suspense } from 'react';
 
 import { Loading } from './parts/misc';
 import { InputForm } from './LookupByLicenseInputForm';
 import { Query } from './LookupByLicenseQuery';
 import { EntryForm } from './EntryForm';
 import { Success } from './Success';
+import { useReducerState } from './parts/use-reducer-state';
 
 /** @typedef {import('@nti/lib-interfaces/src/models/calendar').BaseEvent} Event */
 /** @typedef {() => void} Handler */
@@ -23,17 +24,11 @@ export default Lookup;
  * @returns {JSX.Element}
  */
 export function Lookup({ event, returnView }) {
-	const [{ state, query, user }, dispatch] = useReducer(
-		(s, a) => ({ ...s, ...a }),
-		{
-			state: 'input',
-			query: null,
-			user: null,
-		}
-	);
-
-	const reset = query =>
-		dispatch({ query: null, user: null, state: 'input' });
+	const [{ state, query, user }, dispatch, reset] = useReducerState({
+		state: 'input',
+		query: null,
+		user: null,
+	});
 
 	switch (state) {
 		case 'input':
