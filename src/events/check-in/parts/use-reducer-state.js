@@ -1,6 +1,6 @@
 import { useReducer, useCallback } from 'react';
 
-/** @typedef {() => void} dispatch */
+/** @typedef {(state: any) => void} dispatch */
 /** @typedef {() => void} reset */
 
 /**

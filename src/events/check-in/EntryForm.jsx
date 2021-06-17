@@ -100,6 +100,14 @@ export function EntryForm({ item, returnView, onSave }) {
 	const user = item instanceof Models.entities.User ? item : item?.User;
 
 	const { call, error, busy } = useFormFun();
+	const save = useCallback(call(() => onSave(form.current), [onSave]));
+	const del = useCallback(
+		call(
+			() => item.delete(),
+			err => !err && returnView()
+		),
+		[item]
+	);
 
 	return (
 		<Box>
@@ -145,11 +153,7 @@ export function EntryForm({ item, returnView, onSave }) {
 			</form>
 			<Controls>
 				{onSave && (
-					<ActionButton
-						rounded
-						disabled={busy}
-						onClick={call(() => onSave(form.current))}
-					>
+					<ActionButton rounded disabled={busy} onClick={save}>
 						Save
 					</ActionButton>
 				)}
@@ -158,15 +162,7 @@ export function EntryForm({ item, returnView, onSave }) {
 				</Button>
 				<Spacer />
 				{item?.hasLink('delete') && (
-					<ActionButton
-						inverted
-						destructive
-						text
-						onClick={call(
-							() => item.delete(),
-							err => !err && returnView()
-						)}
-					>
+					<ActionButton inverted destructive text onClick={del}>
 						Delete Attendee
 					</ActionButton>
 				)}
@@ -185,14 +181,16 @@ function useFormFun() {
 		(f, fin) => async (_, finish) => {
 			try {
 				dispatch({ busy: true });
-				finish?.call(fin);
+				if (fin) {
+					finish?.call(fin);
+				}
 				await f();
 			} catch (e) {
 				dispatch({ busy: false, error: e.message });
 				throw e;
 			}
 		},
-		[]
+		[dispatch]
 	);
 
 	return {
