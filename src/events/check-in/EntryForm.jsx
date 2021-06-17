@@ -130,7 +130,8 @@ export function EntryForm({ item, returnView, onSave }) {
 				<DecoratedInput
 					name="uuid"
 					label="UUID"
-					disabled={busy || readOnly}
+					value={user?.DEQ_UUID}
+					disabled
 				/>
 				<DecoratedInput
 					name="email"
