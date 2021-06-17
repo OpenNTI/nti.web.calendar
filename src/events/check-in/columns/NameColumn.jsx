@@ -1,6 +1,8 @@
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 
 import { DisplayName } from '@nti/web-commons';
+
+import { List } from '../parts/misc';
 
 import { Flex, SearchContext, TableCell, TableCellText } from './shared';
 import { AvatarColumn } from './AvatarColumn';
@@ -29,7 +31,12 @@ export function NameColumn({ item, avatar = true, additional }) {
 			<TableCellText>
 				<DisplayName entity={item} mark={term} />
 				<br />
-				{item.email}
+				<List>
+					<List.Item title="Licence Number">
+						{item.LicenseNumber}
+					</List.Item>
+					<List.Item title="email">{item.email}</List.Item>
+				</List>
 			</TableCellText>
 			{additional}
 		</Flex>
