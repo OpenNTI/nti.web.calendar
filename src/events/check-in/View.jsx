@@ -1,4 +1,4 @@
-import React, { useCallback, useReducer } from 'react';
+import React, { useReducer } from 'react';
 
 import { useNavigationStackContext } from '@nti/web-routing';
 
@@ -7,6 +7,7 @@ import { Lookup as UserLookup } from './Lookup';
 import { EntryForm } from './EntryForm';
 // Lazy load
 const LookupByLicense = React.lazy(() => import('./LookupByLicense'));
+const CheckInNewUser = React.lazy(() => import('./CheckInNewUser'));
 
 const BASIC_STATE = (state, action) => ({ ...state, ...action });
 
@@ -28,30 +29,21 @@ export default function View(props) {
 		state: 'main',
 	});
 
-	const viewMain = useCallback(() => {
-		reset();
-		dispatch({ state: 'main' });
-	}, [reset]);
+	// These handlers aren't wrapped in useCallback because
+	// 	) they get recreated ever time anyways.
+	// 	) this level renders once per transition.
 
-	const transition = useCallback(
-		(to, item) => {
-			push?.(viewMain);
-			dispatch({ state: to, item });
-		},
-		[viewMain, push]
+	const viewMain = () => (reset(), dispatch({ state: 'main' }));
+	const transition = (to, item) => (
+		push?.(viewMain), dispatch({ state: to, item })
 	);
+	const viewEntry = x => transition('entry-review', x);
+	const viewLookup = () => transition('lookup');
 
-	const viewEntry = useCallback(
-		x => transition('entry-review', x),
-		[transition]
-	);
-
-	const viewLookupByLicense = useCallback(
-		() => transition('lookup-by-license'),
-		[transition]
-	);
-
-	const viewLookup = useCallback(() => transition('lookup'), [transition]);
+	//#region DEQ Stuffs:
+	const viewLookupByLicense = () => transition('lookup-by-license');
+	const viewCheckInNewUser = () => transition('check-in-new-user');
+	//#endregion
 
 	switch (state) {
 		default:
@@ -61,6 +53,7 @@ export default function View(props) {
 					onViewEntry={viewEntry}
 					onViewLookup={viewLookup}
 					onViewLookupByLicense={viewLookupByLicense}
+					onViewCheckInNewUser={viewCheckInNewUser}
 					{...props}
 				/>
 			);
@@ -68,10 +61,15 @@ export default function View(props) {
 		case 'entry-review':
 			return <EntryForm item={item} returnView={viewMain} />;
 
+		case 'lookup':
+			return <UserLookup {...props} returnView={viewMain} />;
+
+		//#region DEQ Stuffs:
 		case 'lookup-by-license':
 			return <LookupByLicense {...props} returnView={viewMain} />;
 
-		case 'lookup':
-			return <UserLookup {...props} returnView={viewMain} />;
+		case 'check-in-new-user':
+			return <CheckInNewUser {...props} returnView={viewMain} />;
+		//#endregion
 	}
 }

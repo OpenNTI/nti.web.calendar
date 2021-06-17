@@ -22,6 +22,7 @@ import { AttendanceRecordCheckInTimeColumn as CheckInTimeColumn } from './column
  * 	onViewEntry: ItemHandler,
  * 	onViewLookup: Handler,
  * 	onViewLookupByLicense: Handler,
+ * 	onViewCheckInNewUser: Handler,
  * 	event: Event
  * }} CheckInProps
  */
@@ -136,8 +137,14 @@ function Attendance({ event, search, onCountUpdated, onItemClick }) {
  * @param {CheckInProps} props
  * @returns {JSX.Element}
  */
-function Heading({ event, onViewLookup, onViewLookupByLicense }) {
+function Heading({
+	event,
+	onViewLookup,
+	onViewLookupByLicense,
+	onViewCheckInNewUser,
+}) {
 	const showLookupByLicense = event?.hasLink('lookup-by-license-number');
+	const showCheckInNewUser = event?.hasLink('checkin-new-user');
 
 	return (
 		<ActionPrompt>
@@ -153,8 +160,8 @@ function Heading({ event, onViewLookup, onViewLookupByLicense }) {
 					</Action>
 				)}
 				<Action onClick={onViewLookup}>Lookup by Name</Action>
-				{showLookupByLicense && (
-					<Action>
+				{showCheckInNewUser && (
+					<Action onClick={onViewCheckInNewUser}>
 						Create a<br />
 						New Account
 					</Action>

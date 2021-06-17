@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { Text } from '@nti/web-commons';
 
 export const ActionPrompt = styled.div`
@@ -10,23 +12,40 @@ export const ActionPrompt = styled.div`
 	align-items: center;
 `;
 
-export const Actions = styled.div`
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-	justify-content: space-between;
+function ActionsMapper({ children, ...props }) {
+	const count = React.Children.toArray(children).filter(Boolean).length;
+	// hacks... design wants the button padding / size to change if there
+	// is only one in the container... so... hack this into the existence.
+	return {
+		...props,
+		children: React.Children.map(
+			children,
+			child =>
+				child &&
+				React.cloneElement(child, {
+					bunch: count > 1,
+				})
+		),
+	};
+}
+
+export const Actions = styled('div').attrs(ActionsMapper)`
 	margin-top: 27px;
 	min-height: 48px;
-	width: 75%;
+	display: flex;
+	flex-direction: row;
+	align-items: stretch;
+	justify-content: center;
+	flex-wrap: wrap;
+	width: 100%;
 
 	@media (--respond-to-handhelds) {
-		justify-content: space-around;
 		margin-bottom: 10px;
 	}
 `;
 
 export const Action = styled(Text.Base).attrs({ as: 'button' })`
-	flex: 0 0 113px;
+	flex: 0 0 auto;
 	border: 0;
 	font-size: 12px;
 	line-height: 16px;
@@ -34,12 +53,13 @@ export const Action = styled(Text.Base).attrs({ as: 'button' })`
 	background: #fff;
 	box-shadow: 0 2px 24px 0 #30397c;
 	cursor: pointer;
-	padding: initial;
-	margin: initial;
+	padding: 16px 32px;
+	margin: 10px;
 	color: inherit;
 	min-height: 48px;
 
-	@media (--respond-to-handhelds) {
-		margin-bottom: 10px;
+	&.bunch {
+		padding: initial;
+		width: 113px;
 	}
 `;
