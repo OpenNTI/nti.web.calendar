@@ -85,7 +85,7 @@ export function Lookup({ event, returnView }) {
 
 		case 'query':
 			return (
-				<Suspense fallback={Loading}>
+				<Suspense fallback={<Loading />}>
 					<Query
 						event={event}
 						query={query}
