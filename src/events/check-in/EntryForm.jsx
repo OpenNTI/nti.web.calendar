@@ -34,6 +34,11 @@ const Legend = styled(Text.Label).attrs({ as: 'legend' })`
 const ErrorText = styled(Text.Base).attrs({ as: 'div' })`
 	color: var(--primary-red);
 	line-height: 1.1 !important;
+	font-size: 12px;
+	margin: 10px 10px 0;
+`;
+
+const ErrorTop = styled(ErrorText).attrs({ as: 'div' })`
 	font-size: 14px;
 	text-align: center;
 `;
@@ -58,14 +63,22 @@ const FieldSet = styled.fieldset`
 	}
 `;
 
-function DecoratedInput({ className, required, label, ...props }) {
+function DecoratedInput({ className, required, label, name, error, ...props }) {
 	return (
 		<FieldSet className={className}>
 			<Legend>
 				{label}
 				{required && <Required />}
 			</Legend>
-			<input className={className} required={required} {...props} />
+			<input
+				className={className}
+				required={required}
+				name={name}
+				{...props}
+			/>
+			{name && error?.field === name && (
+				<ErrorText>{error.message}</ErrorText>
+			)}
 		</FieldSet>
 	);
 }
@@ -115,9 +128,15 @@ export function EntryForm({ item, returnView, onSave }) {
 				<Title>Review and Confirm Information</Title>
 				<Image />
 			</TitleArea>
-			<ErrorText>{error}</ErrorText>
+			{
+				// only show top error if we cannot associate it with a field
+				error && form.current?.[error.field] == null && (
+					<ErrorTop>{error.message}</ErrorTop>
+				)
+			}
 			<form onSubmit={stop} ref={form}>
 				<DecoratedInput
+					error={error}
 					name="realname"
 					label="Full Name"
 					required
@@ -130,6 +149,7 @@ export function EntryForm({ item, returnView, onSave }) {
 					value="license_number"
 				/>
 				<DecoratedInput
+					error={error}
 					name="external_id"
 					label="License Number"
 					required
@@ -137,12 +157,14 @@ export function EntryForm({ item, returnView, onSave }) {
 					disabled={busy || readOnly}
 				/>
 				<DecoratedInput
+					error={error}
 					name="uuid"
 					label="UUID"
 					value={user?.DEQ_UUID}
 					disabled
 				/>
 				<DecoratedInput
+					error={error}
 					type="email"
 					name="email"
 					label="Email Address"
@@ -186,7 +208,7 @@ function useFormFun() {
 				}
 				await f();
 			} catch (e) {
-				dispatch({ busy: false, error: e.message });
+				dispatch({ busy: false, error: e });
 				throw e;
 			}
 		},
