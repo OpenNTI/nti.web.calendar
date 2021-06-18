@@ -84,7 +84,6 @@ const DownloadLinkMapper = props => ({
 export const DownloadLink = styled('a').attrs(DownloadLinkMapper)`
 	--square-size: 38px;
 
-	display: block;
 	color: var(--tertiary-grey);
 	background: var(--panel-background);
 	box-shadow: 0 0 0 1px var(--border-grey-light-alt);
