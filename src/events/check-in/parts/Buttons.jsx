@@ -77,7 +77,7 @@ export const More = styled(Button).attrs(MoreChildrenPropMap)`
 
 //#region Download Button
 const DownloadLinkMapper = props => ({
-	hidden: !!props.href,
+	hidden: !props.href,
 	children: <Icons.Download />,
 	...props,
 });
