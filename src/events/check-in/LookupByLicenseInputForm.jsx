@@ -12,23 +12,26 @@ const Image = styled('img').attrs({ src: icon })`
 	height: 84px;
 `;
 
+// the "input&&&" selector is a hack to make this more specific than "foundation" in the mobile app
 const Input = styled('input').attrs({})`
-	border: 0;
-	padding: 4px 0;
-	text-align: center;
-	color: currentColor;
-	border-bottom: 1px solid var(--primary-blue);
-	font-size: 14px;
-	line-height: 19px;
-	width: 180px;
+	input&&& {
+		border: 0;
+		padding: 4px 0;
+		text-align: center;
+		color: currentColor;
+		border-bottom: 1px solid var(--primary-blue);
+		font-size: 14px;
+		line-height: 19px;
+		width: 180px;
 
-	&::placeholder {
-		color: var(--tertiary-grey);
+		&::placeholder {
+			color: var(--tertiary-grey);
+		}
 	}
 `;
 
 const Video = styled.video`
-	--video-bottom-offset: 134px;
+	--video-bottom-offset: 145px;
 
 	position: absolute;
 	left: 50%;

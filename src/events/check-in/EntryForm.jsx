@@ -93,6 +93,10 @@ const Controls = styled.div`
 	flex-direction: row-reverse;
 	align-items: baseline;
 
+	@media (--respond-to-handhelds) {
+		margin-top: 50px;
+	}
+
 	${Button} {
 		font-size: 14px;
 	}
@@ -128,12 +132,7 @@ export function EntryForm({ item, returnView, onSave }) {
 				<Title>Review and Confirm Information</Title>
 				<Image />
 			</TitleArea>
-			{
-				// only show top error if we cannot associate it with a field
-				error && form.current?.[error.field] == null && (
-					<ErrorTop>{error.message}</ErrorTop>
-				)
-			}
+
 			<form onSubmit={stop} ref={form}>
 				<DecoratedInput
 					error={error}
@@ -173,6 +172,12 @@ export function EntryForm({ item, returnView, onSave }) {
 					disabled={busy || readOnly}
 				/>
 			</form>
+			{
+				// only show top error if we cannot associate it with a field
+				error && form.current?.[error.field] == null && (
+					<ErrorTop>{error.message}</ErrorTop>
+				)
+			}
 			<Controls>
 				{onSave && (
 					<ActionButton rounded disabled={busy} onClick={save}>

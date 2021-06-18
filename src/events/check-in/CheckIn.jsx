@@ -47,6 +47,7 @@ export function CheckIn({ onViewEntry, event, ...handlers }) {
 					<Search
 						square
 						className={css`
+							flex: 1 1 auto;
 							max-width: 200px;
 							@media (--respond-to-handhelds) {
 								max-width: unset;
