@@ -23,7 +23,7 @@ export function Success({ user, reset, returnView }) {
 		<Box>
 			<img src={icon} />
 			<SubTitle>{user?.realname} has been checked in.</SubTitle>
-			<Button rounded onClick={reset}>
+			<Button rounded onClick={reset} hidden={!reset}>
 				Scan another QR code
 			</Button>
 			<Button inverted text onClick={returnView}>

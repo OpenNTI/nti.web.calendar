@@ -18,7 +18,7 @@ export default NewUser;
  * @returns {JSX.Element}
  */
 function NewUser({ event, returnView }) {
-	const [{ state, user }, dispatch, reset] = useReducerState({
+	const [{ state, user }, dispatch] = useReducerState({
 		state: 'input',
 		user: null,
 	});
@@ -35,22 +35,20 @@ function NewUser({ event, returnView }) {
 
 						const data = await event?.postToLink(
 							'checkin-new-user',
-							payload
+							payload,
+							true
 						);
 
-						// eslint-disable-next-line no-console
-						console.log(data);
 						dispatch({
-							/* ... */
+							state: 'success',
+							user: data.User,
 						});
 					}}
 				/>
 			);
 
 		case 'success':
-			return (
-				<Success user={user} reset={reset} returnView={returnView} />
-			);
+			return <Success user={user} returnView={returnView} />;
 	}
 
 	return <>{state}</>;
