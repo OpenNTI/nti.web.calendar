@@ -1,6 +1,13 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import QrcodeDecoder from 'qrcode-decoder';
 
+/**
+ * This will only work on secure (https or localhost) hosts.
+ *
+ * @param {(data: any) => void} onScan Callback when scan finds data
+ * @param {boolean} enabled Flag to enable/disable
+ * @returns {React.MutableRefObject<HTMLVideoElement>}
+ */
 export function useCodeScanner(onScan, enabled = true) {
 	const videoRef = useRef();
 	useEffect(() => {
@@ -33,7 +40,7 @@ export function useCodeScanner(onScan, enabled = true) {
 			if (video.hidden) return;
 			onScan(data);
 			stop();
-		})();
+		})(); //.catch(alert)});
 
 		return stop;
 	}, [onScan, videoRef.current, enabled]);
