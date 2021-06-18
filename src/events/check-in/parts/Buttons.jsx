@@ -1,4 +1,4 @@
-import { Button as ButtonBase, PromiseButton } from '@nti/web-commons';
+import { Button as ButtonBase, PromiseButton, Icons } from '@nti/web-commons';
 
 export const Button = styled(ButtonBase, { allowAs: true })`
 	padding: 14px 42px 13px;
@@ -74,3 +74,29 @@ export const More = styled(Button).attrs(MoreChildrenPropMap)`
 `;
 
 //#endregion More Button
+
+//#region Download Button
+const DownloadLinkMapper = props => ({
+	hidden: !!props.href,
+	children: <Icons.Download />,
+	...props,
+});
+export const DownloadLink = styled('a').attrs(DownloadLinkMapper)`
+	--square-size: 38px;
+
+	display: block;
+	color: var(--tertiary-grey);
+	background: var(--panel-background);
+	box-shadow: 0 0 0 1px var(--border-grey-light-alt);
+	width: var(--square-size);
+	line-height: var(--square-size);
+	height: var(--square-size);
+	cursor: pointer;
+
+	&:focus,
+	&:active,
+	&:hover {
+		color: var(--secondary-grey);
+	}
+`;
+//#endregion

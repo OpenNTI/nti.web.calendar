@@ -31,11 +31,15 @@ export const TitleBar = styled.div`
 	flex-wrap: wrap;
 	align-items: baseline;
 	justify-content: space-between;
-	margin: 18px 21px 18px 0;
+	margin: 18px 0;
 	@media (--respond-to-handhelds) {
-		margin-right: 0;
 		& > * {
 			flex: 1 1 auto;
 		}
 	}
+`;
+
+export const Group = styled.span`
+	display: flex;
+	align-items: center;
 `;

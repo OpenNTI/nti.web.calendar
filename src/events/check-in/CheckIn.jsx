@@ -3,9 +3,9 @@ import React, { Suspense, useCallback, useEffect, useState } from 'react';
 import { Search, useLink, useChanges } from '@nti/web-commons';
 
 import { ActionPrompt, Actions, Action } from './parts/Hero';
-import { Box, TitleBar } from './parts/Containers';
+import { Box, TitleBar, Group } from './parts/Containers';
 import { Empty, Loading } from './parts/misc';
-import { More } from './parts/Buttons';
+import { More, DownloadLink } from './parts/Buttons';
 import { Table } from './parts/Table';
 import { Title } from './parts/Text';
 import { AttendanceRecordNameColumn as NameColumn } from './columns/AttendanceRecordNameColumn';
@@ -43,17 +43,24 @@ export function CheckIn({ onViewEntry, event, ...handlers }) {
 
 			<TitleBar>
 				<Title>Checked-In Attendees ({count})</Title>
-				<Search
-					className={css`
-						max-width: 200px;
-						@media (--respond-to-handhelds) {
-							max-width: unset;
-						}
-					`}
-					delay={500}
-					value={search}
-					onChange={setSearch}
-				/>
+				<Group>
+					<Search
+						square
+						className={css`
+							max-width: 200px;
+							@media (--respond-to-handhelds) {
+								max-width: unset;
+							}
+						`}
+						delay={500}
+						value={search}
+						onChange={setSearch}
+					/>
+					<DownloadLink
+						href={event.getLink('export-attendance')}
+						download="export-attendance.csv"
+					/>
+				</Group>
 			</TitleBar>
 
 			<Suspense fallback={<Loading />}>
