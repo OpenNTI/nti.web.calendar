@@ -18,9 +18,21 @@ export const Button = styled(ButtonBase, { allowAs: true })`
 	}
 `;
 
-export function ActionButton(props) {
-	return <PromiseButton.IMPL {...props} as={Button} rounded />;
-}
+const ActionButtonMapper = props => ({
+	rounded: true,
+	as: Button,
+	...props,
+});
+export const ActionButton = styled(PromiseButton.impl).attrs(
+	ActionButtonMapper
+)`
+	transition: all 0.5s ease-in;
+
+	&:global(.finished) {
+		background: transparent;
+		color: var(--primary-blue);
+	}
+`;
 
 //#region More Button
 const MoreChildrenPropMap = ({ children, ...props }) => ({

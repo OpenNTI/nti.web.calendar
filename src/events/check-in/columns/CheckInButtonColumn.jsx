@@ -13,14 +13,26 @@ export function CheckInColumn({ item }) {
 	const action = useContext(CheckInAction);
 	const callback = useCallback(
 		(_, finish) => {
-			finish?.hide();
+			finish?.retain();
 			return action(item);
 		},
 		[item, action]
 	);
 	return (
-		<ActionButton key={item.getID()} onClick={callback}>
+		<ActionButton
+			key={item.getID()}
+			onClick={callback}
+			renderFinalState={Finish}
+		>
 			Check In
 		</ActionButton>
+	);
+}
+
+function Finish() {
+	return (
+		<b>
+			<i className="icon-check" /> Checked-in
+		</b>
 	);
 }
