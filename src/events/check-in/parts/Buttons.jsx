@@ -1,19 +1,16 @@
 import React from 'react';
 
-import {
-	Button as ButtonBase,
-	PromiseButton,
-	Icons,
-	Text,
-} from '@nti/web-commons';
+import { Button as ButtonBase, PromiseButton, Icons } from '@nti/web-commons';
 
 import t from '../strings';
 
-const B = React.forwardRef((P, ref) => (
-	<Text.Base ref={ref} {...P} as={ButtonBase} getString={t} />
-));
+const localeFilter = ({ children, localeKey, with: localeData, ...P }) => ({
+	children: (localeKey && t(localeKey, localeData)) || children,
+	...P,
+});
+localeFilter.compose = f => p => f(localeFilter(p));
 
-export const Button = styled(B, { allowAs: true })`
+export const Button = styled(ButtonBase, { allowAs: true }).attrs(localeFilter)`
 	padding: 14px 42px 13px;
 	font-size: 12px;
 	line-height: 16px;
@@ -34,7 +31,7 @@ export const Button = styled(B, { allowAs: true })`
 const ActionButtonMapper = props => ({
 	rounded: true,
 	as: Button,
-	...props,
+	...localeFilter(props),
 });
 export const ActionButton = styled(PromiseButton.impl).attrs(
 	ActionButtonMapper
@@ -54,7 +51,9 @@ const MoreChildrenPropMap = ({ children, ...props }) => ({
 	children: <span>{children}</span>,
 });
 
-export const More = styled(Button).attrs(MoreChildrenPropMap)`
+export const More = styled(Button).attrs(
+	localeFilter.compose(MoreChildrenPropMap)
+)`
 	display: inline-flex;
 	flex-direction: column;
 	align-items: center;

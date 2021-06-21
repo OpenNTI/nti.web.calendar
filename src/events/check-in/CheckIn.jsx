@@ -2,6 +2,7 @@ import React, { Suspense, useCallback, useEffect, useState } from 'react';
 
 import { Search, useLink, useChanges } from '@nti/web-commons';
 
+import getString from './strings';
 import { ActionPrompt, Actions, Action } from './parts/Hero';
 import { Box, TitleBar, Group } from './parts/Containers';
 import { Empty, Loading } from './parts/misc';
@@ -42,7 +43,7 @@ export function CheckIn({ onViewEntry, event, ...handlers }) {
 			<Heading {...handlers} event={event} />
 
 			<TitleBar>
-				<Title>Checked-In Attendees ({count})</Title>
+				<Title localeKey="title" with={{ count }} />
 				<Group>
 					<Search
 						square
@@ -53,6 +54,7 @@ export function CheckIn({ onViewEntry, event, ...handlers }) {
 								max-width: unset;
 							}
 						`}
+						placeholder={getString('search-placeholder-text')}
 						delay={500}
 						value={search}
 						onChange={setSearch}
@@ -90,7 +92,7 @@ export function CheckIn({ onViewEntry, event, ...handlers }) {
  * @returns {JSX.Element}
  */
 function Attendance({ event, search, onCountUpdated, onItemClick }) {
-	const [batchSize, setPageSize] = useState();
+	const [batchSize, setPageSize] = useState(1);
 	const [reload, setReloadNonce] = useState();
 
 	/** @type {EventAttendance} (attendance) */
@@ -131,11 +133,11 @@ function Attendance({ event, search, onCountUpdated, onItemClick }) {
 					onRowClick={onItemClick}
 				/>
 			) : (
-				<Empty>{search ? 'Not found.' : 'No Check-ins yet'}</Empty>
+				<Empty localeKey={search ? 'not-found' : 'empty'} />
 			)}
 
 			{attendance.hasMore && (
-				<More onClick={setMaxPageSize}>View All</More>
+				<More onClick={setMaxPageSize} localeKey="view-all" />
 			)}
 		</>
 	);
@@ -156,23 +158,20 @@ function Heading({
 
 	return (
 		<ActionPrompt>
-			<Title invert as="h2">
-				Select an option to check in an attendee.
-			</Title>
+			<Title invert as="h2" localeKey="actions.title" />
 			<Actions>
 				{showLookupByLicense && (
-					<Action onClick={onViewLookupByLicense}>
-						Scan or
-						<br />
-						Enter Code
-					</Action>
+					<Action
+						onClick={onViewLookupByLicense}
+						localeKey="actions.lookup-by-license"
+					/>
 				)}
-				<Action onClick={onViewLookup}>Lookup by Name</Action>
+				<Action onClick={onViewLookup} localeKey="actions.lookup" />
 				{showCheckInNewUser && (
-					<Action onClick={onViewCheckInNewUser}>
-						Create a<br />
-						New Account
-					</Action>
+					<Action
+						onClick={onViewCheckInNewUser}
+						localeKey="actions.check-in-new-user"
+					/>
 				)}
 			</Actions>
 		</ActionPrompt>

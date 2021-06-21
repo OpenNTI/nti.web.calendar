@@ -1,3 +1,5 @@
+import getString from '../strings';
+
 import { NameColumn } from './NameColumn';
 import { TableCell } from './shared';
 
@@ -12,6 +14,6 @@ export function AttendanceRecordNameColumn({ item, ...props }) {
 	/** @type {EventAttendanceRecord} (item) */
 	return NameColumn({ avatar: false, item: item.User, ...props });
 }
-AttendanceRecordNameColumn.Name = 'Name';
+AttendanceRecordNameColumn.Name = () => getString('columns.name');
 AttendanceRecordNameColumn.SortKey = 'Name';
 AttendanceRecordNameColumn.cssClassName = TableCell;

@@ -7,6 +7,7 @@ import { useReducerState } from './parts/use-reducer-state';
 import { ActionButton, Button } from './parts/Buttons';
 import { Box, TitleBar } from './parts/Containers';
 import { Title } from './parts/Text';
+import getString from './strings';
 
 //#region 🎨 paint
 
@@ -27,7 +28,7 @@ const Required = styled('span').attrs({ children: '*' })`
 	color: var(--primary-red);
 `;
 
-const Legend = styled(Text.Label).attrs({ as: 'legend' })`
+const Legend = styled(Text.Label).attrs({ as: 'legend', getString })`
 	color: var(--tertiary-grey);
 `;
 
@@ -66,7 +67,7 @@ const FieldSet = styled.fieldset`
 function DecoratedInput({ className, required, label, name, error, ...props }) {
 	return (
 		<FieldSet className={className}>
-			<Legend>
+			<Legend localeKey={`entry-form.${name}`}>
 				{label}
 				{required && <Required />}
 			</Legend>
@@ -129,7 +130,7 @@ export function EntryForm({ item, returnView, onSave }) {
 	return (
 		<Box>
 			<TitleArea>
-				<Title>Review and Confirm Information</Title>
+				<Title localeKey="entry-form.title" />
 				<Image />
 			</TitleArea>
 
@@ -137,7 +138,6 @@ export function EntryForm({ item, returnView, onSave }) {
 				<DecoratedInput
 					error={error}
 					name="realname"
-					label="Full Name"
 					required
 					value={user?.realname}
 					disabled={busy || readOnly}
@@ -150,7 +150,6 @@ export function EntryForm({ item, returnView, onSave }) {
 				<DecoratedInput
 					error={error}
 					name="external_id"
-					label="License Number"
 					required
 					value={user?.LicenseNumber}
 					disabled={busy || readOnly}
@@ -158,7 +157,6 @@ export function EntryForm({ item, returnView, onSave }) {
 				<DecoratedInput
 					error={error}
 					name="uuid"
-					label="UUID"
 					value={user?.DEQ_UUID}
 					disabled
 				/>
@@ -166,7 +164,6 @@ export function EntryForm({ item, returnView, onSave }) {
 					error={error}
 					type="email"
 					name="email"
-					label="Email Address"
 					required
 					value={user?.email}
 					disabled={busy || readOnly}
@@ -180,18 +177,30 @@ export function EntryForm({ item, returnView, onSave }) {
 			}
 			<Controls>
 				{onSave && (
-					<ActionButton rounded disabled={busy} onClick={save}>
-						Save
-					</ActionButton>
+					<ActionButton
+						rounded
+						disabled={busy}
+						onClick={save}
+						localeKey="entry-form.save"
+					/>
 				)}
-				<Button inverted text onClick={returnView} disabled={busy}>
-					Cancel
-				</Button>
+				<Button
+					inverted
+					text
+					onClick={returnView}
+					disabled={busy}
+					localeKey="entry-form.cancel"
+				/>
+
 				<Spacer />
 				{item?.hasLink('delete') && (
-					<ActionButton inverted destructive text onClick={del}>
-						Delete Attendee
-					</ActionButton>
+					<ActionButton
+						inverted
+						destructive
+						text
+						onClick={del}
+						localeKey="entry-form.delete"
+					/>
 				)}
 			</Controls>
 		</Box>

@@ -3,6 +3,7 @@ import React, { useContext } from 'react';
 import { DisplayName } from '@nti/web-commons';
 
 import { List } from '../parts/misc';
+import getString from '../strings';
 
 import { Flex, SearchContext, TableCell, TableCellText } from './shared';
 import { AvatarColumn } from './AvatarColumn';
@@ -42,7 +43,7 @@ export function NameColumn({ item, avatar = true, additional }) {
 		</Flex>
 	);
 }
-NameColumn.Name = 'Name';
+NameColumn.Name = () => getString('columns.name');
 NameColumn.SortKey = 'Name';
 NameColumn.cssClassName = TableCell;
 //#endregion

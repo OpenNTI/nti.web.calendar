@@ -2,6 +2,8 @@ import React from 'react';
 
 import { Text } from '@nti/web-commons';
 
+import getString from '../strings';
+
 export const ActionPrompt = styled.div`
 	min-height: 166px;
 	margin: 0 calc(var(--padding-inset) * -1);
@@ -44,7 +46,7 @@ export const Actions = styled('div').attrs(ActionsMapper)`
 	}
 `;
 
-export const Action = styled(Text.Base).attrs({ as: 'button' })`
+export const Action = styled(Text.Base).attrs({ as: 'button', getString })`
 	flex: 0 0 auto;
 	border: 0;
 	font-size: 12px;

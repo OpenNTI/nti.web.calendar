@@ -4,6 +4,7 @@ import { CenteredBox as Box } from './parts/Containers';
 import { SubTitle } from './parts/Text';
 import { useCodeScanner } from './parts/use-code-scanner';
 import icon from './assets/qr_icon.svg';
+import getString from './strings';
 
 //#region 🎨 paint
 
@@ -59,9 +60,9 @@ export function InputForm({ onLookup }) {
 	return (
 		<Box as="form" onSubmit={submit}>
 			<Image />
-			<SubTitle>Scan your QR code using your reader…</SubTitle>
+			<SubTitle localeKey="lookup-by-license.scan-instruction" />
 			<Input
-				placeholder="Or click to manually enter"
+				placeholder={getString('lookup-by-license.placeholder-text')}
 				ref={inputRef}
 				autoFocus
 			/>

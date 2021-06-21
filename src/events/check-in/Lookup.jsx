@@ -8,6 +8,7 @@ import { Table } from './parts/Table';
 import { CheckInNameColumn } from './columns/CheckInNameColumn';
 import { CheckInColumn, CheckInAction } from './columns/CheckInButtonColumn';
 import { SearchContext } from './columns/shared';
+import getString from './strings';
 
 /** @typedef {import('@nti/lib-interfaces/src/models/calendar').BaseEvent} CalendarEvent */
 /** @typedef {import('@nti/lib-interfaces/src/models/entities').User} User */
@@ -49,7 +50,7 @@ export function Lookup({ event }) {
 	return (
 		<Box>
 			<SearchBox
-				placeholder="Search..."
+				placeholder={getString('search-placeholder-text')}
 				delay={500}
 				value={search}
 				onChange={setSearch}
@@ -86,6 +87,6 @@ function SearchResults({ event, term }) {
 			/>
 		</SearchContext.Provider>
 	) : (
-		<Empty>Not Found</Empty>
+		<Empty localeKey="not-found" />
 	);
 }

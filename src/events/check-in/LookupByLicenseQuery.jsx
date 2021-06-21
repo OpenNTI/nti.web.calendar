@@ -21,10 +21,13 @@ export function Query({ event, query, onResolve, onReset }) {
 
 	return user ? null : (
 		<Box>
-			<Empty>&quot;{query}&quot; Not found.</Empty>
-			<Button inverted text onClick={onReset}>
-				Try again?
-			</Button>
+			<Empty localeKey="lookup-by-license.not-found" with={{ query }} />
+			<Button
+				inverted
+				text
+				onClick={onReset}
+				localeKey="lookup-by-license.retry"
+			/>
 		</Box>
 	);
 }

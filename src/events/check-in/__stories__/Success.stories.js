@@ -20,7 +20,7 @@ export function Success() {
 	return (
 		<Container>
 			<Suspense fallback={<div />}>
-				<Screen />
+				<Screen user={{ realname: 'John Doe' }} reset={() => {}} />
 			</Suspense>
 		</Container>
 	);

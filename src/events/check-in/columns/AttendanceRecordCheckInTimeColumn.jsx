@@ -2,6 +2,8 @@ import cx from 'classnames';
 
 import { DateTime } from '@nti/web-commons';
 
+import getString from '../strings';
+
 import { TableCell, TableCellText } from './shared';
 
 /** @typedef {import('./shared').EventAttendanceRecord} EventAttendanceRecord */
@@ -23,7 +25,8 @@ export function AttendanceRecordCheckInTimeColumn({ item }) {
 		</>
 	);
 }
-AttendanceRecordCheckInTimeColumn.Name = 'Check-in Time';
+AttendanceRecordCheckInTimeColumn.Name = () =>
+	getString('columns.check-in-time');
 AttendanceRecordCheckInTimeColumn.SortKey = 'registrationTime';
 AttendanceRecordCheckInTimeColumn.cssClassName = cx(
 	TableCell,

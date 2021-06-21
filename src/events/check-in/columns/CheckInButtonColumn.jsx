@@ -1,6 +1,7 @@
 import React, { useCallback, useContext } from 'react';
 
 import { ActionButton } from '../parts/Buttons';
+import getString from '../strings';
 
 export const CheckInAction = React.createContext();
 
@@ -23,16 +24,16 @@ export function CheckInColumn({ item }) {
 			key={item.getID()}
 			onClick={callback}
 			renderFinalState={Finish}
-		>
-			Check In
-		</ActionButton>
+			localeKey="action.label"
+		/>
 	);
 }
 
 function Finish() {
 	return (
 		<b>
-			<i className="icon-check" /> Checked-in
+			<i className="icon-check" />
+			{getString('action.success')}
 		</b>
 	);
 }

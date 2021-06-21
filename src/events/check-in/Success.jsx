@@ -22,13 +22,19 @@ export function Success({ user, reset, returnView }) {
 	return (
 		<Box>
 			<img src={icon} />
-			<SubTitle>{user?.realname} has been checked in.</SubTitle>
-			<Button rounded onClick={reset} hidden={!reset}>
-				Scan another QR code
-			</Button>
-			<Button inverted text onClick={returnView}>
-				Return to Event Page
-			</Button>
+			<SubTitle localeKey="success-screen.check-in-success" with={user} />
+			<Button
+				rounded
+				onClick={reset}
+				hidden={!reset}
+				localeKey="success-screen.scan-another-code"
+			/>
+			<Button
+				inverted
+				text
+				onClick={returnView}
+				localeKey="success-screen.return-to-main"
+			/>
 		</Box>
 	);
 }
