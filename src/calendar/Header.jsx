@@ -10,7 +10,7 @@ import { Connectors } from '@nti/lib-store';
 import CalendarList from './calendar-list';
 import CalendarExport from './export';
 
-const t = scoped('nti.web.calendar.header', {
+const t = scoped('calendar.header', {
 	title: 'Calendars',
 });
 

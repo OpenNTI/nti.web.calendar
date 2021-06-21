@@ -9,7 +9,7 @@ import { scoped } from '@nti/lib-locale';
 
 import Store from './Store';
 
-const t = scoped('nti-calendar.export', {
+const t = scoped('calendar.export', {
 	unavailable: 'Calendars are not available for export at this time.',
 	header: 'Export your Calendars',
 	message:

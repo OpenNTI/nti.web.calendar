@@ -28,7 +28,7 @@ const buildIsSelected = (selected, unselected) => {
 	};
 };
 
-const t = scoped('web-calendar.calendars.Filter', {
+const t = scoped('calendar.filter', {
 	courses: 'courses',
 	search: 'Search your Calendars',
 	empty: 'No Calendars',

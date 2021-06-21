@@ -29,7 +29,7 @@ const Empty = styled.div`
 `;
 //#endregion
 
-const t = scoped('nti.web.calendar.day', {
+const t = scoped('calendar.day', {
 	empty: 'No events yet...',
 	today: 'Today',
 	todayWithDate: 'Today %(date)s',

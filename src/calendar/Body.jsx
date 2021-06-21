@@ -11,7 +11,7 @@ import Day from './Day';
 import BodyEdge from './BodyEdge';
 const { BoundaryMonitor } = Scroll;
 
-const t = scoped('nti.web.calendar.body', {
+const t = scoped('calendar.body', {
 	empty: 'No Calendar Events.',
 });
 
