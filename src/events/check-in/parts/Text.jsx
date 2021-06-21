@@ -1,6 +1,9 @@
 import { Text } from '@nti/web-commons';
 
+import getString from '../strings';
+
 const defaultAs = tag => props => ({
+	getString,
 	...props,
 	as: props.as || tag,
 });
@@ -17,7 +20,7 @@ export const Title = styled(Text.Base).attrs(defaultAs('h1'))`
 	}
 `;
 
-export const SubTitle = styled(Text.Base)`
+export const SubTitle = styled(Text.Base).attrs({ getString })`
 	font-size: 14px;
 	font-weight: bold;
 	letter-spacing: 0;

@@ -1,6 +1,19 @@
-import { Button as ButtonBase, PromiseButton, Icons } from '@nti/web-commons';
+import React from 'react';
 
-export const Button = styled(ButtonBase, { allowAs: true })`
+import {
+	Button as ButtonBase,
+	PromiseButton,
+	Icons,
+	Text,
+} from '@nti/web-commons';
+
+import t from '../strings';
+
+const B = React.forwardRef((P, ref) => (
+	<Text.Base ref={ref} {...P} as={ButtonBase} getString={t} />
+));
+
+export const Button = styled(B, { allowAs: true })`
 	padding: 14px 42px 13px;
 	font-size: 12px;
 	line-height: 16px;
