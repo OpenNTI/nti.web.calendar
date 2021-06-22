@@ -64,7 +64,6 @@ export function InputForm({ onLookup }) {
 			<Input
 				placeholder={getString('lookup-by-license.placeholder-text')}
 				ref={inputRef}
-				autoFocus
 			/>
 
 			<Video hidden ref={videoRef} />
