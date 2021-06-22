@@ -38,6 +38,9 @@ export function Lookup({ event }) {
 				setError(null);
 				await event.recordAttendance(user);
 			} catch (e) {
+				if (e.code === 'DuplicateEntry') {
+					return;
+				}
 				setError({ user, message: e.message });
 				throw e;
 			}
