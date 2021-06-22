@@ -27,6 +27,7 @@ function NewUser({ event, returnView }) {
 		case 'input':
 			return (
 				<EntryForm
+					returnView={returnView}
 					onSave={async form => {
 						// Stubbing 1-off logic outside of model
 						const payload = Object.fromEntries(
