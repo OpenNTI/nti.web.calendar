@@ -92,7 +92,7 @@ export function CheckIn({ onViewEntry, event, ...handlers }) {
  * @returns {JSX.Element}
  */
 function Attendance({ event, search, onCountUpdated, onItemClick }) {
-	const [batchSize, setPageSize] = useState(1);
+	const [batchSize, setPageSize] = useState();
 	const [reload, setReloadNonce] = useState();
 
 	/** @type {EventAttendance} (attendance) */
