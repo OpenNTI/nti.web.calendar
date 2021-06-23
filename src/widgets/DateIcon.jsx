@@ -9,14 +9,12 @@ const Wrapper = styled.div`
 	cursor: pointer;
 `;
 
-DateIcon.propTypes = {
-	date: PropTypes.object,
-};
-function DateIcon(props) {
+const DateIcon = React.forwardRef((props, ref) => {
 	const { todaysCount, markSeen, hasSeen } = Store.useValue();
 
 	return (
 		<Wrapper
+			ref={ref}
 			className="nti-calendar-date-icon-container"
 			onClick={() => {
 				markSeen();
@@ -29,6 +27,10 @@ function DateIcon(props) {
 			/>
 		</Wrapper>
 	);
-}
+});
+
+DateIcon.propTypes = {
+	date: PropTypes.object,
+};
 
 export default Store.compose(DateIcon);
