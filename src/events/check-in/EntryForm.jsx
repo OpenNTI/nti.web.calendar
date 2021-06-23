@@ -8,6 +8,7 @@ import { ActionButton, Button } from './parts/Buttons';
 import { Box, TitleBar } from './parts/Containers';
 import { Title } from './parts/Text';
 import getString from './strings';
+import icon from './assets/qr-code.svg';
 
 //#region 🎨 paint
 
@@ -17,7 +18,7 @@ const TitleArea = styled(TitleBar)`
 	flex-wrap: nowrap;
 `;
 
-const Image = styled.img`
+const Image = styled('img').attrs({ src: icon })`
 	float: right;
 	width: 84px;
 	height: 84px;
