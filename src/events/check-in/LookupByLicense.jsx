@@ -6,6 +6,8 @@ import { Query } from './LookupByLicenseQuery';
 import { EntryForm } from './EntryForm';
 import { Success } from './Success';
 import { useReducerState } from './parts/use-reducer-state';
+import { ErrorBoundary } from './parts/ErrorBoundary';
+import { LookupError } from './LookupByLicenseError';
 
 /** @typedef {import('@nti/lib-interfaces/src/models/calendar').BaseEvent} Event */
 /** @typedef {() => void} Handler */
@@ -40,16 +42,20 @@ export function Lookup({ event, returnView }) {
 
 		case 'query':
 			return (
-				<Suspense fallback={<Loading />}>
-					<Query
-						event={event}
-						query={query}
-						onResolve={user =>
-							dispatch({ state: 'resolved', user })
-						}
-						onReset={reset}
-					/>
-				</Suspense>
+				<ErrorBoundary
+					fallback={<LookupError reset={reset} query={query} />}
+				>
+					<Suspense fallback={<Loading />}>
+						<Query
+							event={event}
+							query={query}
+							onResolve={user =>
+								dispatch({ state: 'resolved', user })
+							}
+							onReset={reset}
+						/>
+					</Suspense>
+				</ErrorBoundary>
 			);
 
 		case 'resolved':

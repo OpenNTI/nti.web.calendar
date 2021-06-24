@@ -3,6 +3,7 @@ import React, { Suspense, useCallback, useState } from 'react';
 import { Search as SearchInput, useLink } from '@nti/web-commons';
 
 import { Box } from './parts/Containers';
+import { ErrorBoundary } from './parts/ErrorBoundary';
 import { Empty, Loading } from './parts/misc';
 import { Table } from './parts/Table';
 import { CheckInNameColumn } from './columns/CheckInNameColumn';
@@ -60,11 +61,15 @@ export function Lookup({ event }) {
 				autoFocus
 			/>
 			<CheckInAction.Provider value={action}>
-				<Suspense fallback={<Loading />}>
-					{search && search.length > 2 && (
-						<SearchResults event={event} term={search} />
-					)}
-				</Suspense>
+				<ErrorBoundary
+					fallback={<Empty localeKey="connection-error" />}
+				>
+					<Suspense fallback={<Loading />}>
+						{search && search.length > 2 && (
+							<SearchResults event={event} term={search} />
+						)}
+					</Suspense>
+				</ErrorBoundary>
 			</CheckInAction.Provider>
 		</Box>
 	);

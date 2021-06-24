@@ -11,6 +11,7 @@ import { Table } from './parts/Table';
 import { Title } from './parts/Text';
 import { AttendanceRecordNameColumn as NameColumn } from './columns/AttendanceRecordNameColumn';
 import { AttendanceRecordCheckInTimeColumn as CheckInTimeColumn } from './columns/AttendanceRecordCheckInTimeColumn';
+import { ErrorBoundary } from './parts/ErrorBoundary';
 // import { AttendanceDeleteColumn } from './columns/AttendanceDeleteColumn';
 
 /** @typedef {import('@nti/lib-interfaces/src/models/calendar').EventAttendance} EventAttendance */
@@ -65,19 +66,20 @@ export function CheckIn({ onViewEntry, event, ...handlers }) {
 					/>
 				</Group>
 			</TitleBar>
-
-			<Suspense fallback={<Loading />}>
-				<Attendance
-					event={event}
-					search={search}
-					/* The loading mask necessitates pushing the hook into this
+			<ErrorBoundary fallback={<Empty localeKey="connection-error" />}>
+				<Suspense fallback={<Loading />}>
+					<Attendance
+						event={event}
+						search={search}
+						/* The loading mask necessitates pushing the hook into this
 					component, so the count has to be called out separately.
 					I'm not 100% happy about this, but this seems like the cleanest
 					way to accomplish this without using a Store */
-					onCountUpdated={setCount}
-					onItemClick={onViewEntry}
-				/>
-			</Suspense>
+						onCountUpdated={setCount}
+						onItemClick={onViewEntry}
+					/>
+				</Suspense>
+			</ErrorBoundary>
 		</Box>
 	);
 }

@@ -1,10 +1,12 @@
 import { scoped } from '@nti/lib-locale';
 
 export default scoped('calendar.events.check-in', {
+	'connection-error': 'Something went wrong. Offline?',
 	'search-placeholder-text': 'Search…',
 	'not-found': 'Not Found.',
 	empty: 'No Check-ins yet',
 	'view-all': 'View All',
+	retry: 'Try Again',
 	title: 'Checked-In Attendees (%(count)s)',
 
 	action: {
@@ -27,8 +29,9 @@ export default scoped('calendar.events.check-in', {
 
 	'lookup-by-license': {
 		'scan-instruction': 'Scan your QR code using your reader…',
+		'scan-error': 'Something went wrong.',
 		'placeholder-text': 'Or click to manually enter',
-		'not-found': '&quot;%(query)s&quot; Not found.',
+		'not-found': 'Unable to find user &quot;%(query)s&quot;.',
 		retry: 'Try again?',
 	},
 
