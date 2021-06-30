@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Button } from '@nti/web-commons';
+
 import { Box } from '../parts/Containers';
 import { Table as CommonsTable } from '../parts/Table';
 import { TableCellText } from '../columns/shared';
@@ -16,6 +18,10 @@ const Container = styled(Box)`
 	}
 `;
 
+const Btn = styled(Button)`
+	align-self: flex-end;
+`;
+
 export default function BulkUploadComplete({
 	result: { Items: items = [], Issues: issues = [] },
 	returnView,
@@ -24,7 +30,7 @@ export default function BulkUploadComplete({
 		<Container>
 			<Title>{items.length} attendees checked in.</Title>
 			<Issues issues={issues} />
-			<button onClick={returnView}>Return</button>
+			<Btn onClick={returnView}>Return</Btn>
 		</Container>
 	);
 }
