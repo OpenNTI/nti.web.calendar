@@ -2,8 +2,10 @@ import React from 'react';
 
 import { Input, Errors } from '@nti/web-commons';
 
-import { useReducerState } from './parts/use-reducer-state';
-import getString from './strings';
+import { useReducerState } from '../parts/use-reducer-state';
+import getString from '../strings';
+
+import Complete from './Complete';
 
 const scope = key => `bulk-attendance-upload.filedrop.${key}`;
 const t = key => getString(scope(key));
@@ -23,7 +25,7 @@ export default BulkUpload;
  * @returns {JSX.Element}
  */
 function BulkUpload({ event, returnView }) {
-	const [{ state }, dispatch] = useReducerState({
+	const [{ state, result }, dispatch] = useReducerState({
 		state: 'input',
 	});
 
@@ -38,7 +40,7 @@ function BulkUpload({ event, returnView }) {
 				/>
 			);
 		case 'complete':
-			return <div>Complete</div>;
+			return <Complete result={result} returnView={returnView} />;
 	}
 
 	return <>{state}</>;
@@ -68,8 +70,7 @@ const BulkUploadForm = ({ event, onComplete }) => {
 			formData.append('source', file);
 			const result = await event.postToLink(
 				'bulk-attendance-upload',
-				formData,
-				true
+				formData
 			);
 			onComplete?.(result);
 		} catch (e) {

@@ -9,7 +9,7 @@ import { EntryForm } from './EntryForm';
 // Lazy load
 const LookupByLicense = React.lazy(() => import('./LookupByLicense'));
 const CheckInNewUser = React.lazy(() => import('./CheckInNewUser'));
-const BulkUpload = React.lazy(() => import('./BulkUpload'));
+const BulkUpload = React.lazy(() => import('./bulk-upload/BulkUpload'));
 
 /** @typedef {import('@nti/lib-interfaces/src/models/calendar').BaseEvent} Event */
 /** @typedef {() => void} Handler */
