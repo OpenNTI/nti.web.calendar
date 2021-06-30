@@ -154,9 +154,11 @@ function Heading({
 	onViewLookup,
 	onViewLookupByLicense,
 	onViewCheckInNewUser,
+	onViewBulkUpload,
 }) {
 	const showLookupByLicense = event?.hasLink('lookup-by-license-number');
 	const showCheckInNewUser = event?.hasLink('checkin-new-user');
+	const showUpload = true || event?.hasLink('bulk-attendance-upload');
 
 	return (
 		<ActionPrompt>
@@ -173,6 +175,12 @@ function Heading({
 					<Action
 						onClick={onViewCheckInNewUser}
 						localeKey="actions.check-in-new-user"
+					/>
+				)}
+				{showUpload && (
+					<Action
+						onClick={onViewBulkUpload}
+						localeKey="actions.bulk-attendance-upload"
 					/>
 				)}
 			</Actions>

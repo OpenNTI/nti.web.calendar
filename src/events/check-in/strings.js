@@ -19,6 +19,7 @@ export default scoped('calendar.events.check-in', {
 		'lookup-by-license': 'Scan or<br />Enter Code',
 		lookup: 'Lookup by Name',
 		'check-in-new-user': 'Create a<br />New Account',
+		'bulk-attendance-upload': 'Upload a CSV',
 	},
 
 	'success-screen': {
@@ -33,6 +34,18 @@ export default scoped('calendar.events.check-in', {
 		'placeholder-text': 'Or click to manually enter',
 		'not-found': 'Unable to find user &quot;%(query)s&quot;.',
 		retry: 'Try again?',
+	},
+
+	'bulk-attendance-upload': {
+		filedrop: {
+			title: 'Drag a CSV to Upload, or',
+			choose: 'Choose a File',
+			requirements: 'Must be a .csv under 10MB.',
+			wrongType: 'File type is unsupported.',
+			tooLarge: 'File is too large.',
+			unknownError: 'Unable to upload file.',
+		},
+		input: 'Choose',
 	},
 
 	'entry-form': {

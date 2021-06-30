@@ -9,6 +9,7 @@ import { EntryForm } from './EntryForm';
 // Lazy load
 const LookupByLicense = React.lazy(() => import('./LookupByLicense'));
 const CheckInNewUser = React.lazy(() => import('./CheckInNewUser'));
+const BulkUpload = React.lazy(() => import('./BulkUpload'));
 
 /** @typedef {import('@nti/lib-interfaces/src/models/calendar').BaseEvent} Event */
 /** @typedef {() => void} Handler */
@@ -42,6 +43,7 @@ export default function View(props) {
 	//#region DEQ Stuffs:
 	const viewLookupByLicense = () => transition('lookup-by-license');
 	const viewCheckInNewUser = () => transition('check-in-new-user');
+	const viewBulkUpload = () => transition('bulk-attendance-upload');
 	//#endregion
 
 	switch (state) {
@@ -53,6 +55,7 @@ export default function View(props) {
 					onViewLookup={viewLookup}
 					onViewLookupByLicense={viewLookupByLicense}
 					onViewCheckInNewUser={viewCheckInNewUser}
+					onViewBulkUpload={viewBulkUpload}
 					{...props}
 				/>
 			);
@@ -69,6 +72,9 @@ export default function View(props) {
 
 		case 'check-in-new-user':
 			return <CheckInNewUser {...props} returnView={viewMain} />;
+
+		case 'bulk-attendance-upload':
+			return <BulkUpload {...props} returnView={viewMain} />;
 		//#endregion
 	}
 }
