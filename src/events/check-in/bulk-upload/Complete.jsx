@@ -45,6 +45,10 @@ const column = (prop, name = prop) => {
 
 const LineColumn = column('line');
 const MessageColumn = column('message');
+const CertIdColumn = ({ item: { data } }) => (
+	<TableCellText>{data?.OpCert_ID}</TableCellText>
+);
+CertIdColumn.Name = 'Cert ID';
 
 const Table = styled(CommonsTable)`
 	&& {
@@ -58,7 +62,7 @@ function Issues({ issues, limit = 15 }) {
 			<Title>Encountered {issues.length} issues:</Title>
 			<Table
 				items={issues.slice(0, limit)}
-				columns={[LineColumn, MessageColumn]}
+				columns={[LineColumn, CertIdColumn, MessageColumn]}
 			/>
 			{issues.length > limit && (
 				<SubTitle>…and {issues.length - limit} more</SubTitle>
