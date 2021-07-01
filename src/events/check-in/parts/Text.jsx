@@ -27,3 +27,11 @@ export const SubTitle = styled(Text.Base).attrs({ getString })`
 	line-height: 19px;
 	margin: 35px 0;
 `;
+
+export const ShortHelp = styled(Text.Base)`
+	font-size: 12px;
+	font-weight: bold;
+	letter-spacing: 0;
+	line-height: 19px;
+	text-transform: uppercase;
+`;
