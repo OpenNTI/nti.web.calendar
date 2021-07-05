@@ -30,7 +30,7 @@ export default function View(props) {
 	});
 
 	// These handlers aren't wrapped in useCallback because
-	// 	) they get recreated ever time anyways.
+	// 	) they get recreated every time anyways.
 	// 	) this level renders once per transition.
 
 	const viewMain = () => (reset(), dispatch({ state: 'main' }));
