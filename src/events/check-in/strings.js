@@ -37,7 +37,7 @@ export default scoped('calendar.events.check-in', {
 	},
 
 	'bulk-attendance-upload': {
-		filedrop: {
+		'file-drop': {
 			title: 'Drag a CSV to Upload, or',
 			choose: 'Choose a File',
 			requirements: 'Must be a .csv under 10MB.',

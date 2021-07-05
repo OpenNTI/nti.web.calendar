@@ -7,9 +7,7 @@ import getString from '../strings';
 
 import Complete from './Complete';
 
-const scope = key => `bulk-attendance-upload.filedrop.${key}`;
-const t = key => getString(scope(key));
-t.isMissing = key => getString.isMissing(scope(key));
+const t = getString.scoped('bulk-attendance-upload.file-drop');
 
 /** @typedef {import('@nti/lib-interfaces/src/models/calendar').BaseEvent} Event */
 /** @typedef {() => void} Handler */
@@ -17,34 +15,7 @@ t.isMissing = key => getString.isMissing(scope(key));
 //react.lazy only supports default exports...so make one
 export default BulkUpload;
 
-/**
- *
- * @param {Object} props
- * @param {Event} props.event
- * @param {Handler} props.returnView
- * @returns {JSX.Element}
- */
-function BulkUpload({ event, returnView }) {
-	const [{ state, result }, dispatch] = useReducerState({
-		state: 'input',
-	});
-
-	switch (state) {
-		case 'input':
-			return (
-				<BulkUploadForm
-					event={event}
-					onComplete={result =>
-						dispatch({ state: 'complete', result })
-					}
-				/>
-			);
-		case 'complete':
-			return <Complete result={result} returnView={returnView} />;
-	}
-
-	return <>{state}</>;
-}
+//#region 🎨
 
 const FormContainer = styled.div`
 	min-height: 350px;
@@ -74,20 +45,17 @@ const Mask = styled.div`
 `;
 
 const BulkUploadForm = ({ event, onComplete }) => {
-	const [{ error, loading }, dispatch] = useReducerState({});
-	const clearError = () => dispatch({ error: null });
-	const unmounted = useRef();
+	const [{ error, loading }, dispatch, reset] = useReducerState({
+		error: null,
+		loading: false,
+	});
 
-	const update = (...args) => {
-		if (!unmounted.current) {
-			dispatch(...args);
-		}
-	};
-
-	useEffect(() => () => (unmounted.current = true));
+	const active = useRef(true);
+	useEffect(() => () => (active.current = false), []);
 
 	const onChange = async file => {
-		clearError();
+		const update = (...args) => active.current && dispatch(...args);
+		reset();
 		update({ loading: true });
 		try {
 			const formData = new FormData();
@@ -103,6 +71,7 @@ const BulkUploadForm = ({ event, onComplete }) => {
 			update({ loading: false });
 		}
 	};
+
 	return (
 		<FormContainer>
 			<FileDrop
@@ -121,3 +90,34 @@ const BulkUploadForm = ({ event, onComplete }) => {
 		</FormContainer>
 	);
 };
+
+//#endregion
+
+/**
+ *
+ * @param {Object} props
+ * @param {Event} props.event
+ * @param {Handler} props.returnView
+ * @returns {JSX.Element}
+ */
+function BulkUpload({ event, returnView }) {
+	const [{ state, result }, dispatch] = useReducerState({
+		state: 'input',
+	});
+
+	switch (state) {
+		case 'input':
+			return (
+				<BulkUploadForm
+					event={event}
+					onComplete={result =>
+						dispatch({ state: 'complete', result })
+					}
+				/>
+			);
+		case 'complete':
+			return <Complete result={result} returnView={returnView} />;
+	}
+
+	return <>{state}</>;
+}
