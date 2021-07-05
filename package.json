@@ -42,7 +42,7 @@
     "@nti/web-session": "NextThought/nti.web.session",
     "@nti/web-storage": "NextThought/nti.web.storage",
     "@nti/web-whiteboard": "NextThought/nti.web.whiteboard",
-    "qrcode-decoder": "0.1.3",
+    "qrcode-decoder": "0.2.0",
     "react-copy-to-clipboard": "^5.0.1"
   },
   "devDependencies": {
