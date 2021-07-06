@@ -80,7 +80,7 @@ const BulkUploadForm = ({ event, onComplete }) => {
 					'text/csv': true,
 				}}
 				getString={t}
-				error={error && Errors.Messages.getMessage(error)}
+				error={Errors.Messages.getMessage(error)}
 			/>
 			{loading && (
 				<Mask>
