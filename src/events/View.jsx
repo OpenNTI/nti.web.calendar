@@ -29,7 +29,7 @@ export function View(props) {
 	useEffect(() => {
 		event.on('show-details', toggle);
 		return () => event.un('show-details', toggle);
-	}, [event]);
+	}, [event, toggle]);
 
 	const Viewer = showCheckIn ? CheckIn : Editor;
 	return (
