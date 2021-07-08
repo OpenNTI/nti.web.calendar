@@ -1,8 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 
-import { Input, Errors, Loading } from '@nti/web-commons';
+import { Input, Errors, Loading, useReducerState } from '@nti/web-commons';
 
-import { useReducerState } from '../parts/use-reducer-state';
 import getString from '../strings';
 
 import Complete from './Complete';

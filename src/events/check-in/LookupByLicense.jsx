@@ -1,11 +1,12 @@
 import React, { Suspense } from 'react';
 
+import { useReducerState } from '@nti/web-commons';
+
 import { Loading } from './parts/misc';
 import { InputForm } from './LookupByLicenseInputForm';
 import { Query } from './LookupByLicenseQuery';
 import { EntryForm } from './EntryForm';
 import { Success } from './Success';
-import { useReducerState } from './parts/use-reducer-state';
 import { ErrorBoundary } from './parts/ErrorBoundary';
 import { LookupError } from './LookupByLicenseError';
 

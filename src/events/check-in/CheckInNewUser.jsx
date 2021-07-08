@@ -1,7 +1,8 @@
 import React from 'react';
 
+import { useReducerState } from '@nti/web-commons';
+
 import { EntryForm } from './EntryForm';
-import { useReducerState } from './parts/use-reducer-state';
 import { Success } from './Success';
 
 /** @typedef {import('@nti/lib-interfaces/src/models/calendar').BaseEvent} Event */
