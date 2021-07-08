@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { isFlag } from '@nti/web-client';
 
 import Editor from './editor/EventEditor';
+import { Registration } from './Registration';
 
 const CheckIn = React.lazy(() => import('./check-in/View'));
 
@@ -24,6 +25,7 @@ export function View(props) {
 	const Viewer = showCheckIn ? CheckIn : Editor;
 	return (
 		<Suspense fallback={<div />}>
+			<Registration {...props} />
 			<Viewer {...props} />
 		</Suspense>
 	);
