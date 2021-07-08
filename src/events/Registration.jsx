@@ -27,6 +27,7 @@ const Box = styled.div`
 
 const Label = styled(Text.Label).attrs({ getString: t })`
 	text-transform: none;
+	margin-left: 1em;
 `;
 
 //#endregion
@@ -36,7 +37,7 @@ export function Registration({ event }) {
 	return (
 		event?.getRegistrationTime() && (
 			<Box>
-				<Icons.Check />
+				<Icons.Check.Circled />
 				<Label
 					localeKey="checked-in-at"
 					with={{
