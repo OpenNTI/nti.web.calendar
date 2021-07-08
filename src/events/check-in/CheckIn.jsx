@@ -44,7 +44,11 @@ export function CheckIn({ onViewEntry, event, ...handlers }) {
 			<Heading {...handlers} event={event} />
 
 			<TitleBar>
-				<Title localeKey="title" with={{ count }} />
+				<Title
+					localeKey="title"
+					with={{ count }}
+					data-testid="event-checked-in-attendees"
+				/>
 				<Group>
 					<Search
 						square

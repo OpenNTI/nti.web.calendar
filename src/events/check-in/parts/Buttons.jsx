@@ -6,6 +6,7 @@ import t from '../strings';
 
 const localeFilter = ({ children, localeKey, with: localeData, ...P }) => ({
 	children: (localeKey && t(localeKey, localeData)) || children,
+	'data-testid': localeKey,
 	...P,
 });
 localeFilter.compose = f => p => f(localeFilter(p));
@@ -103,6 +104,7 @@ export const More = styled(Button).attrs(
 const DownloadLinkMapper = props => ({
 	hidden: !props.href,
 	children: <Icons.Download />,
+	'data-testid': 'download',
 	...props,
 });
 export const DownloadLink = styled('a').attrs(DownloadLinkMapper)`

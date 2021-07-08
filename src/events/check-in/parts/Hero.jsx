@@ -46,7 +46,16 @@ export const Actions = styled('div').attrs(ActionsMapper)`
 	}
 `;
 
-export const Action = styled(Text.Base).attrs({ as: 'button', getString })`
+function ActionMapper(props) {
+	return {
+		as: 'button',
+		getString,
+		'data-testid': props.localeKey,
+		...props,
+	};
+}
+
+export const Action = styled(Text.Base).attrs(ActionMapper)`
 	flex: 0 0 auto;
 	border: 0;
 	font-size: 12px;

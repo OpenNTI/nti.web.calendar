@@ -2,13 +2,14 @@ import { Text } from '@nti/web-commons';
 
 import getString from '../strings';
 
-const defaultAs = tag => props => ({
+const defaults = tag => props => ({
+	as: tag,
 	getString,
+	'data-testid': props.localeKey,
 	...props,
-	as: props.as || tag,
 });
 
-export const Title = styled(Text.Base).attrs(defaultAs('h1'))`
+export const Title = styled(Text.Base).attrs(defaults('h1'))`
 	font-size: 22px;
 	font-weight: 300;
 	line-height: 30px;
@@ -20,7 +21,7 @@ export const Title = styled(Text.Base).attrs(defaultAs('h1'))`
 	}
 `;
 
-export const SubTitle = styled(Text.Base).attrs({ getString })`
+export const SubTitle = styled(Text.Base).attrs(defaults())`
 	font-size: 14px;
 	font-weight: bold;
 	letter-spacing: 0;
@@ -28,7 +29,7 @@ export const SubTitle = styled(Text.Base).attrs({ getString })`
 	margin: 35px 0;
 `;
 
-export const ShortHelp = styled(Text.Base)`
+export const ShortHelp = styled(Text.Base).attrs(defaults())`
 	font-size: 12px;
 	font-weight: bold;
 	letter-spacing: 0;
