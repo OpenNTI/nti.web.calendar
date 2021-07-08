@@ -12,6 +12,9 @@ export const ActionPrompt = styled.div`
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	@media (--respond-to-handhelds) {
+		padding: 10px 0;
+	}
 `;
 
 function ActionsMapper({ children, ...props }) {
@@ -40,10 +43,6 @@ export const Actions = styled('div').attrs(ActionsMapper)`
 	justify-content: center;
 	flex-wrap: wrap;
 	width: 100%;
-
-	@media (--respond-to-handhelds) {
-		margin-bottom: 10px;
-	}
 `;
 
 function ActionMapper(props) {
