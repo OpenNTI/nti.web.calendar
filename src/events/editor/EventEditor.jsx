@@ -4,51 +4,19 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 
 import { decorate } from '@nti/lib-commons';
-import { DateTime, Input, Prompt, Text } from '@nti/web-commons';
-import { scoped } from '@nti/lib-locale';
-import { ImageUpload } from '@nti/web-whiteboard';
+import { Prompt } from '@nti/web-commons';
 
 import Store from '../../calendar/Store';
 
-import DateInput from './DateInput';
-import CalendarSelect from './CalendarSelect';
+import t from './strings';
+import { Body } from './Body';
+import { Header } from './Header';
 
 const { SaveCancel } = Prompt;
 
-const t = scoped('calendar.editor.Editor', {
-	eventTitle: 'Event Title',
-	eventDescription: 'Description...',
-	eventLocation: 'Location',
-	calendar: 'Calendar',
-	save: 'Done',
-	cancel: 'Cancel',
-	close: 'Close',
-	edit: 'Edit',
-	location: 'Location',
-	datesTimes: 'Dates & Times',
-	delete: 'Delete',
-	event: 'Event',
-	start: 'Start',
-	end: 'End',
-	title: 'View Event',
-	searchCalendar: 'Search Calendars',
-});
-
-const createScope = scoped('calendar.editor.Editor.create', {
-	title: 'Create Event',
-	save: 'Create',
-	cancel: 'Cancel',
-});
-const editScope = scoped('calendar.editor.Editor.edit', {
-	title: 'Edit Event',
-	save: 'Save',
-	cancel: 'Cancel',
-});
-const editableScope = scoped('calendar.editor.Editor.editable', {
-	title: 'View Event',
-	save: 'Edit',
-	cancel: 'Cancel',
-});
+const createScope = t.scoped('create');
+const editScope = t.scoped('editor');
+const editableScope = t.scoped('editable');
 
 function getStateFromEvent(event) {
 	let defaultStartDate = new Date();
@@ -99,7 +67,7 @@ class EventEditor extends React.Component {
 			event && this.getMatchingCalendar(event, availableCalendars);
 
 		this.state = {
-			viewMode: !create,
+			readOnly: !create,
 			calendar:
 				calendarFromEvent ||
 				(availableCalendars && availableCalendars[0]),
@@ -136,173 +104,16 @@ class EventEditor extends React.Component {
 		})[0];
 	}
 
-	renderDateInfo() {
-		const { startDate } = this.state;
-
-		return (
-			<div className="date">
-				<div className="month">
-					{DateTime.format(startDate, DateTime.MONTH_ABBR)}
-				</div>
-				<div className="day">
-					{DateTime.format(startDate, DateTime.DAY_OF_THE_MONTH)}
-				</div>
-			</div>
-		);
-	}
-
-	renderEventInfo() {
-		const { startDate, title, description, img, viewMode } = this.state;
-
-		return (
-			<div className="event-info">
-				<div className="title">
-					{viewMode ? (
-						<Text.Base linkify>{title}</Text.Base>
-					) : (
-						<Input.Text
-							placeholder={t('eventTitle')}
-							value={title}
-							onChange={val => this.setState({ title: val })}
-							maxLength="140"
-						/>
-					)}
-				</div>
-				<div className="time-info">
-					<span className="date">
-						{DateTime.format(
-							startDate,
-							DateTime.WEEKDAY_AT_TIME_PADDED_WITH_ZONE
-						)}
-					</span>
-				</div>
-				<div className="image-and-description">
-					{viewMode ? (
-						img && <img className="preview" src={img.src} />
-					) : (
-						<ImageUpload
-							img={img}
-							onChange={imgBlob => this.setState({ imgBlob })}
-						/>
-					)}
-					{viewMode ? (
-						<Text.Base className="desc" linkify>
-							{description}
-						</Text.Base>
-					) : (
-						<Input.TextArea
-							value={description}
-							onChange={val =>
-								this.setState({ description: val })
-							}
-							placeholder={t('eventDescription')}
-						/>
-					)}
-				</div>
-			</div>
-		);
-	}
-
 	onCalendarSelect = calendar => {
 		this.setState({ calendar });
 	};
 
-	renderCalendarSelect() {
-		const { event } = this.props;
-		const { calendar } = this.state;
-
-		return (
-			<div className="input-section calendar">
-				<div className="section-title">{t('calendar')}</div>
-				<CalendarSelect
-					onChange={this.onCalendarSelect}
-					selected={calendar}
-					event={event}
-				/>
-			</div>
-		);
-	}
-
-	renderLocation() {
-		const { location, viewMode } = this.state;
-
-		if (viewMode && !location) {
-			return null;
-		}
-
-		return (
-			<div className="input-section location">
-				<div className="section-title">{t('location')}</div>
-				{viewMode ? (
-					<Text.Base className="name" linkify>
-						{location}
-					</Text.Base>
-				) : (
-					<Input.Text
-						placeholder={t('eventLocation')}
-						value={location}
-						onChange={val => this.setState({ location: val })}
-						maxLength="140"
-					/>
-				)}
-			</div>
-		);
-	}
-
-	renderDate(value, label, field) {
-		const { viewMode } = this.state;
-
-		if (viewMode) {
-			return (
-				<div className="date-display">
-					{DateTime.format(value, DateTime.MONTH_NAME_DAY_YEAR_TIME)}
-				</div>
-			);
-		}
-
-		return (
-			<DateInput
-				date={value}
-				label={label}
-				onChange={val => this.setState({ [field]: val })}
-			/>
-		);
-	}
-
-	renderDateInputs() {
-		return (
-			<div className="input-section times">
-				<div className="section-title">{t('datesTimes')}</div>
-				<div className="dates">
-					{this.renderDate(
-						this.state.startDate,
-						t('start'),
-						'startDate'
-					)}
-					{this.renderDate(this.state.endDate, t('end'), 'endDate')}
-				</div>
-			</div>
-		);
-	}
-
-	renderOtherInfo() {
-		const { viewMode } = this.state;
-
-		return (
-			<div className="other-info">
-				{!viewMode && this.renderCalendarSelect()}
-				{this.renderLocation()}
-				{this.renderDateInputs()}
-			</div>
-		);
-	}
-
 	onCancel = () => {
 		const { onCancel, onDismiss, create } = this.props;
-		const { viewMode } = this.state;
+		const { readOnly } = this.state;
 
-		if (!viewMode && !create) {
-			this.setState({ viewMode: true });
+		if (!readOnly && !create) {
+			this.setState({ readOnly: true });
 
 			return;
 		}
@@ -319,7 +130,7 @@ class EventEditor extends React.Component {
 	onSave = async () => {
 		const { event, createEvent, onSuccess, editable, create } = this.props;
 		const {
-			viewMode,
+			readOnly,
 			calendar,
 			title,
 			description,
@@ -329,10 +140,10 @@ class EventEditor extends React.Component {
 			imgBlob,
 		} = this.state;
 
-		if (viewMode) {
+		if (readOnly) {
 			if (editable) {
 				this.setState({
-					viewMode: false,
+					readOnly: false,
 				});
 
 				return;
@@ -358,25 +169,17 @@ class EventEditor extends React.Component {
 
 		if (!create && calendarEvent) {
 			this.setState({
-				viewMode: true,
+				readOnly: true,
 				...getStateFromEvent(calendarEvent),
 			});
 		}
 	};
 
-	renderError() {
-		const { createError } = this.props;
-
-		if (createError) {
-			return <div className="error">{createError}</div>;
-		}
-	}
-
 	getScope() {
 		const { editable, create } = this.props;
-		const { viewMode } = this.state;
+		const { readOnly } = this.state;
 
-		if (viewMode) {
+		if (readOnly) {
 			if (editable) {
 				return editableScope;
 			}
@@ -391,54 +194,64 @@ class EventEditor extends React.Component {
 		}
 	}
 
-	renderEvent() {
-		const {
-			props: { saving },
-			state: { viewMode },
-		} = this;
-
-		const cls = cx('calendar-event-editor', {
-			saving,
-			'view-only': viewMode,
-		});
-
-		return (
-			<div className={cls}>
-				{this.renderError()}
-				<div className="contents">
-					<div className="header-info">
-						{this.renderDateInfo()}
-						{this.renderEventInfo()}
-					</div>
-					{this.renderOtherInfo()}
-				</div>
-			</div>
-		);
-	}
-
 	render() {
 		const {
+			createError,
 			saving,
 			dialog = true,
 			controls = true,
 			className: css,
 		} = this.props;
-		const { viewMode, calendar } = this.state;
+		const { readOnly, calendar } = this.state;
 		const className = cx('event-view-dialog', css);
 
 		const Cmp = !controls ? 'div' : SaveCancel;
 		const props = !controls
-			? { className }
+			? null
 			: {
-					className,
 					getString: this.getScope(),
 					onCancel: this.onCancel,
 					onSave: this.onSave,
-					disableSave: saving || (!calendar && !viewMode),
+					disableSave: saving || (!calendar && !readOnly),
 					dialog,
 			  };
 
-		return <Cmp {...props}>{this.renderEvent()}</Cmp>;
+		return (
+			<Cmp className={className} {...props}>
+				<div
+					className={cx('calendar-event-editor', {
+						saving,
+						'view-only': readOnly,
+					})}
+				>
+					{createError && <div className="error">{createError}</div>}
+					<div className="contents">
+						<Header
+							{...this.state}
+							onDescriptionChange={val =>
+								this.setState({ description: val })
+							}
+							onTitleChange={val => this.setState({ title: val })}
+							onImageChange={imgBlob =>
+								this.setState({ imgBlob })
+							}
+						/>
+						<Body
+							{...this.props}
+							{...this.state}
+							onCalendarSelect={this.onCalendarSelect}
+							onEndDateChange={x => this.setState({ endDate: x })}
+							onLocationChange={val =>
+								this.setState({ location: val })
+							}
+							onStartDateChange={x =>
+								this.setState({ startDate: x })
+							}
+						/>
+					</div>
+				</div>
+			</Cmp>
+		);
 	}
 }
 
