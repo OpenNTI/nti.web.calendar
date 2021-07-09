@@ -5,6 +5,8 @@ import { Text } from '@nti/web-commons';
 import { CheckInAction } from './CheckInButtonColumn';
 import { NameColumn } from './NameColumn';
 
+/** @typedef {import('@nti/lib-interfaces/src/models/calendar').EventUserSearchHit} EventUserSearchHit */
+
 const ErrorText = styled(Text.Base).attrs({ as: 'div' })`
 	color: var(--primary-red);
 	line-height: 1.1 !important;
@@ -13,15 +15,23 @@ const ErrorText = styled(Text.Base).attrs({ as: 'div' })`
 `;
 
 CheckInNameColumn.cssClassName = NameColumn.cssClassName;
+
+/**
+ * @param {Object} props
+ * @param {EventUserSearchHit} props.item
+ * @returns {JSX.Element}
+ */
 export function CheckInNameColumn({ item, ...props }) {
 	const { error } = useContext(CheckInAction);
 	return NameColumn({
 		...props,
-		item,
+		item: item.User,
 		avatar: true,
 		additional: (
 			<>
-				{error?.user === item && <ErrorText>{error.message}</ErrorText>}
+				{error?.record === item && (
+					<ErrorText>{error.message}</ErrorText>
+				)}
 			</>
 		),
 	});

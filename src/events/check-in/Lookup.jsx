@@ -11,6 +11,7 @@ import { CheckInColumn, CheckInAction } from './columns/CheckInButtonColumn';
 import { SearchContext } from './columns/shared';
 import getString from './strings';
 
+/** @typedef {import('@nti/lib-interfaces/src/models/calendar').EventUserSearchHit} EventUserSearchHit */
 /** @typedef {import('@nti/lib-interfaces/src/models/calendar').BaseEvent} CalendarEvent */
 /** @typedef {import('@nti/lib-interfaces/src/models/entities').User} User */
 
@@ -34,15 +35,19 @@ export function Lookup({ event }) {
 	const [error, setError] = useState();
 
 	const action = useCallback(
-		async user => {
+		/**
+		 * @param {EventUserSearchHit} record
+		 * @returns {void}
+		 */
+		async record => {
 			try {
 				setError(null);
-				await event.recordAttendance(user);
+				await event.recordAttendance(record.User);
 			} catch (e) {
 				if (e.code === 'DuplicateEntry') {
 					return;
 				}
-				setError({ user, message: e.message });
+				setError({ record, message: e.message });
 				throw e;
 			}
 		},
