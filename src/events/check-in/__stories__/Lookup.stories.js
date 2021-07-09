@@ -22,12 +22,16 @@ const Mock = {
 	getLink: (rel, params) => rel + JSON.stringify(params),
 	fetchLinkParsed: () =>
 		[1, 2, 3, 4].map((x, i) => ({
-			getID: () => i,
-			Username: 'Foobar' + x,
-			displayName: 'Foobar ' + x,
-			initials: 'F' + i,
-			email: `blackhole+${x}@nowhere.io`,
-			LicenseNumber: '0000000' + i,
+			Class: 'EventUserSearchHit',
+			MimeType: 'application/vnd.nextthought.calendar.eventusersearchhit',
+			User: {
+				getID: () => i,
+				Username: 'Foobar' + x,
+				displayName: 'Foobar ' + x,
+				initials: 'F' + i,
+				email: `blackhole+${x}@nowhere.io`,
+				LicenseNumber: '0000000' + i,
+			},
 		})),
 };
 
