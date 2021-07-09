@@ -11,6 +11,7 @@ import Store from '../../calendar/Store';
 import t from './strings';
 import { Body } from './Body';
 import { Header } from './Header';
+import { Registration } from './Registration';
 
 const { SaveCancel } = Prompt;
 
@@ -118,13 +119,8 @@ class EventEditor extends React.Component {
 			return;
 		}
 
-		if (onCancel) {
-			onCancel();
-		}
-
-		if (onDismiss) {
-			onDismiss();
-		}
+		onCancel?.();
+		onDismiss?.();
 	};
 
 	onSave = async () => {
@@ -201,6 +197,7 @@ class EventEditor extends React.Component {
 			dialog = true,
 			controls = true,
 			className: css,
+			event,
 		} = this.props;
 		const { readOnly, calendar } = this.state;
 		const className = cx('event-view-dialog', css);
@@ -218,6 +215,7 @@ class EventEditor extends React.Component {
 
 		return (
 			<Cmp className={className} {...props}>
+				<Registration event={event} />
 				<div
 					className={cx('calendar-event-editor', {
 						saving,
