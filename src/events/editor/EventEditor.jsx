@@ -225,6 +225,7 @@ class EventEditor extends React.Component {
 					{createError && <div className="error">{createError}</div>}
 					<div className="contents">
 						<Header
+							dialog={dialog}
 							{...this.state}
 							onDescriptionChange={val =>
 								this.setState({ description: val })

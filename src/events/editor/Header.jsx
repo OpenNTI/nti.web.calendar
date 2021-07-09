@@ -7,6 +7,7 @@ import { ImageUpload } from '@nti/web-whiteboard';
 import t from './strings';
 
 export function Header({
+	dialog,
 	event,
 	startDate,
 	title,
@@ -18,7 +19,7 @@ export function Header({
 	onImageChange,
 }) {
 	const suppressDuplicateInfoFromCustomHeader =
-		event?.hasLink('list-attendance') && readOnly;
+		dialog || (event?.hasLink('list-attendance') && readOnly);
 	return (
 		<div
 			className={cx('header-info', {
