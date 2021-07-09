@@ -3,6 +3,8 @@ import React, { useCallback, useContext } from 'react';
 import { ActionButton } from '../parts/Buttons';
 import getString from '../strings';
 
+/** @typedef {import('@nti/lib-interfaces/src/models/calendar').EventUserSearchHit} EventUserSearchHit */
+
 export const CheckInAction = React.createContext();
 
 CheckInColumn.cssClassName = css`
@@ -10,6 +12,12 @@ CheckInColumn.cssClassName = css`
 	text-align: right;
 	flex: 0 0 100% !important;
 `;
+
+/**
+ * @param {Object} props
+ * @param {EventUserSearchHit} props.item
+ * @returns {JSX.Element}
+ */
 export function CheckInColumn({ item }) {
 	const action = useContext(CheckInAction);
 	const callback = useCallback(
@@ -21,6 +29,7 @@ export function CheckInColumn({ item }) {
 	);
 	return (
 		<ActionButton
+			initialState={item.hasLink('attendance') ? 'finished' : undefined}
 			key={item.getID()}
 			onClick={callback}
 			renderFinalState={Finish}
