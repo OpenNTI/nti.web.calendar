@@ -15,7 +15,7 @@ import { TableCell, TableCellText } from './shared';
  */
 export function AttendanceRecordCheckInTimeColumn({ item }) {
 	/** @type {EventAttendanceRecord} (item) */
-	return (
+	return !item?.getRegistrationTime ? null : (
 		<>
 			<DateTime
 				as={TableCellText}

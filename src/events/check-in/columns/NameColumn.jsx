@@ -17,7 +17,7 @@ import { AvatarColumn } from './AvatarColumn';
  * @param {JSX.Element} props.additional
  * @returns {JSX.Element}
  */
-export function NameColumn({ item, avatar = true, additional }) {
+export function NameColumn({ item = {}, avatar = true, additional }) {
 	const term = useContext(SearchContext);
 	return (
 		<Flex
