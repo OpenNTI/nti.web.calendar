@@ -69,7 +69,8 @@ const Picker = styled.div`
 const PickerTrigger = styled.div`
 	height: 40px;
 	line-height: 40px;
-	width: 300px;
+	min-width: 200px;
+	flex: 1 1 auto;
 	font-size: 14px;
 	padding-left: 10px;
 	position: relative;

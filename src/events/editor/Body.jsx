@@ -1,10 +1,38 @@
-import './EventEditor.scss';
 import React from 'react';
 
 import t from './strings';
 import CalendarSelect from './CalendarSelect';
 import { DateFields } from './DateField';
 import { LocationInfo } from './Location';
+import { SectionTitle } from './SectionTitle.jsx';
+
+const Container = styled.div`
+	padding-bottom: 30px;
+
+	&.readOnly {
+		display: flex;
+		flex-wrap: wrap;
+	}
+
+	@media (--respond-to-handhelds) {
+		padding-left: 0;
+	}
+
+	i:global(.icon-chevron-down) {
+		color: var(--tertiary-grey);
+		font-size: 12px;
+		margin-top: 2px;
+		top: 14px;
+	}
+
+	:global(.flyout-trigger) {
+		color: var(--secondary-grey);
+
+		&:not(:focus) {
+			box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+		}
+	}
+`;
 
 export function Body({
 	calendar,
@@ -19,10 +47,10 @@ export function Body({
 	startDate,
 }) {
 	return (
-		<div className="other-info">
+		<Container {...{ readOnly }}>
 			{!readOnly && (
-				<div className="input-section calendar">
-					<div className="section-title">{t('calendar')}</div>
+				<div>
+					<SectionTitle>{t('calendar')}</SectionTitle>
 					<CalendarSelect
 						onChange={onCalendarSelect}
 						selected={calendar}
@@ -37,11 +65,14 @@ export function Body({
 				onChange={onLocationChange}
 			/>
 			<DateFields
-				startDate={startDate}
-				onStartDateChange={readOnly ? null : x => onStartDateChange}
-				endDate={endDate}
-				onEndDateChange={readOnly ? null : onEndDateChange}
+				{...{
+					readOnly,
+					startDate,
+					onStartDateChange,
+					endDate,
+					onEndDateChange,
+				}}
 			/>
-		</div>
+		</Container>
 	);
 }

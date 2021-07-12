@@ -13,8 +13,11 @@ const t = scoped('calendar.events.editor.CalendarSelect', {
 });
 
 const Container = styled.div`
+	/*
 	width: 440px;
 	max-width: calc(100% - 14px);
+	*/
+
 	border-radius: 2px;
 	padding: 0 0.625rem;
 	overflow: hidden;
@@ -24,12 +27,20 @@ const Container = styled.div`
 	justify-content: space-between;
 
 	&.disabled {
+		opacity: 0.5;
 		pointer-events: none;
 	}
 
 	&:not(:focus) {
 		box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
 	}
+
+	/* i.icon-chevron-down {
+		color: var(--tertiary-grey);
+		font-size: 12px;
+		margin-top: 2px;
+		top: 10px;
+	} */
 `;
 
 const Empty = styled(Text.Base)`

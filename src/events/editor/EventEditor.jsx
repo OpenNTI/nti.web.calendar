@@ -1,4 +1,3 @@
-import './EventEditor.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
@@ -40,6 +39,39 @@ function getStateFromEvent(event) {
 			event.icon !== 'null' && { src: event.icon },
 	};
 }
+
+const sizing = css`
+	dialog & {
+		height: 100%;
+		max-width: min(765px, 100vw);
+	}
+`;
+
+const Contents = styled.div`
+	overflow-y: auto;
+	padding: 0 40px;
+	@media (--respond-to-handhelds) {
+		padding: 0 10px;
+	}
+`;
+
+const ErrorMessage = styled.div`
+	background-color: var(--primary-red);
+	color: white;
+	text-align: center;
+	min-height: 40px;
+	line-height: 40px;
+	font-size: 14px;
+`;
+
+const Editor = styled.div`
+	max-width: calc(100vw);
+
+	&.saving {
+		opacity: 0.5;
+		pointer-events: none;
+	}
+`;
 
 class EventEditor extends React.Component {
 	static propTypes = {
@@ -200,7 +232,7 @@ class EventEditor extends React.Component {
 			event,
 		} = this.props;
 		const { readOnly, calendar } = this.state;
-		const className = cx('event-view-dialog', css);
+		const className = cx(sizing, css);
 
 		const Cmp = !controls ? 'div' : SaveCancel;
 		const props = !controls
@@ -216,14 +248,9 @@ class EventEditor extends React.Component {
 		return (
 			<Cmp className={className} {...props}>
 				<Registration event={event} />
-				<div
-					className={cx('calendar-event-editor', {
-						saving,
-						'view-only': readOnly,
-					})}
-				>
-					{createError && <div className="error">{createError}</div>}
-					<div className="contents">
+				<Editor {...{ saving }} className="calendar-event-editor">
+					{createError && <ErrorMessage>{createError}</ErrorMessage>}
+					<Contents>
 						<Header
 							dialog={dialog}
 							{...this.state}
@@ -247,8 +274,8 @@ class EventEditor extends React.Component {
 								this.setState({ startDate: x })
 							}
 						/>
-					</div>
-				</div>
+					</Contents>
+				</Editor>
 			</Cmp>
 		);
 	}
