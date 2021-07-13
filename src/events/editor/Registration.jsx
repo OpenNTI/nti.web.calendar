@@ -33,9 +33,9 @@ const Label = styled(Text.Label).attrs({ getString: t })`
 //#endregion
 
 export function Registration({ event }) {
-	const date = event?.getRegistrationTime();
+	const date = event?.getRegistrationTime() ?? null;
 	return (
-		event?.getRegistrationTime() && (
+		date && (
 			<Box>
 				<Icons.Check.Circled />
 				<Label

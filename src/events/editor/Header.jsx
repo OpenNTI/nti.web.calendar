@@ -18,7 +18,7 @@ export function Header({
 	onImageChange,
 }) {
 	const suppressDuplicateInfoFromCustomHeader =
-		event.hasLink('list-attendance') && readOnly;
+		event?.hasLink('list-attendance') && readOnly;
 	return (
 		<div
 			className={cx('header-info', {
