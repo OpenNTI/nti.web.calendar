@@ -10,19 +10,17 @@ import { TableCell, TableCellText } from './shared';
 
 /**
  * @param {Object} props
- * @param {EventAttendanceRecord} props.item
+ * @param {EventAttendanceRecord?} props.item
  * @returns {JSX.Element}
  */
 export function AttendanceRecordCheckInTimeColumn({ item }) {
 	/** @type {EventAttendanceRecord} (item) */
-	return !item?.getRegistrationTime ? null : (
-		<>
-			<DateTime
-				as={TableCellText}
-				date={item.getRegistrationTime()}
-				format={DateTime.TIME}
-			/>
-		</>
+	return (
+		<DateTime
+			as={TableCellText}
+			date={item?.getRegistrationTime() ?? null}
+			format={DateTime.TIME}
+		/>
 	);
 }
 AttendanceRecordCheckInTimeColumn.Name = () =>

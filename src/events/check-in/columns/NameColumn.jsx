@@ -13,11 +13,11 @@ import { AvatarColumn } from './AvatarColumn';
 /**
  * @param {Object} props
  * @param {boolean} [props.avatar=true]
- * @param {User} props.item
+ * @param {User?} props.item
  * @param {JSX.Element} props.additional
  * @returns {JSX.Element}
  */
-export function NameColumn({ item = {}, avatar = true, additional }) {
+export function NameColumn({ item, avatar = true, additional }) {
 	const term = useContext(SearchContext);
 	return (
 		<Flex
@@ -34,9 +34,9 @@ export function NameColumn({ item = {}, avatar = true, additional }) {
 				<br />
 				<List>
 					<List.Item title="Licence Number">
-						{item.LicenseNumber}
+						{item?.LicenseNumber}
 					</List.Item>
-					<List.Item title="email">{item.email}</List.Item>
+					<List.Item title="email">{item?.email}</List.Item>
 				</List>
 			</TableCellText>
 			{additional}
