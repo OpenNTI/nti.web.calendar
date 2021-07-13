@@ -31,6 +31,7 @@ export function getStateFromEvent(event) {
 	const has = x => x != null && x !== 'null';
 
 	return {
+		event,
 		startDate: event?.getStartTime() ?? defaultStartDate,
 		endDate:
 			event?.getEndTime() ??
@@ -49,7 +50,7 @@ const sizing = css`
 	}
 `;
 
-const Contents = styled.div`
+export const Contents = styled.div`
 	overflow-y: auto;
 	padding: 0 40px;
 	@media (--respond-to-handhelds) {
@@ -57,7 +58,7 @@ const Contents = styled.div`
 	}
 `;
 
-const ErrorMessage = styled.div`
+export const ErrorMessage = styled.div`
 	background-color: var(--primary-red);
 	color: white;
 	text-align: center;
@@ -66,14 +67,22 @@ const ErrorMessage = styled.div`
 	font-size: 14px;
 `;
 
-const EditorFrame = styled.div`
+export const EditorFrame = styled.div`
 	max-width: calc(100vw);
+	padding-top: 10px;
 
 	&.saving {
 		opacity: 0.5;
 		pointer-events: none;
 	}
 `;
+
+function getMatchingCalendar(event, availableCalendars) {
+	return (
+		event &&
+		availableCalendars?.filter(c => c.getID() === event.ContainerId)?.[0]
+	);
+}
 
 class EventEditor extends React.Component {
 	static propTypes = {
@@ -98,13 +107,14 @@ class EventEditor extends React.Component {
 
 		const { event, availableCalendars, create } = props;
 
-		const calendarFromEvent =
-			event && this.getMatchingCalendar(event, availableCalendars);
+		const calendarFromEvent = getMatchingCalendar(
+			event,
+			availableCalendars
+		);
 
 		this.state = {
 			readOnly: !create,
 			calendar: calendarFromEvent || availableCalendars?.[0],
-			event: props.event,
 			availableCalendars,
 			...getStateFromEvent(event),
 		};
@@ -129,12 +139,6 @@ class EventEditor extends React.Component {
 		if (state) {
 			this.setState(state);
 		}
-	}
-
-	getMatchingCalendar(event, availableCalendars) {
-		return (availableCalendars || []).filter(c => {
-			return c.getID() === event.ContainerId;
-		})[0];
 	}
 
 	onCalendarSelect = calendar => {

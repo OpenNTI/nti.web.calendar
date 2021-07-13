@@ -1,10 +1,12 @@
 import React from 'react';
 
+import { Button } from '@nti/web-commons';
+
 import t from './strings';
 import CalendarSelect from './CalendarSelect';
 import { DateFields } from './DateField';
 import { LocationInfo } from './Location';
-import { SectionTitle } from './SectionTitle.jsx';
+import { SectionTitle } from './SectionTitle';
 
 const Container = styled.div`
 	padding-bottom: 30px;
@@ -43,12 +45,16 @@ export function Body({
 	onEndDateChange,
 	onLocationChange,
 	onStartDateChange,
+	onDelete,
 	readOnly,
 	startDate,
+	children,
+	className,
 }) {
 	return (
-		<Container {...{ readOnly }}>
-			{!readOnly && (
+		<Container {...{ className, readOnly }}>
+			{children}
+			{!readOnly && onCalendarSelect && (
 				<div>
 					<SectionTitle>{t('calendar')}</SectionTitle>
 					<CalendarSelect
@@ -73,6 +79,12 @@ export function Body({
 					onEndDateChange,
 				}}
 			/>
+
+			{onDelete && (
+				<Button destructive rounded onClick={onDelete}>
+					{t('delete')}
+				</Button>
+			)}
 		</Container>
 	);
 }
