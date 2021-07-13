@@ -5,7 +5,7 @@ import { scoped } from '@nti/lib-locale';
 import { DateTime } from '@nti/web-commons';
 
 import { Item } from '../events/Item';
-import Editor from '../events/editor/EventEditor';
+import { Editor } from '../events/editor/Editor';
 
 //#region paint
 const Padded = styled.div`

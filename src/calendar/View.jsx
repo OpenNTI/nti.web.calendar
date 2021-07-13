@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 
-import Editor from '../events/editor/EventEditor';
+import { Editor } from '../events/editor/Editor';
 
 import Body from './Body';
 import Header from './Header';

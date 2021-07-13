@@ -18,25 +18,27 @@ const createScope = t.scoped('create');
 const editScope = t.scoped('editor');
 const editableScope = t.scoped('editable');
 
-function getStateFromEvent(event) {
+export function getStateFromEvent(event) {
 	let defaultStartDate = new Date();
 
 	defaultStartDate.setSeconds(0);
 	defaultStartDate.setMinutes(defaultStartDate.getMinutes() + 59);
 	defaultStartDate.setMinutes(0);
 
+	// check icon for null string.
+	// When we remove an icon and PUT to the record,
+	// it won't be null, but "null" ([JG]: Really? Sounds fixable...)
+	const has = x => x != null && x !== 'null';
+
 	return {
-		startDate: event ? event.getStartTime() : defaultStartDate,
-		endDate: event
-			? event.getEndTime()
-			: new Date(defaultStartDate.getTime() + 60 * 60 * 1000),
-		title: event && event.title,
-		description: event && event.description,
-		location: event && event.location,
-		// check icon for null string.  if we remove an icon and PUT to the record, it won't be null, but "null"
-		img: event &&
-			event.icon &&
-			event.icon !== 'null' && { src: event.icon },
+		startDate: event?.getStartTime() ?? defaultStartDate,
+		endDate:
+			event?.getEndTime() ??
+			new Date(defaultStartDate.getTime() + 60 * 60 * 1000),
+		title: event?.title,
+		description: event?.description,
+		location: event?.location,
+		img: has(event?.icon) && { src: event.icon },
 	};
 }
 
@@ -64,7 +66,7 @@ const ErrorMessage = styled.div`
 	font-size: 14px;
 `;
 
-const Editor = styled.div`
+const EditorFrame = styled.div`
 	max-width: calc(100vw);
 
 	&.saving {
@@ -101,9 +103,7 @@ class EventEditor extends React.Component {
 
 		this.state = {
 			readOnly: !create,
-			calendar:
-				calendarFromEvent ||
-				(availableCalendars && availableCalendars[0]),
+			calendar: calendarFromEvent || availableCalendars?.[0],
 			event: props.event,
 			availableCalendars,
 			...getStateFromEvent(event),
@@ -248,7 +248,7 @@ class EventEditor extends React.Component {
 		return (
 			<Cmp className={className} {...props}>
 				<Registration event={event} />
-				<Editor {...{ saving }} className="calendar-event-editor">
+				<EditorFrame {...{ saving }} className="calendar-event-editor">
 					{createError && <ErrorMessage>{createError}</ErrorMessage>}
 					<Contents>
 						<Header
@@ -275,13 +275,13 @@ class EventEditor extends React.Component {
 							}
 						/>
 					</Contents>
-				</Editor>
+				</EditorFrame>
 			</Cmp>
 		);
 	}
 }
 
-export default decorate(EventEditor, [
+export const Editor = decorate(EventEditor, [
 	Store.connect([
 		'createEvent',
 		'createError',

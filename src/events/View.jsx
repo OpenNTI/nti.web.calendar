@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { isFlag } from '@nti/web-client';
 import { useToggle } from '@nti/web-commons';
 
-import Editor from './editor/EventEditor';
+import { Editor } from './editor/Editor';
 
 const CheckIn = React.lazy(() => import('./check-in/View'));
 
