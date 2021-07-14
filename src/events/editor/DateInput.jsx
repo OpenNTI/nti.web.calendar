@@ -99,6 +99,10 @@ const isSameDay = (a, b) => {
 
 function determineAvailableTimes(date) {
 	const startOfDay = new Date(date);
+	if (isNaN(startOfDay.getTime())) {
+		return [];
+	}
+
 	startOfDay.setHours(0, 0, 0, 0);
 
 	let availableTimes = [];
