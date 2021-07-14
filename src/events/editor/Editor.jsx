@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 
-import { decorate } from '@nti/lib-commons';
-import { Prompt } from '@nti/web-commons';
+import { Prompt, useReducerState } from '@nti/web-commons';
 
 import Store from '../../calendar/Store';
 
@@ -11,6 +10,8 @@ import t from './strings';
 import { Body } from './Body';
 import { Header } from './Header';
 import { Registration } from './Registration';
+
+//#region 🎨 & 🛠️
 
 const { SaveCancel } = Prompt;
 
@@ -84,73 +85,70 @@ function getMatchingCalendar(event, availableCalendars) {
 	);
 }
 
-class EventEditor extends React.Component {
-	static propTypes = {
-		event: PropTypes.object,
-		onCancel: PropTypes.func,
-		onDismiss: PropTypes.func,
-		onSuccess: PropTypes.func,
-		createEvent: PropTypes.func,
-		createError: PropTypes.string,
-		saving: PropTypes.bool,
-		editable: PropTypes.bool,
-		create: PropTypes.bool,
-		dialog: PropTypes.bool,
-		controls: PropTypes.bool,
-		availableCalendars: PropTypes.array,
-	};
+function getScope({ editable, create }, readOnly) {
+	return readOnly
+		? editable
+			? editableScope
+			: t
+		: create
+		? createScope
+		: editScope;
+}
 
-	state = {};
+//#endregion
 
-	constructor(props) {
-		super(props);
+EventEditor.propTypes = {
+	event: PropTypes.object,
+	onCancel: PropTypes.func,
+	onDismiss: PropTypes.func,
+	onSuccess: PropTypes.func,
+	createEvent: PropTypes.func,
+	createError: PropTypes.string,
+	saving: PropTypes.bool,
+	editable: PropTypes.bool,
+	create: PropTypes.bool,
+	dialog: PropTypes.bool,
+	controls: PropTypes.bool,
+	availableCalendars: PropTypes.array,
+};
 
-		const { event, availableCalendars, create } = props;
+function EventEditor(props) {
+	const {
+		event,
+		availableCalendars,
+		create,
+		onCancel,
+		onDismiss,
+		onSuccess,
+		editable,
 
+		createEvent,
+		createError,
+		saving,
+		dialog = true,
+		controls = true,
+		className: css,
+	} = props;
+
+	const [state, setState, , change] = useReducerState({});
+
+	useEffect(() => {
 		const calendarFromEvent = getMatchingCalendar(
 			event,
 			availableCalendars
 		);
 
-		this.state = {
+		setState({
 			readOnly: !create,
 			calendar: calendarFromEvent || availableCalendars?.[0],
 			availableCalendars,
 			...getStateFromEvent(event),
-		};
-	}
+		});
+	}, [event, availableCalendars, create]);
 
-	componentDidUpdate({ availableCalendars: prevCals, event: prevEvent }) {
-		const { availableCalendars, event } = this.props;
-		let state = null;
-
-		if (event !== prevEvent) {
-			state = { ...getStateFromEvent(event) };
-		}
-
-		if (prevCals !== availableCalendars) {
-			const calendarFromEvent =
-				event && this.getMatchingCalendar(event, availableCalendars);
-
-			state = state || {};
-			state.calendar = calendarFromEvent || availableCalendars[0];
-		}
-
-		if (state) {
-			this.setState(state);
-		}
-	}
-
-	onCalendarSelect = calendar => {
-		this.setState({ calendar });
-	};
-
-	onCancel = () => {
-		const { onCancel, onDismiss, create } = this.props;
-		const { readOnly } = this.state;
-
-		if (!readOnly && !create) {
-			this.setState({ readOnly: true });
+	const cancel = () => {
+		if (!state.readOnly && !create) {
+			setState({ readOnly: true });
 
 			return;
 		}
@@ -159,137 +157,83 @@ class EventEditor extends React.Component {
 		onDismiss?.();
 	};
 
-	onSave = async () => {
-		const { event, createEvent, onSuccess, editable, create } = this.props;
-		const {
-			readOnly,
-			calendar,
-			title,
-			description,
-			location,
-			startDate,
-			endDate,
-			imgBlob,
-		} = this.state;
-
-		if (readOnly) {
+	const onSave = async () => {
+		if (state.readOnly) {
 			if (editable) {
-				this.setState({
+				setState({
 					readOnly: false,
 				});
 
 				return;
 			}
 
-			return this.onCancel();
+			return cancel();
 		}
 
 		const calendarEvent = await createEvent(
-			calendar,
+			state.calendar,
 			event,
-			title,
-			description,
-			location,
-			startDate,
-			endDate,
-			imgBlob
+			state.title,
+			state.description,
+			state.location,
+			state.startDate,
+			state.endDate,
+			state.imgBlob
 		);
 
-		if (create && onSuccess && calendarEvent) {
-			onSuccess(calendarEvent);
-		}
+		if (!calendarEvent) return;
 
-		if (!create && calendarEvent) {
-			this.setState({
+		if (create) {
+			onSuccess?.(calendarEvent);
+		} else {
+			setState({
 				readOnly: true,
 				...getStateFromEvent(calendarEvent),
 			});
 		}
 	};
 
-	getScope() {
-		const { editable, create } = this.props;
-		const { readOnly } = this.state;
+	const Cmp = !controls ? 'div' : SaveCancel;
+	const frameProps = !controls
+		? null
+		: {
+				getString: getScope(props, state.readOnly),
+				onCancel: cancel,
+				onSave,
+				disableSave: saving || (!state.calendar && !state.readOnly),
+				dialog,
+		  };
 
-		if (readOnly) {
-			if (editable) {
-				return editableScope;
-			}
-
-			return t;
-		} else {
-			if (create) {
-				return createScope;
-			} else {
-				return editScope;
-			}
-		}
-	}
-
-	render() {
-		const {
-			createError,
-			saving,
-			dialog = true,
-			controls = true,
-			className: css,
-			event,
-		} = this.props;
-		const { readOnly, calendar } = this.state;
-		const className = cx(sizing, css);
-
-		const Cmp = !controls ? 'div' : SaveCancel;
-		const props = !controls
-			? null
-			: {
-					getString: this.getScope(),
-					onCancel: this.onCancel,
-					onSave: this.onSave,
-					disableSave: saving || (!calendar && !readOnly),
-					dialog,
-			  };
-
-		return (
-			<Cmp className={className} {...props}>
-				<Registration event={event} />
-				<EditorFrame {...{ saving }} className="calendar-event-editor">
-					{createError && <ErrorMessage>{createError}</ErrorMessage>}
-					<Contents>
-						<Header
-							dialog={dialog}
-							{...this.state}
-							onDescriptionChange={val =>
-								this.setState({ description: val })
-							}
-							onTitleChange={val => this.setState({ title: val })}
-							onImageChange={imgBlob =>
-								this.setState({ imgBlob })
-							}
-						/>
-						<Body
-							{...this.props}
-							{...this.state}
-							onCalendarSelect={this.onCalendarSelect}
-							onEndDateChange={x => this.setState({ endDate: x })}
-							onLocationChange={val =>
-								this.setState({ location: val })
-							}
-							onStartDateChange={x =>
-								this.setState({ startDate: x })
-							}
-						/>
-					</Contents>
-				</EditorFrame>
-			</Cmp>
-		);
-	}
+	return (
+		<Cmp className={cx(sizing, css)} {...frameProps}>
+			<Registration event={event} />
+			<EditorFrame {...{ saving }} className="calendar-event-editor">
+				{createError && <ErrorMessage>{createError}</ErrorMessage>}
+				<Contents>
+					<Header
+						dialog={dialog}
+						{...state}
+						onDescriptionChange={change('description')}
+						onTitleChange={change('title')}
+						onImageChange={change('imgBlob')}
+					/>
+					<Body
+						{...props}
+						{...state}
+						onCalendarSelect={change('calendar')}
+						onEndDateChange={change('endDate')}
+						onLocationChange={change('location')}
+						onStartDateChange={change('startDate')}
+					/>
+				</Contents>
+			</EditorFrame>
+		</Cmp>
+	);
 }
 
-export const Editor = decorate(EventEditor, [
-	Store.connect([
-		'createEvent',
-		'createError',
-		'saving',
-		'availableCalendars',
-	]),
-]);
+export const Editor = Store.connect([
+	'createEvent',
+	'createError',
+	'saving',
+	'availableCalendars',
+])(EventEditor);
