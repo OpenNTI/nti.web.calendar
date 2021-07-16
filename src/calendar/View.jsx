@@ -9,33 +9,35 @@ import Body from './Body';
 import Header from './Header';
 import Store from './Store';
 
-const Calendar = React.forwardRef(function CalendarRenderer(
-	{ additionalControls, className, onClose, readOnly },
-	ref
-) {
-	const { canCreate } = Store.useValue();
+const Calendar = React.forwardRef(
+	({ additionalControls, className, onClose, readOnly }, ref) => {
+		const { canCreate } = Store.useValue();
 
-	const [show, showEditor] = useState();
+		const [show, showEditor] = useState();
 
-	return (
-		<div className={cx('calendar-main', className)} ref={ref}>
-			<Header onClose={onClose} additionalControls={additionalControls} />
-			<Body />
-			{!readOnly && canCreate && (
-				<div className="add-event" onClick={() => showEditor(true)}>
-					<i className="icon-add" />
-				</div>
-			)}
-			{show && (
-				<Editor
-					onCancel={() => showEditor(false)}
-					onSuccess={() => showEditor(false)}
-					create={!readOnly && canCreate}
+		return (
+			<div className={cx('calendar-main', className)} ref={ref}>
+				<Header
+					onClose={onClose}
+					additionalControls={additionalControls}
 				/>
-			)}
-		</div>
-	);
-});
+				<Body />
+				{!readOnly && canCreate && (
+					<div className="add-event" onClick={() => showEditor(true)}>
+						<i className="icon-add" />
+					</div>
+				)}
+				{show && (
+					<Editor
+						onCancel={() => showEditor(false)}
+						onSuccess={() => showEditor(false)}
+						create={!readOnly && canCreate}
+					/>
+				)}
+			</div>
+		);
+	}
+);
 
 Calendar.propTypes = {
 	entity: PropTypes.object,
