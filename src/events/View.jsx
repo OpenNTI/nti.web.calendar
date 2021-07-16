@@ -14,16 +14,20 @@ View.propTypes = {
 	controls: PropTypes.bool,
 	editable: PropTypes.bool,
 };
+
+View.defaultProps = {
+	controls: true,
+};
+
 export function View(props) {
-	const { event, controls, dialog, editable } = props;
+	const { event, dialog, editable } = props;
+
 	const [details, toggle] = useToggle();
-	const showCheckIn =
-		event.hasLink('list-attendance') &&
-		!controls &&
-		!dialog &&
-		!editable &&
-		!details &&
-		isFlag('event-check-ins');
+
+	const hasCheckIn =
+		isFlag('event-check-ins') && event.hasLink('list-attendance');
+
+	const showCheckIn = hasCheckIn && !dialog && !editable && !details;
 
 	useEffect(() => {
 		event.on('show-details', toggle);
@@ -31,6 +35,7 @@ export function View(props) {
 	}, [event, toggle]);
 
 	const Viewer = showCheckIn ? CheckIn : Editor;
+
 	return (
 		<Suspense fallback={<div />}>
 			<Viewer {...props} />

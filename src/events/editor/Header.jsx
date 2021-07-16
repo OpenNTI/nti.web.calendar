@@ -69,7 +69,7 @@ const ImageAndDescription = styled.div`
 `;
 
 const Preview = styled.img`
-	margin-right: 10px;
+	/* margin-right: 10px; */
 	max-width: 100%;
 	height: auto;
 `;

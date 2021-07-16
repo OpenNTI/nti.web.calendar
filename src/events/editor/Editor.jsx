@@ -1,23 +1,16 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import cx from 'classnames';
 
-import { Prompt, useReducerState } from '@nti/web-commons';
+import { useReducerState, Prompt, StandardUI } from '@nti/web-commons';
 
 import Store from '../../calendar/Store';
 
-import t from './strings';
 import { Body } from './Body';
 import { Header } from './Header';
 import { Registration } from './Registration';
+import { getScope } from './strings.js';
 
 //#region 🎨 & 🛠️
-
-const { SaveCancel } = Prompt;
-
-const createScope = t.scoped('create');
-const editScope = t.scoped('editor');
-const editableScope = t.scoped('editable');
 
 export function getStateFromEvent(event) {
 	let defaultStartDate = new Date();
@@ -44,7 +37,7 @@ export function getStateFromEvent(event) {
 	};
 }
 
-const sizing = css`
+const Frame = styled.div`
 	dialog & {
 		height: 100%;
 		max-width: min(765px, 100vw);
@@ -78,73 +71,50 @@ export const EditorFrame = styled.div`
 	}
 `;
 
-function getMatchingCalendar(event, availableCalendars) {
+function getCalendar(event, availableCalendars) {
 	return (
-		event &&
-		availableCalendars?.filter(c => c.getID() === event.ContainerId)?.[0]
+		(event &&
+			availableCalendars?.filter(
+				c => c.getID() === event.ContainerId
+			)?.[0]) ||
+		availableCalendars?.[0]
 	);
 }
 
-function getScope({ editable, create }, readOnly) {
-	return readOnly
-		? editable
-			? editableScope
-			: t
-		: create
-		? createScope
-		: editScope;
-}
+const isReadOnly = props =>
+	!props?.create === true ? false : !props?.event?.hasLink('edit');
 
 //#endregion
-
-EventEditor.propTypes = {
-	event: PropTypes.object,
-	onCancel: PropTypes.func,
-	onDismiss: PropTypes.func,
-	onSuccess: PropTypes.func,
-	createEvent: PropTypes.func,
-	createError: PropTypes.string,
-	saving: PropTypes.bool,
-	editable: PropTypes.bool,
-	create: PropTypes.bool,
-	dialog: PropTypes.bool,
-	controls: PropTypes.bool,
-	availableCalendars: PropTypes.array,
-};
 
 function EventEditor(props) {
 	const {
 		event,
-		availableCalendars,
 		create,
 		onCancel,
 		onDismiss,
 		onSuccess,
 		editable,
 
-		createEvent,
-		createError,
-		saving,
 		dialog = true,
-		controls = true,
-		className: css,
 	} = props;
+
+	const { createEvent, createError, saving, availableCalendars } =
+		Store.useValue();
 
 	const [state, setState, , change] = useReducerState({});
 
 	useEffect(() => {
-		const calendarFromEvent = getMatchingCalendar(
-			event,
-			availableCalendars
-		);
+		const calendar = getCalendar(event, availableCalendars);
 
 		setState({
-			readOnly: !create,
-			calendar: calendarFromEvent || availableCalendars?.[0],
+			calendar,
+			readOnly: isReadOnly(props),
 			availableCalendars,
 			...getStateFromEvent(event),
 		});
-	}, [event, availableCalendars, create]);
+	}, [event, availableCalendars]);
+
+	const t = getScope(props, state.readOnly);
 
 	const cancel = () => {
 		if (!state.readOnly && !create) {
@@ -157,7 +127,7 @@ function EventEditor(props) {
 		onDismiss?.();
 	};
 
-	const onSave = async () => {
+	const save = async () => {
 		if (state.readOnly) {
 			if (editable) {
 				setState({
@@ -193,19 +163,8 @@ function EventEditor(props) {
 		}
 	};
 
-	const Cmp = !controls ? 'div' : SaveCancel;
-	const frameProps = !controls
-		? null
-		: {
-				getString: getScope(props, state.readOnly),
-				onCancel: cancel,
-				onSave,
-				disableSave: saving || (!state.calendar && !state.readOnly),
-				dialog,
-		  };
-
 	return (
-		<Cmp className={cx(sizing, css)} {...frameProps}>
+		<Framer {...props} getString={t} onSave={save} onCancel={cancel}>
 			<Registration event={event} />
 			<EditorFrame {...{ saving }} className="calendar-event-editor">
 				{createError && <ErrorMessage>{createError}</ErrorMessage>}
@@ -227,13 +186,61 @@ function EventEditor(props) {
 					/>
 				</Contents>
 			</EditorFrame>
-		</Cmp>
+		</Framer>
 	);
 }
 
-export const Editor = Store.connect([
-	'createEvent',
-	'createError',
-	'saving',
-	'availableCalendars',
-])(EventEditor);
+EventEditor.isReadOnly = isReadOnly;
+EventEditor.getCalendar = getCalendar;
+
+EventEditor.propTypes = {
+	event: PropTypes.object,
+	disableSave: PropTypes.func,
+	onCancel: PropTypes.func,
+	onDismiss: PropTypes.func,
+	onSuccess: PropTypes.func,
+	createEvent: PropTypes.func,
+	createError: PropTypes.string,
+	saving: PropTypes.bool,
+	editable: PropTypes.bool,
+	create: PropTypes.bool,
+	controls: PropTypes.bool,
+	dialog: PropTypes.bool,
+	availableCalendars: PropTypes.array,
+};
+
+export const Editor = EventEditor;
+
+function Framer({ event, dialog, ...props }) {
+	const { saving, availableCalendars } = Store.useValue();
+	const disableSave = Boolean(
+		saving || !Editor.getCalendar(event, availableCalendars)
+	);
+
+	return (
+		<Frame
+			as={
+				props.editable && props.controls
+					? Prompt.SaveCancel
+					: EventFrame
+			}
+			dialog={dialog}
+			disableSave={disableSave}
+			{...props}
+		/>
+	);
+}
+
+function EventFrame({ getString, children, controls, onCancel }) {
+	return (
+		<>
+			{controls && (
+				<StandardUI.Window.TitleBar
+					onClose={onCancel}
+					title={getString?.('title')}
+				/>
+			)}
+			{children}
+		</>
+	);
+}
