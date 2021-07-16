@@ -105,6 +105,7 @@ const InfoToggle = styled(Button).attrs(InfoMapper)`
  */
 DetailHeader.propTypes = {
 	event: PropTypes.instanceOf(Models.calendar.BaseEvent).isRequired,
+	detailToggle: PropTypes.bool,
 };
 //#endregion
 
@@ -114,14 +115,14 @@ DetailHeader.propTypes = {
  * @param {HeadingProps} props
  * @returns {React.ReactElement}
  */
-export function DetailHeader({ event, className }) {
+export function DetailHeader({ event, className, detailToggle = true }) {
 	return (
 		<Block className={className}>
 			<DateIcon date={event.getStartTime()} minimal />
 			<Block column>
 				<Title>
 					{event.title}
-					{event.hasLink('list-attendance') && (
+					{detailToggle && event.hasLink('list-attendance') && (
 						<InfoToggle
 							onClick={() => event.emit('show-details')}
 						/>
