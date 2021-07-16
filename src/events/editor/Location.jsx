@@ -34,11 +34,12 @@ const Container = styled.div`
 	}
 `;
 
-export function LocationInfo({ location, readOnly, onChange }) {
+export function LocationInfo({ location, mode, onChange }) {
+	const viewingMode = mode === 'view';
 	return !location ? null : (
-		<Container readOnly={readOnly}>
+		<Container readOnly={viewingMode}>
 			<SectionTitle>{t('location')}</SectionTitle>
-			{readOnly ? (
+			{viewingMode ? (
 				<LocationName>{location}</LocationName>
 			) : (
 				<LocationEditor

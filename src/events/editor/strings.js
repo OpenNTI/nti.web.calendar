@@ -42,8 +42,8 @@ const createScope = t.scoped('create');
 const editScope = t.scoped('editor');
 const editableScope = t.scoped('editable');
 
-export function getScope({ editable, create }, readOnly) {
-	return readOnly
+export function getScope({ editable, create }, mode) {
+	return mode === 'view'
 		? editable
 			? editableScope
 			: t

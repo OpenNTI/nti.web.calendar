@@ -46,15 +46,15 @@ export function Body({
 	onLocationChange,
 	onStartDateChange,
 	onDelete,
-	readOnly,
+	mode,
 	startDate,
 	children,
 	className,
 }) {
 	return (
-		<Container {...{ className, readOnly }}>
+		<Container {...{ className, readOnly: mode === 'view' }}>
 			{children}
-			{!readOnly && onCalendarSelect && (
+			{mode === 'edit' && onCalendarSelect && (
 				<div>
 					<SectionTitle>{t('calendar')}</SectionTitle>
 					<CalendarSelect
@@ -67,12 +67,12 @@ export function Body({
 
 			<LocationInfo
 				location={location}
-				readOnly={readOnly}
+				mode={mode}
 				onChange={onLocationChange}
 			/>
 			<DateFields
 				{...{
-					readOnly,
+					mode,
 					startDate,
 					onStartDateChange,
 					endDate,

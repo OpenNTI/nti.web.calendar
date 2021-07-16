@@ -117,13 +117,14 @@ export function Header({
 	title,
 	description,
 	img,
-	readOnly,
+	mode,
 	onTitleChange,
 	onDescriptionChange,
 	onImageChange,
 }) {
+	const viewingMode = mode === 'view';
 	const suppressDuplicateInfoFromCustomHeader =
-		dialog || (event?.hasLink('list-attendance') && readOnly);
+		dialog || (event?.hasLink('list-attendance') && viewingMode);
 	return (
 		<Container
 			padded={!suppressDuplicateInfoFromCustomHeader}
@@ -135,7 +136,7 @@ export function Header({
 			/>
 			<EventInfo>
 				<EventTitle hidden={suppressDuplicateInfoFromCustomHeader}>
-					{readOnly ? (
+					{viewingMode ? (
 						<Text.Base linkify>{title}</Text.Base>
 					) : (
 						<Input.Text
@@ -154,12 +155,12 @@ export function Header({
 					/>
 				</EventTime>
 				<ImageAndDescription>
-					{readOnly ? (
+					{viewingMode ? (
 						img && <Preview src={img.src} />
 					) : (
 						<EventImageEditor img={img} onChange={onImageChange} />
 					)}
-					{readOnly ? (
+					{viewingMode ? (
 						<Description>{description}</Description>
 					) : (
 						<DescriptionEditor

@@ -81,8 +81,7 @@ function getCalendar(event, availableCalendars) {
 	);
 }
 
-const isReadOnly = props =>
-	!props?.create === true ? false : !props?.event?.hasLink('edit');
+const getInitialMode = props => (props?.create ? 'edit' : 'view');
 
 //#endregion
 
@@ -95,7 +94,7 @@ function EventEditor(props) {
 		onSuccess,
 		editable,
 
-		dialog = true,
+		dialog,
 	} = props;
 
 	const { createEvent, createError, saving, availableCalendars } =
@@ -108,17 +107,17 @@ function EventEditor(props) {
 
 		setState({
 			calendar,
-			readOnly: isReadOnly(props),
 			availableCalendars,
+			mode: getInitialMode(props),
 			...getStateFromEvent(event),
 		});
 	}, [event, availableCalendars]);
 
-	const t = getScope(props, state.readOnly);
+	const t = getScope(props, state.mode);
 
 	const cancel = () => {
-		if (!state.readOnly && !create) {
-			setState({ readOnly: true });
+		if (state.mode === 'edit' && getInitialMode(props) === 'view') {
+			setState({ mode: 'view' });
 
 			return;
 		}
@@ -128,10 +127,10 @@ function EventEditor(props) {
 	};
 
 	const save = async () => {
-		if (state.readOnly) {
+		if (state.mode === 'view') {
 			if (editable) {
 				setState({
-					readOnly: false,
+					mode: 'edit',
 				});
 
 				return;
@@ -157,14 +156,20 @@ function EventEditor(props) {
 			onSuccess?.(calendarEvent);
 		} else {
 			setState({
-				readOnly: true,
+				mode: 'view',
 				...getStateFromEvent(calendarEvent),
 			});
 		}
 	};
 
 	return (
-		<Framer {...props} getString={t} onSave={save} onCancel={cancel}>
+		<Framer
+			{...props}
+			{...state}
+			getString={t}
+			onSave={save}
+			onCancel={cancel}
+		>
 			<Registration event={event} />
 			<EditorFrame {...{ saving }} className="calendar-event-editor">
 				{createError && <ErrorMessage>{createError}</ErrorMessage>}
@@ -190,9 +195,6 @@ function EventEditor(props) {
 	);
 }
 
-EventEditor.isReadOnly = isReadOnly;
-EventEditor.getCalendar = getCalendar;
-
 EventEditor.propTypes = {
 	event: PropTypes.object,
 	disableSave: PropTypes.func,
@@ -211,11 +213,9 @@ EventEditor.propTypes = {
 
 export const Editor = EventEditor;
 
-function Framer({ event, dialog, ...props }) {
-	const { saving, availableCalendars } = Store.useValue();
-	const disableSave = Boolean(
-		saving || !Editor.getCalendar(event, availableCalendars)
-	);
+function Framer({ calendar, event, dialog, mode, ...props }) {
+	const { saving } = Store.useValue();
+	const disableSave = Boolean(saving || (mode === 'edit' && !calendar));
 
 	return (
 		<Frame

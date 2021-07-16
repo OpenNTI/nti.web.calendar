@@ -30,26 +30,27 @@ const Dates = styled.div`
 `;
 
 export function DateFields({
-	readOnly,
+	mode,
 	startDate,
 	endDate,
 	onStartDateChange,
 	onEndDateChange,
 }) {
+	const viewingMode = mode === 'view';
 	return (
 		<div>
 			<SectionTitle>{t('datesTimes')}</SectionTitle>
-			<Dates {...{ readOnly }}>
+			<Dates {...{ readOnly: viewingMode }}>
 				<DateField
 					value={startDate}
 					label={t('start')}
-					onChange={readOnly ? null : onStartDateChange}
+					onChange={viewingMode ? null : onStartDateChange}
 				/>
 
 				<DateField
 					value={endDate}
 					label={t('end')}
-					onChange={readOnly ? null : onEndDateChange}
+					onChange={viewingMode ? null : onEndDateChange}
 				/>
 			</Dates>
 		</div>
