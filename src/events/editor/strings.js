@@ -1,5 +1,5 @@
 import { scoped } from '@nti/lib-locale';
-export default scoped('calendar.event.editor', {
+const t = scoped('calendar.event.editor', {
 	eventTitle: 'Event Title',
 	eventDescription: 'Description...',
 	eventLocation: 'Location',
@@ -35,3 +35,19 @@ export default scoped('calendar.event.editor', {
 		cancel: 'Cancel',
 	},
 });
+
+export default t;
+
+const createScope = t.scoped('create');
+const editScope = t.scoped('editor');
+const editableScope = t.scoped('editable');
+
+export function getScope({ editable, create }, readOnly) {
+	return readOnly
+		? editable
+			? editableScope
+			: t
+		: create
+		? createScope
+		: editScope;
+}
