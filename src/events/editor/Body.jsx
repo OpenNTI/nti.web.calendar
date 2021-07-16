@@ -30,13 +30,12 @@ export function Body({
 					/>
 				</div>
 			)}
-			{!readOnly && (
-				<LocationInfo
-					location={location}
-					readOnly={readOnly}
-					onChange={onLocationChange}
-				/>
-			)}
+
+			<LocationInfo
+				location={location}
+				readOnly={readOnly}
+				onChange={onLocationChange}
+			/>
 			<DateFields
 				startDate={startDate}
 				onStartDateChange={readOnly ? null : x => onStartDateChange}
