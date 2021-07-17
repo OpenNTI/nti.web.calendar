@@ -65,17 +65,16 @@ const ImageAndDescription = styled.div`
 	flex-wrap: wrap;
 	flex-direction: row;
 	align-items: center;
-	justify-content: space-around;
+	justify-content: flex-start;
+	gap: 10px;
 `;
 
 const Preview = styled.img`
-	/* margin-right: 10px; */
 	max-width: 100%;
 	height: auto;
 `;
 
 const EventImageEditor = styled(ImageUpload)`
-	margin-right: 10px;
 	max-width: 200px;
 
 	& :global(.error) {
@@ -97,7 +96,6 @@ const DescriptionEditor = styled(Input.TextArea)`
 	@media (--respond-to-handhelds) {
 		width: 100%;
 		max-width: 100%;
-		margin-bottom: 10px;
 	}
 `;
 
@@ -156,7 +154,7 @@ export function Header({
 				</EventTime>
 				<ImageAndDescription>
 					{viewingMode ? (
-						img && <Preview src={img.src} />
+						img?.src && <Preview src={img?.src} />
 					) : (
 						<EventImageEditor img={img} onChange={onImageChange} />
 					)}
