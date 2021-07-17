@@ -17,6 +17,7 @@ View.propTypes = {
 
 View.defaultProps = {
 	controls: true,
+	dialog: true,
 };
 
 export function View(props) {
