@@ -4,11 +4,12 @@ import PropTypes from 'prop-types';
 import { useReducerState, Prompt, StandardUI } from '@nti/web-commons';
 
 import Store from '../../calendar/Store';
+import { DetailHeader } from '../DetailHeader';
 
 import { Body } from './Body';
 import { Header } from './Header';
 import { Registration } from './Registration';
-import { getScope } from './strings.js';
+import { getScope } from './strings';
 
 //#region 🎨 & 🛠️
 
@@ -33,14 +34,18 @@ export function getStateFromEvent(event) {
 		title: event?.title,
 		description: event?.description,
 		location: event?.location,
-		img: has(event?.icon) && { src: event.icon },
+		img: (has(event?.icon) && { src: event.icon }) || null,
 	};
 }
 
 const Frame = styled.div`
-	dialog & {
-		height: 100%;
+	& > i:global(.icon-close) {
+		display: none;
+	}
+
+	& dialog & {
 		max-width: min(765px, 100vw);
+		/* max-height: calc(100vh - var(--navigation-top, 0)); */
 	}
 `;
 
@@ -62,7 +67,7 @@ export const ErrorMessage = styled.div`
 `;
 
 export const EditorFrame = styled.div`
-	max-width: calc(100vw);
+	/* max-width: 100vw; */
 	padding-top: 10px;
 
 	&.saving {
@@ -84,6 +89,8 @@ function getCalendar(event, availableCalendars) {
 const getInitialMode = props => (props?.create ? 'edit' : 'view');
 
 //#endregion
+
+//#region main
 
 function EventEditor(props) {
 	const {
@@ -195,6 +202,10 @@ function EventEditor(props) {
 	);
 }
 
+EventEditor.defaultProps = {
+	dialog: true,
+};
+
 EventEditor.propTypes = {
 	event: PropTypes.object,
 	disableSave: PropTypes.func,
@@ -211,36 +222,94 @@ EventEditor.propTypes = {
 	availableCalendars: PropTypes.array,
 };
 
-export const Editor = EventEditor;
+export const Editor = Store.compose(EventEditor);
 
-function Framer({ calendar, event, dialog, mode, ...props }) {
-	const { saving } = Store.useValue();
-	const disableSave = Boolean(saving || (mode === 'edit' && !calendar));
+//#endregion
 
-	return (
-		<Frame
-			as={
-				props.editable && props.controls
-					? Prompt.SaveCancel
-					: EventFrame
+//#region Frame shenanigans
+const SaveCancel = styled(Prompt.SaveCancel)`
+	[panel-title-bar] {
+		padding: 15px 40px;
+		padding-right: 10px;
+		@media (--respond-to-handhelds) {
+			padding: 15px 10px;
+		}
+
+		& > i {
+			width: 40px;
+			text-align: center;
+
+			@media (--respond-to-handhelds) {
+				width: 30px;
+				text-align: left;
 			}
-			dialog={dialog}
-			disableSave={disableSave}
-			{...props}
-		/>
-	);
+		}
+	}
+`;
+
+function Framer({ calendar, ...props }) {
+	const { saving } = Store.useValue();
+	const custom =
+		props.mode === 'view' && props.event?.hasLink('list-attendance');
+
+	const title = custom ? (
+		<DetailHeader event={props.event} detailToggle={false} />
+	) : undefined;
+
+	if (props.mode === 'edit' || (props.editable && props.controls)) {
+		return (
+			<Frame
+				{...props}
+				as={SaveCancel}
+				title={title}
+				disableSave={saving || (props.mode === 'edit' && !calendar)}
+			/>
+		);
+	}
+
+	return <Frame {...props} as={EventFrame} title={title} />;
 }
 
-function EventFrame({ getString, children, controls, onCancel }) {
+const TitleBar = styled(StandardUI.Window.TitleBar)`
+	border: 0;
+	justify-content: flex-start;
+	padding: 15px 40px;
+	@media (--respond-to-handhelds) {
+		padding: 15px 10px;
+	}
+
+	svg {
+		background: none;
+		position: static;
+		flex: 0 0 auto;
+		transform: none;
+		margin-right: 5px;
+	}
+`;
+
+const Section = styled.section`
+	background: white;
+`;
+
+function EventFrame({
+	className,
+	getString,
+	children,
+	controls,
+	onCancel,
+	title,
+}) {
 	return (
-		<>
+		<Section {...{ className }}>
 			{controls && (
-				<StandardUI.Window.TitleBar
+				<TitleBar
 					onClose={onCancel}
-					title={getString?.('title')}
+					title={title || getString?.('title')}
 				/>
 			)}
 			{children}
-		</>
+		</Section>
 	);
 }
+
+//#endregion
