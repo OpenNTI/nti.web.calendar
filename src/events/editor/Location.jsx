@@ -36,7 +36,7 @@ const Container = styled.div`
 
 export function LocationInfo({ location, mode, onChange }) {
 	const viewingMode = mode === 'view';
-	return !location ? null : (
+	return viewingMode && !location ? null : (
 		<Container readOnly={viewingMode}>
 			<SectionTitle>{t('location')}</SectionTitle>
 			{viewingMode ? (
