@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-import { useReducerState, Prompt, StandardUI } from '@nti/web-commons';
+import { useReducerState, Prompt } from '@nti/web-commons';
 
 import Store from '../../calendar/Store';
 import { DetailHeader } from '../DetailHeader';
@@ -45,9 +45,48 @@ const Frame = styled.div`
 
 	& dialog & {
 		max-width: min(765px, 100vw);
+
 		/* max-height: calc(100vh - var(--navigation-top, 0)); */
 	}
 `;
+
+const SaveCancel = styled(Prompt.SaveCancel)`
+	[panel-title-bar] {
+		padding: 15px 40px;
+		padding-right: 10px;
+		@media (--respond-to-handhelds) {
+			padding: 15px 10px;
+		}
+
+		& > i {
+			width: 40px;
+			text-align: center;
+
+			@media (--respond-to-handhelds) {
+				width: 30px;
+				text-align: left;
+			}
+		}
+	}
+`;
+
+function Framer({ calendar, ...props }) {
+	const { saving } = Store.useValue();
+	const custom = props.mode === 'view'; // && props.event?.hasLink('list-attendance');
+
+	const title = custom ? (
+		<DetailHeader event={props.event} detailToggle={false} />
+	) : undefined;
+
+	return (
+		<Frame
+			{...props}
+			as={SaveCancel}
+			title={title}
+			disableSave={saving || (props.mode === 'edit' && !calendar)}
+		/>
+	);
+}
 
 export const Contents = styled.div`
 	overflow-y: auto;
@@ -223,93 +262,5 @@ EventEditor.propTypes = {
 };
 
 export const Editor = Store.compose(EventEditor);
-
-//#endregion
-
-//#region Frame shenanigans
-const SaveCancel = styled(Prompt.SaveCancel)`
-	[panel-title-bar] {
-		padding: 15px 40px;
-		padding-right: 10px;
-		@media (--respond-to-handhelds) {
-			padding: 15px 10px;
-		}
-
-		& > i {
-			width: 40px;
-			text-align: center;
-
-			@media (--respond-to-handhelds) {
-				width: 30px;
-				text-align: left;
-			}
-		}
-	}
-`;
-
-function Framer({ calendar, ...props }) {
-	const { saving } = Store.useValue();
-	const custom =
-		props.mode === 'view' && props.event?.hasLink('list-attendance');
-
-	const title = custom ? (
-		<DetailHeader event={props.event} detailToggle={false} />
-	) : undefined;
-
-	if (props.mode === 'edit' || (props.editable && props.controls)) {
-		return (
-			<Frame
-				{...props}
-				as={SaveCancel}
-				title={title}
-				disableSave={saving || (props.mode === 'edit' && !calendar)}
-			/>
-		);
-	}
-
-	return <Frame {...props} as={EventFrame} title={title} />;
-}
-
-const TitleBar = styled(StandardUI.Window.TitleBar)`
-	border: 0;
-	justify-content: flex-start;
-	padding: 15px 40px;
-	@media (--respond-to-handhelds) {
-		padding: 15px 10px;
-	}
-
-	svg {
-		background: none;
-		position: static;
-		flex: 0 0 auto;
-		transform: none;
-		margin-right: 5px;
-	}
-`;
-
-const Section = styled.section`
-	background: white;
-`;
-
-function EventFrame({
-	className,
-	getString,
-	children,
-	controls,
-	onCancel,
-	title,
-}) {
-	return (
-		<Section {...{ className }}>
-			{controls && (
-				<TitleBar
-					onClose={onCancel}
-					title={title || getString?.('title')}
-				/>
-			)}
-			{children}
-		</Section>
-	);
-}
 
 //#endregion

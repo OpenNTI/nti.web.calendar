@@ -121,19 +121,11 @@ export function Header({
 	onImageChange,
 }) {
 	const viewingMode = mode === 'view';
-	const suppressDuplicateInfoFromCustomHeader =
-		dialog || (event?.hasLink('list-attendance') && viewingMode);
 	return (
-		<Container
-			padded={!suppressDuplicateInfoFromCustomHeader}
-			className="header-info"
-		>
-			<DateInfo
-				date={startDate}
-				hidden={suppressDuplicateInfoFromCustomHeader}
-			/>
+		<Container padded={!viewingMode} className="header-info">
+			<DateInfo date={startDate} hidden={viewingMode} />
 			<EventInfo>
-				<EventTitle hidden={suppressDuplicateInfoFromCustomHeader}>
+				<EventTitle hidden={viewingMode}>
 					{viewingMode ? (
 						<Text.Base linkify>{title}</Text.Base>
 					) : (
@@ -145,7 +137,7 @@ export function Header({
 						/>
 					)}
 				</EventTitle>
-				<EventTime hidden={suppressDuplicateInfoFromCustomHeader}>
+				<EventTime hidden={viewingMode}>
 					<DateTime
 						className="date"
 						date={startDate}
