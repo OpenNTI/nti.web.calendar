@@ -162,7 +162,7 @@ function Heading({
 }) {
 	const showLookupByLicense = event?.hasLink('lookup-by-license-number');
 	const showCheckInNewUser = event?.hasLink('checkin-new-user');
-	const showUpload = true || event?.hasLink('bulk-attendance-upload');
+	const showUpload = event?.hasLink('bulk-attendance-upload');
 
 	return (
 		<ActionPrompt>
