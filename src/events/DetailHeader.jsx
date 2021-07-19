@@ -59,9 +59,14 @@ const List = styled('ul').attrs(WrapChildren)`
 `;
 
 const Block = styled.div`
+	/* being placed in a flex container */
+	flex: 0 1 auto;
+
+	/* normal stuff */
 	display: flex;
-	flex: 1 1 auto;
 	align-items: center;
+	gap: 10px;
+	text-align: left;
 
 	& > :not(:first-child) {
 		margin: 0 0 0 1em;
@@ -70,6 +75,7 @@ const Block = styled.div`
 	&.column {
 		flex-direction: column;
 		align-items: stretch;
+		gap: 5px;
 
 		& > :not(:first-child) {
 			margin: 0;
