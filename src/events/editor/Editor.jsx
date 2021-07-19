@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
+import { Router } from '@nti/web-routing';
 import { useReducerState, Prompt } from '@nti/web-commons';
 
 import Store from '../../calendar/Store';
@@ -143,6 +144,7 @@ function EventEditor(props) {
 		dialog,
 	} = props;
 
+	const router = Router.useRouter();
 	const { createEvent, createError, saving, availableCalendars } =
 		Store.useValue();
 
@@ -182,7 +184,8 @@ function EventEditor(props) {
 				return;
 			}
 
-			return cancel();
+			return router.routeTo.object(event);
+			// return cancel();
 		}
 
 		const calendarEvent = await createEvent(
