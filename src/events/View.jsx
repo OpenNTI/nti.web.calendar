@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import { isFlag } from '@nti/web-client';
 import { useToggle } from '@nti/web-commons';
+import { Router } from '@nti/web-routing';
 
 import { Editor } from './editor/Editor';
 
@@ -38,8 +39,10 @@ export function View(props) {
 	const Viewer = showCheckIn ? CheckIn : Editor;
 
 	return (
-		<Suspense fallback={<div />}>
-			<Viewer {...props} />
-		</Suspense>
+		<Router.Context>
+			<Suspense fallback={<div />}>
+				<Viewer {...props} />
+			</Suspense>
+		</Router.Context>
 	);
 }
