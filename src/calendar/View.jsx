@@ -32,6 +32,7 @@ const Calendar = React.forwardRef(
 						onCancel={() => showEditor(false)}
 						onSuccess={() => showEditor(false)}
 						create={!readOnly && canCreate}
+						dialog
 					/>
 				)}
 			</div>

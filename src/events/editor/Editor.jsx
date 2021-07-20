@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Router } from '@nti/web-routing';
 import { useReducerState, Prompt } from '@nti/web-commons';
+import { filterProps } from '@nti/web-commons/src/utils';
 
 import Store from '../../calendar/Store';
 import { DetailHeader } from '../DetailHeader';
@@ -79,10 +80,12 @@ function Framer({ calendar, controls, ...props }) {
 		<DetailHeader event={props.event} detailToggle={false} />
 	) : undefined;
 
+	const frameIt = props.dialog && !controls;
+
 	return (
 		<Frame
-			{...props}
-			{...(!controls
+			{...filterProps(props, frameIt ? SaveCancel : 'div')}
+			{...(!frameIt
 				? null
 				: {
 						as: SaveCancel,
