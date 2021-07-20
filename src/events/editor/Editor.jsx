@@ -80,7 +80,7 @@ function Framer({ calendar, controls, ...props }) {
 		<DetailHeader event={props.event} detailToggle={false} />
 	) : undefined;
 
-	const frameIt = props.dialog && !controls;
+	const frameIt = props.dialog || controls;
 
 	return (
 		<Frame
