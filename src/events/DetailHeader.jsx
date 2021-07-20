@@ -126,7 +126,7 @@ DetailHeader.propTypes = {
  */
 export function DetailHeader({ event, className, detailToggle = true }) {
 	return (
-		<Block className={className}>
+		<Block className={className} event-details-header="true">
 			<DateIcon date={event.getStartTime()} minimal />
 			<Block column>
 				<Title>

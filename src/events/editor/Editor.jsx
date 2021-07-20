@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 import { Router } from '@nti/web-routing';
 import { useReducerState, Prompt } from '@nti/web-commons';
-import { filterProps } from '@nti/web-commons/src/utils';
 
 import Store from '../../calendar/Store';
 import { DetailHeader } from '../DetailHeader';
@@ -47,6 +46,7 @@ const Frame = styled.div`
 
 	& dialog & {
 		max-width: min(765px, 100vw);
+		box-shadow: 0 0 3px 0 black;
 
 		/* max-height: calc(100vh - var(--navigation-top, 0)); */
 	}
@@ -72,31 +72,6 @@ const SaveCancel = styled(Prompt.SaveCancel)`
 	}
 `;
 
-function Framer({ calendar, controls, ...props }) {
-	const { saving } = Store.useValue();
-	const custom = props.mode === 'view'; // && props.event?.hasLink('list-attendance');
-
-	const title = custom ? (
-		<DetailHeader event={props.event} detailToggle={false} />
-	) : undefined;
-
-	const frameIt = props.dialog || controls;
-
-	return (
-		<Frame
-			{...filterProps(props, frameIt ? SaveCancel : 'div')}
-			{...(!frameIt
-				? null
-				: {
-						as: SaveCancel,
-						title,
-						disableSave:
-							saving || (props.mode === 'edit' && !calendar),
-				  })}
-		/>
-	);
-}
-
 export const Contents = styled.div`
 	overflow-y: auto;
 	padding: 0 40px;
@@ -104,6 +79,39 @@ export const Contents = styled.div`
 		padding: 0 10px;
 	}
 `;
+
+const DetailHeader2 = styled(DetailHeader)`
+	padding-top: 10px;
+`;
+
+const Titled = props => (
+	<>
+		<Contents>
+			<DetailHeader2 event={props.event} detailToggle={false} />
+		</Contents>
+		{props.children}
+	</>
+);
+
+function Framer({ calendar, controls, ...props }) {
+	const { saving } = Store.useValue();
+	const customTitle = props.mode === 'view'; // && props.event?.hasLink('list-attendance');
+
+	const frameIt = props.dialog || controls;
+
+	return (
+		<Frame
+			{...props}
+			as={frameIt ? SaveCancel : Titled}
+			title={
+				!customTitle ? undefined : (
+					<DetailHeader event={props.event} detailToggle={false} />
+				)
+			}
+			disableSave={saving || (props.mode === 'edit' && !calendar)}
+		/>
+	);
+}
 
 export const ErrorMessage = styled.div`
 	background-color: var(--primary-red);
