@@ -109,8 +109,6 @@ const Description = styled(Text.Base).attrs({
 //#endregion
 
 export function Header({
-	dialog,
-	event,
 	startDate,
 	title,
 	description,
