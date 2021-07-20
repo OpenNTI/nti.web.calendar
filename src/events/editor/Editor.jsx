@@ -71,7 +71,7 @@ const SaveCancel = styled(Prompt.SaveCancel)`
 	}
 `;
 
-function Framer({ calendar, ...props }) {
+function Framer({ calendar, controls, ...props }) {
 	const { saving } = Store.useValue();
 	const custom = props.mode === 'view'; // && props.event?.hasLink('list-attendance');
 
@@ -82,9 +82,14 @@ function Framer({ calendar, ...props }) {
 	return (
 		<Frame
 			{...props}
-			as={SaveCancel}
-			title={title}
-			disableSave={saving || (props.mode === 'edit' && !calendar)}
+			{...(!controls
+				? null
+				: {
+						as: SaveCancel,
+						title,
+						disableSave:
+							saving || (props.mode === 'edit' && !calendar),
+				  })}
 		/>
 	);
 }
