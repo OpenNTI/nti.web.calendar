@@ -61,6 +61,9 @@ const List = styled('ul').attrs(WrapChildren)`
 const Block = styled.div`
 	/* being placed in a flex container */
 	flex: 0 1 auto;
+	[panel-title-bar] & {
+		flex: 1 1 auto;
+	}
 
 	/* normal stuff */
 	display: flex;
