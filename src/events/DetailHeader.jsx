@@ -132,7 +132,9 @@ DetailHeader.propTypes = {
  */
 export function DetailHeader({ event, className, detailToggle = true }) {
 	const link = (detailToggle && event.hasLink('list-attendance')) || null;
-	const toggle = link ? () => event.emit('show-details') : null;
+	const toggle = link
+		? e => (e.stopPropagation(), event.emit('show-details'))
+		: null;
 	return (
 		<Block className={className} event-details-header="true">
 			<DateIcon date={event.getStartTime()} minimal />
