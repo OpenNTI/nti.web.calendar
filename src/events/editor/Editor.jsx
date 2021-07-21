@@ -200,7 +200,7 @@ function EventEditor(props) {
 				return;
 			}
 
-			return router.routeTo.object(event);
+			return router.routeTo.object(event, 'goto');
 			// return cancel();
 		}
 
