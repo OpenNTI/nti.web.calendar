@@ -84,13 +84,13 @@ const DetailHeader2 = styled(DetailHeader)`
 	padding-top: 10px;
 `;
 
-const Titled = props => (
-	<>
+const Titled = ({ className, ...props }) => (
+	<div {...{ className }}>
 		<Contents>
 			<DetailHeader2 event={props.event} detailToggle={false} />
 		</Contents>
 		{props.children}
-	</>
+	</div>
 );
 
 function Framer({ calendar, controls, ...props }) {
