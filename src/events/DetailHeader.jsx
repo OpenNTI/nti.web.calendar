@@ -70,6 +70,8 @@ const Block = styled.div`
 	align-items: center;
 	gap: 10px;
 	text-align: left;
+	max-width: 100%;
+	overflow: hidden;
 
 	& > :not(:first-child) {
 		margin: 0 0 0 1em;
@@ -87,9 +89,13 @@ const Block = styled.div`
 `;
 
 const Title = styled(Text)`
-	line-height: 1;
+	line-height: 1.1;
 	font-weight: 600;
 	font-size: 0.875rem; /* 14px */
+
+	&.link {
+		cursor: pointer;
+	}
 `;
 
 const InfoMapper = props => ({
@@ -125,17 +131,15 @@ DetailHeader.propTypes = {
  * @returns {React.ReactElement}
  */
 export function DetailHeader({ event, className, detailToggle = true }) {
+	const link = (detailToggle && event.hasLink('list-attendance')) || null;
+	const toggle = link ? () => event.emit('show-details') : null;
 	return (
 		<Block className={className} event-details-header="true">
 			<DateIcon date={event.getStartTime()} minimal />
 			<Block column>
-				<Title>
+				<Title limitLines={1} link={link} onClick={toggle}>
 					{event.title}
-					{detailToggle && event.hasLink('list-attendance') && (
-						<InfoToggle
-							onClick={() => event.emit('show-details')}
-						/>
-					)}
+					{link && <InfoToggle onClick={toggle} />}
 				</Title>
 
 				<List>
@@ -146,5 +150,4 @@ export function DetailHeader({ event, className, detailToggle = true }) {
 		</Block>
 	);
 }
-
 //#endregion
