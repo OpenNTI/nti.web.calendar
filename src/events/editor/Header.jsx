@@ -135,7 +135,7 @@ export function Header({
 						/>
 					)}
 				</EventTitle>
-				<EventTime hidden={viewingMode}>
+				<EventTime>
 					<DateTime
 						className="date"
 						date={startDate}
