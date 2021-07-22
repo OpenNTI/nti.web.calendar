@@ -4,7 +4,7 @@ const t = scoped('calendar.event.editor', {
 	eventDescription: 'Description...',
 	eventLocation: 'Location',
 	calendar: 'Calendar',
-	save: 'icon:Add|Go to Event View',
+	save: 'icon:GoTo|Go to Event View',
 	cancel: 'Close',
 	close: 'Close',
 	edit: 'Edit',
