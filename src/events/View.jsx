@@ -1,7 +1,6 @@
 import React, { Suspense, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-import { isFlag } from '@nti/web-client';
 import { useToggle } from '@nti/web-commons';
 import { Router } from '@nti/web-routing';
 
@@ -40,8 +39,7 @@ export function View(props) {
 
 	const [details, toggle] = useToggle();
 
-	const hasCheckIn =
-		isFlag('event-check-ins') && event.hasLink('list-attendance');
+	const hasCheckIn = event.hasLink('list-attendance');
 
 	const showCheckIn = hasCheckIn && !dialog && !editable && !details;
 

@@ -2,7 +2,6 @@ import React from 'react';
 
 import { DateTime, Input, Text } from '@nti/web-commons';
 import { ImageUpload } from '@nti/web-whiteboard';
-import { isFlag } from '@nti/web-client';
 
 import t from './strings';
 
@@ -121,7 +120,7 @@ export function Header({
 	onImageChange,
 }) {
 	const viewingMode = mode === 'view';
-	const hideDuplicateInfo = viewingMode && isFlag('event-check-ins');
+	const hideDuplicateInfo = viewingMode;
 	return (
 		<Container padded={!viewingMode} className="header-info">
 			<DateInfo date={startDate} hidden={hideDuplicateInfo} />
