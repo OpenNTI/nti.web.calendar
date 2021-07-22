@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import cx from 'classnames';
 
 import { Models } from '@nti/lib-interfaces';
 import { Button, DateTime, Text } from '@nti/web-commons';
@@ -16,25 +15,32 @@ const DateIcon = styled(DateTime.DateIcon)`
 	}
 `;
 
-const Time = props => (
-	<DateTime
-		{...props}
-		as={Text.Label}
-		format={DateTime.MONTH_ABBR_DAY_YEAR_TIME}
-		className={cx(
-			props.className,
-			css`
-				color: var(--tertiary-grey);
+const DTLabel = styled(DateTime).attrs({ as: Text.Label })`
+	color: var(--tertiary-grey);
+	white-space: nowrap;
 
-				/* increase specificity 3x */
-				&&& {
-					font-size: 0.5rem; /* 8px */
-					text-transform: none;
-				}
-			`
-		)}
-	/>
-);
+	/* increase specificity 3x */
+	&&& {
+		font-size: 0.5rem; /* 8px */
+		text-transform: none;
+	}
+`;
+
+const Label = styled.span`
+	display: inline-flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	gap: 0.5em;
+`;
+
+const Time = props => {
+	return (
+		<Label>
+			<DTLabel {...props} format={DateTime.MONTH_ABBR_DAY_YEAR} />
+			<DTLabel {...props} format={DateTime.TIME} />
+		</Label>
+	);
+};
 
 const WrapChildren = props => ({
 	...props,
@@ -52,9 +58,15 @@ const List = styled('ul').attrs(WrapChildren)`
 	justify-content: flex-start;
 	padding: 0;
 	margin: 0;
+	gap: 15px;
 
-	& > li:not(:first-child) {
-		margin-left: 1rem;
+	@media (--respond-to-handhelds) {
+		gap: 10px;
+	}
+
+	> li {
+		flex: 0 1 50%;
+		max-width: fit-content;
 	}
 `;
 
@@ -70,21 +82,13 @@ const Block = styled.div`
 	align-items: center;
 	gap: 10px;
 	text-align: left;
-	max-width: 100%;
+	width: 100%;
 	overflow: hidden;
-
-	& > :not(:first-child) {
-		margin: 0 0 0 1em;
-	}
 
 	&.column {
 		flex-direction: column;
 		align-items: stretch;
 		gap: 5px;
-
-		& > :not(:first-child) {
-			margin: 0;
-		}
 	}
 `;
 
