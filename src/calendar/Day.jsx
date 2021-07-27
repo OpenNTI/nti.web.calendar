@@ -70,13 +70,6 @@ export default class Day extends React.Component {
 
 	state = {};
 
-	onItemClick = item => {
-		this.setState({
-			showEditor: true,
-			event: item,
-		});
-	};
-
 	setToday = x => {
 		const { bin, setToday } = this.props;
 
@@ -104,12 +97,7 @@ export default class Day extends React.Component {
 					)}
 					{items.length > 0 &&
 						items.map(item => (
-							<Item
-								key={keyFor(item)}
-								bin={bin}
-								item={item}
-								onItemClick={this.onItemClick}
-							/>
+							<Item key={keyFor(item)} bin={bin} item={item} />
 						))}
 				</Padded>
 				{showEditor && (

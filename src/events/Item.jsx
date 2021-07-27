@@ -25,7 +25,6 @@ export class Item extends React.Component {
 		bin: PropTypes.object,
 		context: PropTypes.object,
 		readOnly: PropTypes.bool,
-		onItemClick: PropTypes.func,
 	};
 
 	state = {};
