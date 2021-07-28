@@ -109,9 +109,11 @@ const InfoMapper = props => ({
 });
 
 const InfoToggle = styled(Button).attrs(InfoMapper)`
-	box-shadow: none !important;
-	padding: 0 0.5em;
-	vertical-align: middle;
+	&& {
+		box-shadow: none !important;
+		padding: 0 0.5em;
+		vertical-align: middle;
+	}
 `;
 
 //#endregion
