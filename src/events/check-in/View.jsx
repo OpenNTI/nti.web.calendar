@@ -61,7 +61,13 @@ export default function View(props) {
 			);
 
 		case 'entry-review':
-			return <EntryForm item={item} returnView={viewMain} />;
+			return (
+				<EntryForm
+					event={props.event}
+					item={item}
+					returnView={viewMain}
+				/>
+			);
 
 		case 'lookup':
 			return <UserLookup {...props} returnView={viewMain} />;

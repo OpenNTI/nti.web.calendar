@@ -111,8 +111,9 @@ const stop = e => e.preventDefault();
 
 //#endregion
 
-export function EntryForm({ item, returnView, onSave }) {
+export function EntryForm({ event, item, returnView, onSave }) {
 	const readOnly = !!item;
+	const showLicenseNumber = event?.hasLink('lookup-by-license-number');
 	const form = useRef();
 	/** @type {Models.entities.User} */
 	const user = item instanceof Models.entities.User ? item : item?.User;
@@ -142,24 +143,28 @@ export function EntryForm({ item, returnView, onSave }) {
 					value={user?.realname}
 					disabled={busy || readOnly}
 				/>
-				<input
-					type="hidden"
-					name="external_type"
-					value="license_number"
-				/>
-				<DecoratedInput
-					error={error}
-					name="external_id"
-					required
-					value={user?.LicenseNumber}
-					disabled={busy || readOnly}
-				/>
-				<DecoratedInput
-					error={error}
-					name="uuid"
-					value={user?.DEQ_UUID}
-					disabled
-				/>
+				{showLicenseNumber && (
+					<>
+						<input
+							type="hidden"
+							name="external_type"
+							value="license_number"
+						/>
+						<DecoratedInput
+							error={error}
+							name="external_id"
+							required
+							value={user?.LicenseNumber}
+							disabled={busy || readOnly}
+						/>
+						<DecoratedInput
+							error={error}
+							name="uuid"
+							value={user?.DEQ_UUID}
+							disabled
+						/>
+					</>
+				)}
 				<DecoratedInput
 					error={error}
 					type="email"
