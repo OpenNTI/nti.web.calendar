@@ -165,14 +165,16 @@ export function EntryForm({ event, item, returnView, onSave }) {
 						/>
 					</>
 				)}
-				<DecoratedInput
-					error={error}
-					type="email"
-					name="email"
-					required
-					value={user?.email}
-					disabled={busy || readOnly}
-				/>
+				{(showLicenseNumber || !readOnly || user?.email) && (
+					<DecoratedInput
+						error={error}
+						type="email"
+						name="email"
+						required
+						value={user?.email}
+						disabled={busy || readOnly}
+					/>
+				)}
 			</form>
 			{
 				// only show top error if we cannot associate it with a field
