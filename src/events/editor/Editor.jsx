@@ -93,11 +93,11 @@ const Titled = ({ className, ...props }) => (
 	</div>
 );
 
-function Framer({ calendar, controls, ...props }) {
+function Framer({ calendar, ...props }) {
 	const { saving } = Store.useValue();
 	const customTitle = props.mode === 'view'; // && props.event?.hasLink('list-attendance');
 
-	const frameIt = props.dialog || controls;
+	const frameIt = props.dialog || props.controls;
 
 	return (
 		<Frame
@@ -198,6 +198,10 @@ function EventEditor(props) {
 				});
 
 				return;
+			}
+
+			if (typeof router?.routeTo?.object !== 'function') {
+				throw new Error('Missing router.routeTo.object in context');
 			}
 
 			return router.routeTo.object(event, 'goto');
