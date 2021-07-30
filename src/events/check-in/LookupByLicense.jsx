@@ -62,6 +62,7 @@ export function Lookup({ event, returnView }) {
 		case 'resolved':
 			return (
 				<EntryForm
+					event={event}
 					item={user}
 					onSave={async () => {
 						await event.recordAttendance(user);
