@@ -14,6 +14,11 @@ export const AvatarColumn = styled(Flex).attrs(AvatarColumnMapper)`
 	justify-content: center;
 	flex: 0 0 auto;
 
+	> svg {
+		width: 100%;
+		height: auto;
+	}
+
 	> * {
 		max-width: 28px;
 	}
