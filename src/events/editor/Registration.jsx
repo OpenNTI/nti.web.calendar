@@ -36,7 +36,7 @@ export function Registration({ event }) {
 	const date = event?.getRegistrationTime() ?? null;
 	return (
 		date && (
-			<Box>
+			<Box data-testid="checked-in-at">
 				<Icons.Check.Circled />
 				<Label
 					localeKey="checked-in-at"
