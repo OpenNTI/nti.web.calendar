@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { Button as ButtonBase, PromiseButton, Icons } from '@nti/web-commons';
+import { PromiseButton, Icons } from '@nti/web-commons';
+import { Button as ButtonBase } from "@nti/web-core";
 
 import t from '../strings';
 

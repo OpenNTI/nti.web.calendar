@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import { decorate } from '@nti/lib-commons';
-import { EmptyState, Loading, Input, Button } from '@nti/web-commons';
+import { EmptyState, Loading, Input } from '@nti/web-commons';
+import { Button } from "@nti/web-core";
 import { scoped } from '@nti/lib-locale';
 
 import Store from './Store';

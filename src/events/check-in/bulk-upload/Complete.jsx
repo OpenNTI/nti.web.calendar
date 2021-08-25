@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Button as ButtonBase } from '@nti/web-commons';
+import { Button as ButtonBase } from "@nti/web-core";
 
 import { Box } from '../parts/Containers';
 import { Table as CommonsTable } from '../parts/Table';

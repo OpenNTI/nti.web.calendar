@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Models } from '@nti/lib-interfaces';
-import { Button, DateTime, Text } from '@nti/web-commons';
+import { DateTime, Text } from '@nti/web-commons';
+import { Button } from "@nti/web-core";
 
 //#region Parts
 

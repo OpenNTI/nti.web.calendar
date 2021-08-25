@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Button } from '@nti/web-commons';
+import { Button } from "@nti/web-core";
 
 import t from './strings';
 import CalendarSelect from './CalendarSelect';
