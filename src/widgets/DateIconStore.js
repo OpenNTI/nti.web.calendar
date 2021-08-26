@@ -56,11 +56,18 @@ export default class DateIconStore extends Stores.BoundStore {
 	async load() {
 		try {
 			const service = await getService();
-			const collection = await service.getCollection('Calendars');
+			const source = await service
+				.getCollection('Calendars')
+				?.getLink?.('events');
 			const today = new Date();
 			const endOfDay = this.getEndOfDay();
+			if (!source) {
+				return this.set({
+					error: 'There is no calendar.',
+				});
+			}
 
-			const batch = await service.getBatch(collection.getLink('events'), {
+			const batch = await service.getBatch(source, {
 				batchSize: 1,
 				notBefore: today.getTime() / 1000,
 				notAfter: endOfDay.getTime() / 1000,

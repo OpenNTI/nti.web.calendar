@@ -1,5 +1,5 @@
-export { default as getCourseCalendar } from './get-course-calendar';
-export { default as getCalendarCollection } from './get-calendar-collection';
+export * from './get-course-calendar';
+export * from './get-calendar-collection';
 
 export function getToday() {
 	const today = new Date();

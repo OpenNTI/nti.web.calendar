@@ -1,3 +1,4 @@
+import { Batch } from '@nti/lib-interfaces';
 import { Stores, Interfaces } from '@nti/lib-store';
 import { getService } from '@nti/web-client';
 
@@ -66,7 +67,9 @@ class CalendarsStore extends Stores.BoundStore {
 			params.filter = this.searchTerm;
 		}
 
-		return service.getBatch(collection.href, params);
+		return collection
+			? service.getBatch(collection.href, params)
+			: Batch.from(service, { Items: [] });
 	}
 
 	async loadNextBatch(current) {

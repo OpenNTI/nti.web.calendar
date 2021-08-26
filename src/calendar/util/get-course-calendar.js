@@ -1,8 +1,8 @@
-import getCollection from './get-calendar-collection';
+import { getCalendarCollection } from './get-calendar-collection';
 
-export default async function getCourseCalendar(courseId) {
-	const collection = await getCollection(true);
-	return (collection.Items || []).find(
+export async function getCourseCalendar(courseId) {
+	const collection = await getCalendarCollection(true);
+	return (collection?.Items || []).find(
 		c => (c.CatalogEntry || {}).CourseNTIID === courseId
 	);
 }
