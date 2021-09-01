@@ -174,7 +174,9 @@ export default class CalendarStore extends Stores.BoundStore {
 		try {
 			const service = await getService();
 			this.collection = await service.getCollection('Calendars');
-
+			if (!this.collection) {
+				throw new Error('Calendars are not available');
+			}
 			this.loadInitialBatch();
 		} catch (e) {
 			this.set({
