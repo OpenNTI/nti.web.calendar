@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useNavigationStackContext } from '@nti/web-routing';
-import { useReducerState } from '@nti/web-commons';
+import { useReducerState } from '@nti/web-core';
 
 import { CheckIn } from './CheckIn';
 import { Lookup as UserLookup } from './Lookup';

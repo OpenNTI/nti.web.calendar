@@ -1,6 +1,7 @@
 import React, { useCallback, useRef } from 'react';
 
-import { Text, useReducerState } from '@nti/web-commons';
+import { Text } from '@nti/web-commons';
+import { useReducerState } from '@nti/web-core';
 import { Models } from '@nti/lib-interfaces';
 
 import { ActionButton, Button } from './parts/Buttons';

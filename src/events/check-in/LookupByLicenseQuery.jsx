@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { useLink } from '@nti/web-commons';
+import { useLink } from '@nti/web-core';
 
 import { LookupError } from './LookupByLicenseError.jsx';
 

@@ -2,7 +2,8 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import { Router } from '@nti/web-routing';
-import { useReducerState, Prompt } from '@nti/web-commons';
+import { Prompt } from '@nti/web-commons';
+import { useReducerState } from '@nti/web-core';
 
 import Store from '../../calendar/Store';
 import { DetailHeader } from '../DetailHeader';

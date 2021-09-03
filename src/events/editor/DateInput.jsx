@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 
-import { DayPicker, Flyout, DateTime, useReducerState } from '@nti/web-commons';
+import { DayPicker, Flyout, DateTime } from '@nti/web-commons';
+import { useReducerState } from '@nti/web-core';
 
 // in milliseconds
 const MINUTES_INCREMENT = 15 * 60 * 1000;

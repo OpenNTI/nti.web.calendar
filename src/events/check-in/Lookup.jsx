@@ -1,6 +1,7 @@
 import React, { Suspense, useCallback, useState } from 'react';
 
-import { Search as SearchInput, useLink } from '@nti/web-commons';
+import { Search as SearchInput } from '@nti/web-commons';
+import { useLink } from '@nti/web-core';
 
 import { Box } from './parts/Containers';
 import { ErrorBoundary } from './parts/ErrorBoundary';

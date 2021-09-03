@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
 
 import { useRealService } from '@nti/web-client/storybook-utils';
-import { NTObject } from '@nti/web-commons';
+import { NTObject } from '@nti/web-core';
 
 import CheckIn from '../View';
 

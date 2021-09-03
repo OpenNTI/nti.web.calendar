@@ -1,6 +1,7 @@
 import React, { Suspense, useCallback, useEffect, useState } from 'react';
 
-import { Search, useLink, useChanges } from '@nti/web-commons';
+import { Search, useChanges } from '@nti/web-commons';
+import { useLink } from '@nti/web-core';
 
 import getString from './strings';
 import { ActionPrompt, Actions, Action } from './parts/Hero';

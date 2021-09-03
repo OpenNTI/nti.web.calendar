@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 
-import { useReducerState } from '@nti/web-commons';
+import { useReducerState } from '@nti/web-core';
 
 import { Loading } from './parts/misc';
 import { InputForm } from './LookupByLicenseInputForm';
