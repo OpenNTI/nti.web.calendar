@@ -20,7 +20,7 @@ const DateIcon = React.forwardRef((props, ref) => {
 	const available = !useService()
 		.getCollection('Calendars')
 		?.getLink('events');
-	const disabled = available
+	const disabled = !available
 		? null
 		: {
 				disabled: true,
@@ -50,8 +50,10 @@ DateIcon.propTypes = {
 	date: PropTypes.object,
 };
 
-export default Store.compose(props => (
-	<Suspense fallback={<div />}>
-		<DateIcon {...props} />
-	</Suspense>
-));
+export default Store.compose(
+	React.forwardRef((props, ref) => (
+		<Suspense fallback={<div />}>
+			<DateIcon {...props} ref={ref} />
+		</Suspense>
+	))
+);
