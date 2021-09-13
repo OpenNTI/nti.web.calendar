@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { PromiseButton, Icons } from '@nti/web-commons';
-import { Button as ButtonBase } from "@nti/web-core";
+import { Icons } from '@nti/web-commons';
+import { AsyncAction, Button as ButtonBase } from '@nti/web-core';
 
 import t from '../strings';
 
@@ -35,9 +35,7 @@ const ActionButtonMapper = props => ({
 	as: Button,
 	...localeFilter(props),
 });
-export const ActionButton = styled(PromiseButton.impl).attrs(
-	ActionButtonMapper
-)`
+export const ActionButton = styled(AsyncAction).attrs(ActionButtonMapper)`
 	transition: all 0.5s ease-in;
 
 	&:global(.finished) {

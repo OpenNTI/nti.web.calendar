@@ -29,8 +29,10 @@ export function CheckInColumn({ item }) {
 	);
 	return (
 		<ActionButton
-			initialState={item.hasLink('attendance') ? 'finished' : undefined}
-			key={item.User.getID()}
+			initialState={
+				item?.hasLink?.('attendance') ? 'finished' : undefined
+			}
+			key={item.User?.getID()}
 			onClick={callback}
 			renderFinalState={Finish}
 			localeKey="action.label"
