@@ -1,6 +1,6 @@
 {
   "name": "@nti/web-calendar",
-  "version": "1.30.0",
+  "version": "1.31.0-alpha",
   "description": "NextThought components for calendar",
   "main": "src/index.js",
   "module": "src/index.js",
