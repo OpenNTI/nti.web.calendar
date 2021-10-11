@@ -20,7 +20,7 @@ const Mock = {
 	getID: () => 'mock',
 	recordAttendance: async () => {},
 	getLink: (rel, params) => rel + JSON.stringify(params),
-	fetchLinkParsed: () =>
+	fetchLink: () =>
 		[1, 2, 3, 4].map((x, i) => ({
 			Class: 'EventUserSearchHit',
 			MimeType: 'application/vnd.nextthought.calendar.eventusersearchhit',
