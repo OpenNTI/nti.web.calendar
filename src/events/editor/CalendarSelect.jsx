@@ -1,4 +1,4 @@
-import React from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import { scoped } from '@nti/lib-locale';
@@ -59,7 +59,7 @@ const StyledSelect = styled(Select)`
 `;
 
 export default function CalendarSelect({ selected, event, onChange }) {
-	React.useEffect(() => {
+	useEffect(() => {
 		if (selected) {
 			return;
 		}
@@ -86,13 +86,13 @@ export default function CalendarSelect({ selected, event, onChange }) {
 
 	const disabled = Boolean(event);
 
-	const flyoutRef = React.useRef();
+	const flyoutRef = useRef();
 
-	const selectedCalendar = React.useMemo(
+	const selectedCalendar = useMemo(
 		() => (selected ? [selected.getID()] : null),
 		[selected]
 	);
-	const doChange = React.useCallback(
+	const doChange = useCallback(
 		(_, calendar) => (onChange(calendar), flyoutRef.current?.dismiss()),
 		[]
 	);

@@ -1,4 +1,4 @@
-import React from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import { scoped } from '@nti/lib-locale';
@@ -88,18 +88,18 @@ function CalendarsFilter({
 	const showEmpty = !initialError && !loading && empty;
 	const showCourses = items && items.length > 0;
 
-	const scrollerRef = React.useRef();
-	const listRef = React.useCallback(() => {
+	const scrollerRef = useRef();
+	const listRef = useCallback(() => {
 		if (!loading && hasMore && !scrollerRef.current?.canScroll()) {
 			loadMore();
 		}
 	}, [loading, hasMore, loadMore]);
 
-	const isSelected = React.useMemo(
+	const isSelected = useMemo(
 		() => buildIsSelected(selected, unselected),
 		[selected, unselected]
 	);
-	const toggleSelected = React.useCallback(
+	const toggleSelected = useCallback(
 		calendar => {
 			const blacklist = unselected != null;
 			const wasSelected = isSelected(calendar);

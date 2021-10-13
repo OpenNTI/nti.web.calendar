@@ -1,5 +1,5 @@
 import './View.scss';
-import React from 'react';
+import { useCallback } from 'react';
 import PropTypes from 'prop-types';
 
 import CalendarSelect from '../../calendars/Select';
@@ -9,9 +9,10 @@ CalendarList.propTypes = {
 	setFilters: PropTypes.func,
 };
 export default function CalendarList({ filters, setFilters }) {
-	const onChange = React.useCallback(unselected => setFilters(unselected), [
-		setFilters,
-	]);
+	const onChange = useCallback(
+		unselected => setFilters(unselected),
+		[setFilters]
+	);
 
 	return (
 		<CalendarSelect

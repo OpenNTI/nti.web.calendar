@@ -1,4 +1,4 @@
-import React from 'react';
+import { useCallback } from 'react';
 import PropTypes from 'prop-types';
 
 import { Presentation, Icons, Text } from '@nti/web-commons';
@@ -95,10 +95,7 @@ CalendarListItem.propTypes = {
 	onClick: PropTypes.func,
 };
 export default function CalendarListItem({ calendar, selected, onClick }) {
-	const doClick = React.useCallback(() => onClick?.(calendar), [
-		calendar,
-		onClick,
-	]);
+	const doClick = useCallback(() => onClick?.(calendar), [calendar, onClick]);
 
 	return (
 		<Container onClick={doClick}>
