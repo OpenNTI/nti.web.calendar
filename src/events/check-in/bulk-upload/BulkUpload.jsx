@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { Input, Errors, Loading } from '@nti/web-commons';
 import { useReducerState } from '@nti/web-core';

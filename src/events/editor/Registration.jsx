@@ -1,4 +1,3 @@
-import React from 'react';
 
 import { DateTime, Icons, Text } from '@nti/web-commons';
 import { scoped } from '@nti/lib-locale';

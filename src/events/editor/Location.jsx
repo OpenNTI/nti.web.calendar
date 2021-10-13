@@ -1,4 +1,3 @@
-import React from 'react';
 
 import { Input, Text } from '@nti/web-commons';
 

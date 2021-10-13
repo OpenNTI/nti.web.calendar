@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import { Suspense } from 'react';
 
 import { NTObject } from '@nti/web-core';
 import { useMockService } from '@nti/web-client/storybook-utils';

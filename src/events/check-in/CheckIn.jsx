@@ -1,4 +1,4 @@
-import React, { Suspense, useCallback, useEffect, useState } from 'react';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 
 import { Search } from '@nti/web-commons';
 import { useChanges, useLink } from '@nti/web-core';

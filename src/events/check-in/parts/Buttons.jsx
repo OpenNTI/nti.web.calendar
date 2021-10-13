@@ -1,4 +1,3 @@
-import React from 'react';
 
 import { Icons } from '@nti/web-commons';
 import { AsyncAction, Button as ButtonBase } from '@nti/web-core';

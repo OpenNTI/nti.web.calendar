@@ -1,4 +1,3 @@
-import React from 'react';
 
 import { CenteredBox as BoxBase } from './parts/Containers';
 import { Button } from './parts/Buttons';

@@ -1,4 +1,3 @@
-import React from 'react';
 
 import { DateTime, Input, Text } from '@nti/web-commons';
 import { ImageUpload } from '@nti/web-whiteboard';

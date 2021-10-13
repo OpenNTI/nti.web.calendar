@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import { useCallback, useRef } from 'react';
 
 import { Text } from '@nti/web-commons';
 import { useReducerState } from '@nti/web-core';

@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 
 import { CenteredBox as Box } from './parts/Containers';
 import { SubTitle } from './parts/Text';
