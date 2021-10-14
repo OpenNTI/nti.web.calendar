@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Models } from '@nti/lib-interfaces';
 import { DateTime, Text } from '@nti/web-commons';
-import { Button } from "@nti/web-core";
+import { Button } from '@nti/web-core';
 
 //#region Parts
 
@@ -135,7 +135,7 @@ DetailHeader.propTypes = {
 
 /**
  * @param {HeadingProps} props
- * @returns {React.ReactElement}
+ * @returns {JSX.Element}
  */
 export function DetailHeader({ event, className, detailToggle = true }) {
 	const link = (detailToggle && event.hasLink('list-attendance')) || null;
