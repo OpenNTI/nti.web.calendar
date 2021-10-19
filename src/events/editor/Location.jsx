@@ -1,4 +1,3 @@
-
 import { Input, Text } from '@nti/web-commons';
 
 import t from './strings';
@@ -21,6 +20,7 @@ const LocationEditor = styled(Input.Text)`
 const LocationName = styled(Text.Base).attrs({
 	className: 'name',
 	linkify: true,
+	'data-testid': 'location',
 })`
 	font-size: 0.75rem;
 	color: var(--secondary-grey);
@@ -42,6 +42,7 @@ export function LocationInfo({ location, mode, onChange }) {
 				<LocationName>{location}</LocationName>
 			) : (
 				<LocationEditor
+					data-testid="location-editor"
 					placeholder={t('eventLocation')}
 					value={location}
 					onChange={onChange}

@@ -1,4 +1,3 @@
-
 import { DateTime } from '@nti/web-commons';
 
 import t from './strings';
@@ -14,12 +13,14 @@ const DateReadOnly = styled(DateTime).attrs({
 	margin-right: 20px;
 `;
 
-export function DateField({ value, label, onChange }) {
+export function DateField({ value, label, onChange, ...props }) {
 	if (!onChange) {
-		return <DateReadOnly date={value} />;
+		return <DateReadOnly {...props} date={value} />;
 	}
 
-	return <DateInput date={value} label={label} onChange={onChange} />;
+	return (
+		<DateInput {...props} date={value} label={label} onChange={onChange} />
+	);
 }
 
 const Dates = styled.div`
@@ -37,16 +38,18 @@ export function DateFields({
 }) {
 	const viewingMode = mode === 'view';
 	return (
-		<div>
+		<div data-testid="event-date-fields">
 			<SectionTitle>{t('datesTimes')}</SectionTitle>
 			<Dates {...{ readOnly: viewingMode }}>
 				<DateField
+					data-testid="date-field-start"
 					value={startDate}
 					label={t('start')}
 					onChange={viewingMode ? null : onStartDateChange}
 				/>
 
 				<DateField
+					data-testid="date-field-end"
 					value={endDate}
 					label={t('end')}
 					onChange={viewingMode ? null : onEndDateChange}

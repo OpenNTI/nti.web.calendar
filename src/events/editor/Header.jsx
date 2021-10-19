@@ -1,4 +1,3 @@
-
 import { DateTime, Input, Text } from '@nti/web-commons';
 import { ImageUpload } from '@nti/web-whiteboard';
 
@@ -138,6 +137,7 @@ export function Header({
 				</EventTitle>
 				<EventTime>
 					<DateTime
+						data-testid="event-date"
 						className="date"
 						date={startDate}
 						format={DateTime.WEEKDAY_AT_TIME_PADDED_WITH_ZONE}
@@ -145,14 +145,19 @@ export function Header({
 				</EventTime>
 				<ImageAndDescription>
 					{viewingMode ? (
-						img?.src && <Preview src={img?.src} />
+						img?.src && (
+							<Preview src={img?.src} data-testid="event-image" />
+						)
 					) : (
 						<EventImageEditor img={img} onChange={onImageChange} />
 					)}
 					{viewingMode ? (
-						<Description>{description}</Description>
+						<Description data-testid="description">
+							{description}
+						</Description>
 					) : (
 						<DescriptionEditor
+							data-testid="description-editor"
 							value={description}
 							onChange={onDescriptionChange}
 							placeholder={t('eventDescription')}

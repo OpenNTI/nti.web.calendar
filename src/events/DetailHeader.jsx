@@ -146,14 +146,25 @@ export function DetailHeader({ event, className, detailToggle = true }) {
 		<Block className={className} event-details-header="true">
 			<DateIcon date={event.getStartTime()} minimal />
 			<Block column>
-				<Title limitLines={1} link={link} onClick={toggle}>
+				<Title
+					limitLines={1}
+					link={link}
+					onClick={toggle}
+					data-testid="event-title"
+				>
 					{event.title}
 					{link && <InfoToggle onClick={toggle} />}
 				</Title>
 
 				<List>
-					<Time date={event.getStartTime()} />
-					<Time date={event.getEndTime()} />
+					<Time
+						date={event.getStartTime()}
+						data-testid="event-time-start"
+					/>
+					<Time
+						date={event.getEndTime()}
+						data-testid="event-time-end"
+					/>
 				</List>
 			</Block>
 		</Block>

@@ -81,14 +81,16 @@ export const Contents = styled.div`
 	}
 `;
 
-const DetailHeader2 = styled(DetailHeader)`
-	padding-top: 10px;
-`;
-
 const Titled = ({ className, ...props }) => (
 	<div {...{ className }}>
 		<Contents>
-			<DetailHeader2 event={props.event} detailToggle={false} />
+			<DetailHeader
+				event={props.event}
+				detailToggle={false}
+				css={css`
+					padding-top: 10px;
+				`}
+			/>
 		</Contents>
 		{props.children}
 	</div>
