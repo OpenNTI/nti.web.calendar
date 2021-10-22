@@ -2,7 +2,8 @@ import { useCallback, useEffect, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import { scoped } from '@nti/lib-locale';
-import { Flyout, Text, Icons } from '@nti/web-commons';
+import { Flyout, Text } from '@nti/web-commons';
+import { Icons } from '@nti/web-core';
 
 import ListItem from '../../calendars/ListItem';
 import Select from '../../calendars/Select';

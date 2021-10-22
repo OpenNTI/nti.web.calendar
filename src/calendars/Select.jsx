@@ -2,15 +2,8 @@ import { useCallback, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import { scoped } from '@nti/lib-locale';
-import {
-	Loading,
-	Scroll,
-	Errors,
-	Text,
-	Input,
-	Icons,
-	List,
-} from '@nti/web-commons';
+import { Loading, Scroll, Errors, Text, Input, List } from '@nti/web-commons';
+import { Icons } from '@nti/web-core';
 
 import Store from './Store';
 import ListItem from './ListItem';

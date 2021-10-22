@@ -1,6 +1,4 @@
-
-import { Icons } from '@nti/web-commons';
-import { AsyncAction, Button as ButtonBase } from '@nti/web-core';
+import { AsyncAction, Button as ButtonBase, Icons } from '@nti/web-core';
 
 import t from '../strings';
 

@@ -1,5 +1,5 @@
-
-import { DateTime, Icons, Text } from '@nti/web-commons';
+import { DateTime, Text } from '@nti/web-commons';
+import { Icons } from '@nti/web-core';
 import { scoped } from '@nti/lib-locale';
 
 const t = scoped('calendar.events.check-in', {

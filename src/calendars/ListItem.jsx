@@ -1,7 +1,8 @@
 import { useCallback } from 'react';
 import PropTypes from 'prop-types';
 
-import { Presentation, Icons, Text } from '@nti/web-commons';
+import { Presentation, Text } from '@nti/web-commons';
+import { Icons } from '@nti/web-core';
 
 const getTitle = calendar => calendar.title;
 const getSubtitle = calendar => calendar.CatalogEntry?.ProviderUniqueID;
